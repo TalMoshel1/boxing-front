@@ -1,0 +1,8 @@
+.day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    /* width:max-content; */
+  }
+  

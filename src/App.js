@@ -1,19 +1,22 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Calendar from './pages/Calendar'
-import store from './redux/store';
+import {Navbar} from './components/Navbar.jsx'
+import SignIn from './pages/SignIn.jsx'
+
 import './App.css';
 
-console.log('.')
-
 function App() {
+
+
+
   return (
-    <Provider store={store}>
-      <div className="App">
-        <h1>Scheduler</h1>
-        <Calendar />
-      </div>
-    </Provider>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/signin' element={<SignIn />}/>
+        <Route path="/calendar" element={<Calendar />} />
+      </Routes>
+  </BrowserRouter>
   );
 }
 

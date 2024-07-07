@@ -3,4 +3,6 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
     flex-grow: 1;
+    flex-direction: row-reverse;
+    direction: rtl;
   }

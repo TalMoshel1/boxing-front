@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setView, incrementDate, setMonth } from '../redux/calendarSlice';
 import '../css-components/CalendarHeader.css';
@@ -6,11 +6,15 @@ import '../css-components/CalendarHeader.css';
 const CalendarHeader = () => {
   const dispatch = useDispatch();
   const currentDate = useSelector((state) => state.calendar.currentDate);
+  const calendar = useSelector((state)=>state.calendar)
   const view = useSelector((state) => state.calendar.view);
 
+  console.log(calendar)
 
-  console.log(currentDate)
-  console.log(currentDate.toLocaleDateString('en-US', { month: 'long' }))
+
+
+
+
   const handleNext = () => {
     if (view === 'month') {
       dispatch(setMonth(1));
@@ -33,14 +37,14 @@ const CalendarHeader = () => {
 
   return (
     <div className="header">
-      <button onClick={handlePrev}>Previous</button>
+      <button onClick={handlePrev}>{view === 'week' ? 'שבוע קודם' : view === 'day' ? 'יום קודם': ''}</button>
       <span>
         {currentDate.toLocaleDateString('en-US', { month: 'long' })} {currentDate.getFullYear()}
       </span>
-      <button onClick={handleNext}>Next</button>
+      <button onClick={handleNext}>{view === 'week' ? 'שבוע הבא' : view === 'day' ? 'יום הבא': ''}</button>
       <select onChange={(e) => dispatch(setView(e.target.value))} value={view}>
-        <option value="week">Week</option>
-        <option value="day">Day</option>
+        <option value="week">תצוגת שבועית</option>
+        <option value="day">תצוגה יומית</option>
       </select>
     </div>
   );

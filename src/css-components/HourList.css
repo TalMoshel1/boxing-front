@@ -10,6 +10,14 @@
   flex-grow: 1;
 }
 
+.hours-container {
+  gap: 1rem;
+}
+
+.hour {
+  flex-grow:1;
+}
+
 .hour-container {
   padding: 5px 0;
   display: flex;
@@ -17,6 +25,9 @@
   border-bottom: 1px solid #ccc;
 }
 
+.hour-event-container {
+  flex-grow: 1;
+}
 .hour:last-child {
   border-bottom: none;
 }

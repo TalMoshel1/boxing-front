@@ -10,7 +10,7 @@ const SignIn = () => {
 
   const sendPostRequest = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/auth/signin', {
+      const response = await fetch('https://boxing-back.onrender.com/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ const SignIn = () => {
 
       const data = await response.json();
       localStorage.setItem('boxing', JSON.stringify({ token: data.data.token, user: data.data.user }));
-      setBoxing(JSON.stringify({ token: data.data.token, user: data.data.user })); // Update state with new boxing info
+      setBoxing(JSON.stringify({ token: data.data.token, user: data.data.user }));
     } catch (error) {
       console.error('Error sending POST request:', error);
     }
@@ -60,6 +60,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (boxing) {
+      console.log('great its updating...')
       AuthenticateRequest();
     }
   }, [boxing]); // Run AuthenticateRequest when boxing changes

@@ -8,8 +8,8 @@ import { useDispatch } from "react-redux";
 export function Day({ date, lessons }) {
   const [thisDayLessons, setThisDayLessons] = useState([]);
   const dispatch = useDispatch();
-  const token = localStorage.getItem('boxing')
-
+  const {user} = JSON.parse(localStorage.getItem('boxing'))
+console.log(user)
 
   const formatDateInHebrew = (dateString) => {
     const parsedDate = new Date(dateString);
@@ -24,6 +24,10 @@ export function Day({ date, lessons }) {
     return hebrewDate;
   }
 
+  useEffect(()=>{
+    console.log(thisDayLessons)
+  },[thisDayLessons])
+
   useEffect(() => {
     const filteredLessons = lessons.filter(l => l.displayedDate === date.displayedDate);
     setThisDayLessons(filteredLessons);
@@ -36,11 +40,22 @@ export function Day({ date, lessons }) {
   return (
     <div className="day">
       <p>{formatDateInHebrew(date.displayedDate)}</p>
+      <button onClick={handleToggleModal}> בקש לקבוע שיעור פרטי</button>
+     {user.role !== 'admin' && <button onClick={handleToggleModal}> קבע אימון קבוצתי</button>} 
+
       <LessonsContainer>
-        {thisDayLessons.map((l, index) => (
-          <Lesson key={index} lesson={l} />
-        ))}
-        <button onClick={handleToggleModal}> בקש לקבוע שיעור פרטי</button>
+        {thisDayLessons.map((l, index) => {
+          if (user.role !== 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
+            return <Lesson key={index} lesson={l} />
+
+          }
+          if (l.lesson.type !== 'private') {
+            return <Lesson key={index} lesson={l} />
+
+          }
+        }
+        
+        )}
       </LessonsContainer>
     </div>
   )

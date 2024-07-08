@@ -10,7 +10,7 @@ const SignIn = () => {
 
   const sendPostRequest = async () => {
     try {
-      const response = await fetch('https://boxing-back.onrender.com/api/auth/signin', {
+      const response = await fetch('http://localhost:3000/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,12 +36,12 @@ const SignIn = () => {
 
   const AuthenticateRequest = async () => {
     try {
-      const token = JSON.parse(boxing)?.token; // Parse boxing to access token
-      const response = await fetch('https://boxing-back.onrender.com/api/auth/verify-token', {
+      const token = JSON.parse(boxing)?.token;
+      const response = await fetch('http://localhost:3000/api/auth/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': token // Use parsed token here
+          'authorization': token 
         },
       });
       if (!response.ok) {
@@ -63,7 +63,7 @@ const SignIn = () => {
       console.log('great its updating...')
       AuthenticateRequest();
     }
-  }, [boxing]); // Run AuthenticateRequest when boxing changes
+  }, [boxing]); 
 
   return (
     <div className="login-container">

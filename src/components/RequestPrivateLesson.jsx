@@ -6,6 +6,7 @@ import { incrementHour } from "../functions/incrementHour.js";
 
 const RequestPrivateLesson = () => {
   const data = useSelector((state) => state.calendar.modalData);
+  console.log(data.date.date)
   const dispatch = useDispatch();
 
   const [day, setDay] = useState(data.date.date);
@@ -25,9 +26,9 @@ const RequestPrivateLesson = () => {
       let lessonsArray = [];
 
       data.thisDayLessons.forEach((l, index) => {
-        if (index === arrayLength - 1) {
+        if (index === arrayLength - 1 && l.lesson.isApproved === true) {
           lessonsArray.push(`${l.lesson.startTime} עד ${l.lesson.endTime}.`);
-        } else {
+        } else if (l.lesson.isApproved === true){
           lessonsArray.push(`${l.lesson.startTime} עד ${l.lesson.endTime},`);
         }
       });
@@ -47,6 +48,7 @@ const RequestPrivateLesson = () => {
 
   const sendPostRequest = async () => {
     try {
+      console.log('day :', day)
       const endTime = incrementHour(startTime);
       const response = await fetch('http://localhost:3000/api/lessons/requestPrivateLesson', {
         method: 'POST',
@@ -69,11 +71,11 @@ const RequestPrivateLesson = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendPostRequest();
-    setDay('');
-    setStartTime('');
-    setStudentName('');
-    setStudentPhone('');
-    setStudentMail('');
+    // setDay('');
+    // setStartTime('');
+    // setStudentName('');
+    // setStudentPhone('');
+    // setStudentMail('');
   };
 
   if (message) {

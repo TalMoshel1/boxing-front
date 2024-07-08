@@ -18,7 +18,7 @@ const Calendar = () => {
       <div className="content">
         <Days />
       </div>
-      {isModalOpen && <Modal />}
+      {isModalOpen && <Modal > <div>ok</div></Modal>}
       
     </div>
   );

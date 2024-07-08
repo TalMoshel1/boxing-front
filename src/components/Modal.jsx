@@ -7,7 +7,7 @@ import RequestPrivateLesson from '../components/RequestPrivateLesson.jsx'
 
 
 
-const Modal = () => {
+const Modal = ({children}) => {
 
   const user = localStorage.getItem('boxing')
 
@@ -27,7 +27,8 @@ const Modal = () => {
       }
       
   return <main className='modal' onClick={()=>handleToggleModal}>
-    <RequestPrivateLesson />
+    {children}
+    {/* <RequestPrivateLesson /> */}
   </main>
     }
 export default Modal

@@ -37,7 +37,7 @@ const SignIn = () => {
   const AuthenticateRequest = async () => {
     try {
       const token = JSON.parse(boxing)?.token; // Parse boxing to access token
-      const response = await fetch('http://localhost:3000/api/auth/verify-token', {
+      const response = await fetch('https://boxing-back.onrender.com/api/auth/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

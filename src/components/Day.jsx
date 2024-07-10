@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Lesson from "./HourList";
 import LessonsContainer from './LessonContainer.tsx'
-import { toggleSetmodal } from '../redux/calendarSlice.js'
+import { toggleSetPrivateModal, toggleSetGroupModal } from '../redux/calendarSlice.js'
 import "../css-components/Day.css";
 import { useDispatch } from "react-redux";
 
@@ -9,7 +9,6 @@ export function Day({ date, lessons }) {
   const [thisDayLessons, setThisDayLessons] = useState([]);
   const dispatch = useDispatch();
   const {user} = JSON.parse(localStorage.getItem('boxing'))
-console.log(user)
 
   const formatDateInHebrew = (dateString) => {
     const parsedDate = new Date(dateString);
@@ -24,28 +23,32 @@ console.log(user)
     return hebrewDate;
   }
 
-  useEffect(()=>{
-    console.log(thisDayLessons)
-  },[thisDayLessons])
 
   useEffect(() => {
     const filteredLessons = lessons.filter(l => l.displayedDate === date.displayedDate);
     setThisDayLessons(filteredLessons);
   }, [lessons, date.displayedDate]);
 
-  const handleToggleModal = () => {
-    dispatch(toggleSetmodal({ date, thisDayLessons }));
+  const handleToggleSetPrivateModal = () => {
+    console.log({ date, thisDayLessons})
+
+    dispatch(toggleSetPrivateModal({ date, thisDayLessons}));
+  }
+
+  const handleToggleSetGroupModal = () => {
+    console.log('data: ',{ date, thisDayLessons})
+    dispatch(toggleSetGroupModal({ date, thisDayLessons}));
   }
 
   return (
     <div className="day">
       <p>{formatDateInHebrew(date.displayedDate)}</p>
-      <button onClick={handleToggleModal}> בקש לקבוע שיעור פרטי</button>
-     {user.role !== 'admin' && <button onClick={handleToggleModal}> קבע אימון קבוצתי</button>} 
+      <button onClick={handleToggleSetPrivateModal}> בקש לקבוע שיעור פרטי</button>
+     {user.role === 'admin' && <button onClick={handleToggleSetGroupModal}> קבע אימון קבוצתי</button>} 
 
       <LessonsContainer>
         {thisDayLessons.map((l, index) => {
-          if (user.role !== 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
+          if (user.role === 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
             return <Lesson key={index} lesson={l} />
 
           }
@@ -54,7 +57,6 @@ console.log(user)
 
           }
         }
-        
         )}
       </LessonsContainer>
     </div>

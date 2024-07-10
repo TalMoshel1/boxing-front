@@ -3,8 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   currentDate: new Date(),
   view: 'week',
-  isModalOpen: false,
-  modalData: null,
+  isPrivateModalOpen: false,
+  privateModalData: null,
+  isGroupModalOpen: false,
+  groupModalData: null,
+  isDeleteLessonModalOpen: false,
+  deleteLessonModalData: null
 };
 
 const calendarSlice = createSlice({
@@ -22,12 +26,20 @@ const calendarSlice = createSlice({
       const months = action.payload;
       state.currentDate = new Date(state.currentDate.setMonth(state.currentDate.getMonth() + months));
     },
-    toggleSetmodal(state, action) {
-      state.isModalOpen = !state.isModalOpen;
-      state.modalData = action.payload ? action.payload : '';
+    toggleSetPrivateModal(state, action) {
+      state.isPrivateModalOpen = !state.isPrivateModalOpen;
+      state.privateModalData = action.payload ? action.payload : '';
+    },
+    toggleSetGroupModal(state, action) {
+      state.isGroupModalOpen = !state.isGroupModalOpen;
+      state.groupModalData = action.payload ? action.payload : '';
+    },
+    toggleSetDeleteLessonModal(state, action) {
+      state.isDeleteLessonModalOpen = !state.isDeleteLessonModalOpen;
+      state.deleteLessonModalData = action.payload ? action.payload : '';
     }
   },
 });
 
-export const { setView, incrementDate, setMonth, toggleSetmodal } = calendarSlice.actions;
+export const { setView, incrementDate, setMonth, toggleSetPrivateModal, toggleSetGroupModal, toggleSetDeleteLessonModal} = calendarSlice.actions;
 export default calendarSlice.reducer;

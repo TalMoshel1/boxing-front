@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css-components/HourList.css";
+import { useDispatch } from "react-redux";
+import {toggleSetDeleteLessonModal} from '../redux/calendarSlice'
 
 const Lesson = ({ lesson }) => {
+  const [boxing, setBoxing] = useState(localStorage.getItem('boxing'));
+  const dispatch = useDispatch();
+
+  const user = JSON.parse(boxing)?.user;
+  const token = JSON.parse(boxing)?.token;
+
+  const {role}= user
+
+
+  
+  const handleOpenDeleteModal = (lessonId) => {
+    console.log('modal need to be opened')
+    return dispatch(toggleSetDeleteLessonModal(lessonId))
+  }
+
   if (lesson.lesson.type === 'private') {
-    console.log(lesson.lesson)
     return (
       <div className='hour-container'>
+        {role === 'admin' && <button onClick={()=>handleOpenDeleteModal(lesson.lesson._id)}>מחק אימון</button>}
+        <strong>אימון אישי</strong>
       <div className="hour">
         {lesson.lesson.startTime} <br/> {lesson.lesson.endTime}
       </div>
@@ -13,13 +31,14 @@ const Lesson = ({ lesson }) => {
         <div className="hour-event">
           {lesson.lesson.studentName}<br/> {lesson.lesson.studentMail} <br/> {lesson.lesson.studentPhone}
         </div>
-        <div className="hour-event">אימון אישי</div>
       </div>
     </div>
     )
   }
   return (
           <div className='hour-container'>
+        {role === 'admin' && <button onClick={()=>handleOpenDeleteModal(lesson.lesson._id)}>מחק אימון</button>}
+        <strong>אימון קבוצתי</strong>
             <div className="hour">
               {lesson.lesson.startTime} <br/> {lesson.lesson.endTime}
             </div>

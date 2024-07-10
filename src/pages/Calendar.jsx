@@ -3,11 +3,15 @@ import Days from '../components/Days.jsx';
 import Modal from '../components/Modal.jsx'
 import { useSelector } from 'react-redux';
 import '../css-pages/Calendar.css';
+import RequestPrivateLesson from '../components/RequestPrivateLesson.jsx';
+import SetGroupLesson from '../components/setGroupLesson.jsx'
+import DeleteLesson from '../components/deleteLesson.jsx';
 
 const Calendar = () => {
-  const isModalOpen = useSelector((state)=>state.calendar.isModalOpen)
+  const isPrivateModalOpen = useSelector((state)=>state.calendar.isPrivateModalOpen)
+  const isGroupModalOpen = useSelector((state)=>state.calendar.isGroupModalOpen)
+  const isDeleteLessonModalOpen = useSelector((state)=>state.calendar.isDeleteLessonModalOpen)
 
-  console.log('isModalOpen: ', isModalOpen)
 
 
 
@@ -18,7 +22,11 @@ const Calendar = () => {
       <div className="content">
         <Days />
       </div>
-      {isModalOpen && <Modal > <div>ok</div></Modal>}
+      {isPrivateModalOpen && <Modal > <RequestPrivateLesson/></Modal>}
+      {isGroupModalOpen && <Modal > <SetGroupLesson/></Modal>}
+      {isDeleteLessonModalOpen && <Modal > <DeleteLesson/></Modal>}
+
+
       
     </div>
   );

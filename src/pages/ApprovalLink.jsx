@@ -24,10 +24,11 @@ const ApprovalLink = () => {
 
         const data = await response.json();
         if (data) {
+          console.log(data)
             return setIsApproved(data)
         }
       } catch (error) {
-        console.error('Error sending POST request:', error);
+        setIsApproved({message: 'שיעור כבר קבוע במערכת בזמן זה'})
       }
     };
 

@@ -1,6 +1,6 @@
 import React from "react"
 import { useDispatch } from "react-redux";
-import { toggleSetmodal } from '../redux/calendarSlice.js'
+import { toggleSetGroupModal, toggleSetPrivateModal } from '../redux/calendarSlice.js'
 import { useSelector } from 'react-redux';
 import RequestPrivateLesson from '../components/RequestPrivateLesson.jsx'
 
@@ -22,11 +22,11 @@ const Modal = ({children}) => {
 
     const dispatch = useDispatch()
 
-    const handleToggleModal = () => {
-        dispatch(toggleSetmodal());
+    const handleToggleSetGroupModal = () => {
+        dispatch(toggleSetGroupModal());
       }
       
-  return <main className='modal' onClick={()=>handleToggleModal}>
+  return <main className='modal'>
     {children}
     {/* <RequestPrivateLesson /> */}
   </main>

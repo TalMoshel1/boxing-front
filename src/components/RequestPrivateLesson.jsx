@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSetmodal } from '../redux/calendarSlice.js';
+import { toggleSetPrivateModal } from '../redux/calendarSlice.js';
 import { useSelector } from 'react-redux';
 import { incrementHour } from "../functions/incrementHour.js";
 
 const RequestPrivateLesson = () => {
-  const data = useSelector((state) => state.calendar.modalData);
+  const data = useSelector((state) => state.calendar.privateModalData);
   console.log(data.date.date)
   const dispatch = useDispatch();
 
@@ -38,17 +38,12 @@ const RequestPrivateLesson = () => {
     }
   }, [data.thisDayLessons]);
 
-  useEffect(() => {
-    console.log('cant in', cantIn);
-  }, [cantIn]);
-
   const handleToggleModal = () => {
-    dispatch(toggleSetmodal());
+    dispatch(toggleSetPrivateModal());
   };
 
   const sendPostRequest = async () => {
     try {
-      console.log('day :', day)
       const endTime = incrementHour(startTime);
       const response = await fetch('http://localhost:3000/api/lessons/requestPrivateLesson', {
         method: 'POST',
@@ -71,11 +66,6 @@ const RequestPrivateLesson = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendPostRequest();
-    // setDay('');
-    // setStartTime('');
-    // setStudentName('');
-    // setStudentPhone('');
-    // setStudentMail('');
   };
 
   if (message) {

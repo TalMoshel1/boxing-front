@@ -13,9 +13,10 @@ const SignIn = () => {
       const response = await fetch('http://localhost:3000/api/auth/signin', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
       });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
@@ -34,14 +35,14 @@ const SignIn = () => {
     sendPostRequest();
   };
 
-  const AuthenticateRequest = async () => {
+  const authenticateRequest = async () => {
     try {
       const token = JSON.parse(boxing)?.token;
       const response = await fetch('http://localhost:3000/api/auth/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': token 
+          'authorization': `${token}`
         },
       });
       if (!response.ok) {
@@ -60,10 +61,9 @@ const SignIn = () => {
 
   useEffect(() => {
     if (boxing) {
-      console.log('great its updating...')
-      AuthenticateRequest();
+      authenticateRequest();
     }
-  }, [boxing]); 
+  }, [boxing]);
 
   return (
     <div className="login-container">

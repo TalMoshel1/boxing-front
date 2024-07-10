@@ -60,7 +60,7 @@ const SetGroupLesson = () => {
       const token = user.token;
       console.log("token: ", token);
       const response = await fetch(
-        "https://boxing-back-prod.onrender.com/api/lessons/group",
+        "https://boxing-back.onrender.com/api/lessons/group",
         {
           method: "POST",
           headers: {

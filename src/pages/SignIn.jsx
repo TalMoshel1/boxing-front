@@ -11,7 +11,7 @@ const SignIn = () => {
   const sendPostRequest = async () => {
     try {
       const response = await fetch(
-        "https://boxing-back-prod.onrender.com/api/auth/signin",
+        "https://boxing-back.onrender.com/api/auth/signin",
         {
           method: "POST",
           headers: {
@@ -49,7 +49,7 @@ const SignIn = () => {
     try {
       const token = JSON.parse(boxing)?.token;
       const response = await fetch(
-        "https://boxing-back-prod.onrender.com/api/auth/verify-token",
+        "https://boxing-back.onrender.com/api/auth/verify-token",
         {
           method: "POST",
           headers: {

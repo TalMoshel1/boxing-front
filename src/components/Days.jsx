@@ -54,7 +54,7 @@ const Days = () => {
     const sendPostRequest = async () => {
       try {
         const response = await fetch(
-          "https://boxing-back-prod.onrender.com/api/lessons/week",
+          "https://boxing-back.onrender.com/api/lessons/week",
           {
             method: "POST",
             headers: {

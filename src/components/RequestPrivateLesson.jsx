@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSetPrivateModal } from '../redux/calendarSlice.js';
-import { useSelector } from 'react-redux';
+import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
+import { useSelector } from "react-redux";
 import { incrementHour } from "../functions/incrementHour.js";
 
 const RequestPrivateLesson = () => {
   const data = useSelector((state) => state.calendar.privateModalData);
-  console.log(data.date.date)
+  console.log(data.date.date);
   const dispatch = useDispatch();
 
   const [day, setDay] = useState(data.date.date);
-  const [startTime, setStartTime] = useState('');
-  const [studentName, setStudentName] = useState('');
-  const [studentPhone, setStudentPhone] = useState('');
-  const [studentMail, setStudentMail] = useState('');
-  const [cantIn, setCantIn] = useState([]); 
-  const [message, setMessage] = useState('');
+  const [startTime, setStartTime] = useState("");
+  const [studentName, setStudentName] = useState("");
+  const [studentPhone, setStudentPhone] = useState("");
+  const [studentMail, setStudentMail] = useState("");
+  const [cantIn, setCantIn] = useState([]);
+  const [message, setMessage] = useState("");
 
-  console.log('modal data: ', data);
+  console.log("modal data: ", data);
 
   useEffect(() => {
     if (data.thisDayLessons) {
-      let message = 'המאמן תפוס בשעות: ';
+      let message = "המאמן תפוס בשעות: ";
       const arrayLength = data.thisDayLessons.length;
       let lessonsArray = [];
 
       data.thisDayLessons.forEach((l, index) => {
         if (index === arrayLength - 1 && l.lesson.isApproved === true) {
           lessonsArray.push(`${l.lesson.startTime} עד ${l.lesson.endTime}.`);
-        } else if (l.lesson.isApproved === true){
+        } else if (l.lesson.isApproved === true) {
           lessonsArray.push(`${l.lesson.startTime} עד ${l.lesson.endTime},`);
         }
       });
 
-      message += lessonsArray.join(' ');
+      message += lessonsArray.join(" ");
       setCantIn(message);
     }
   }, [data.thisDayLessons]);
@@ -45,21 +45,33 @@ const RequestPrivateLesson = () => {
   const sendPostRequest = async () => {
     try {
       const endTime = incrementHour(startTime);
-      const response = await fetch('http://localhost:3000/api/lessons/requestPrivateLesson', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ day, startTime, endTime, studentName, studentPhone, studentMail })
-      });
+      const response = await fetch(
+        "https://boxing-back-prod.onrender.com/api/lessons/requestPrivateLesson",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            day,
+            startTime,
+            endTime,
+            studentName,
+            studentPhone,
+            studentMail,
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `HTTP error! Status: ${response.status} ${response.statusText}`
+        );
       }
       const data = await response.json();
-      console.log('request private response: ', data);
-      setMessage('האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת');
+      console.log("request private response: ", data);
+      setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
     } catch (error) {
-      console.error('Error sending POST request:', error);
+      console.error("Error sending POST request:", error);
     }
   };
 

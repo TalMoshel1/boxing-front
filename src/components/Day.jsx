@@ -8,7 +8,13 @@ import { useDispatch } from "react-redux";
 export function Day({ date, lessons }) {
   const [thisDayLessons, setThisDayLessons] = useState([]);
   const dispatch = useDispatch();
-  const {user} = JSON.parse(localStorage.getItem('boxing'))
+  let user = localStorage.getItem('boxing')
+  // const {user} = JSON.parse(localStorage.getItem('boxing'))
+  if (user) {
+    user = JSON.parse(user)
+    console.log(user)
+  }
+
 
   const formatDateInHebrew = (dateString) => {
     const parsedDate = new Date(dateString);
@@ -44,11 +50,11 @@ export function Day({ date, lessons }) {
     <div className="day">
       <p>{formatDateInHebrew(date.displayedDate)}</p>
       <button onClick={handleToggleSetPrivateModal}> בקש לקבוע שיעור פרטי</button>
-     {user.role === 'admin' && <button onClick={handleToggleSetGroupModal}> קבע אימון קבוצתי</button>} 
+     {user?.user.role === 'admin' && <button onClick={handleToggleSetGroupModal}> קבע אימון קבוצתי</button>} 
 
       <LessonsContainer>
         {thisDayLessons.map((l, index) => {
-          if (user.role === 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
+          if (user?.user.role === 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
             return <Lesson key={index} lesson={l} />
 
           }

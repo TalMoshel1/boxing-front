@@ -1,45 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { repeatEndDate } from '../functions/repeatEndDate.js'; // Make sure to import your function correctly
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { repeatEndDate } from "../functions/repeatEndDate.js"; // Make sure to import your function correctly
 
 const SetGroupLesson = () => {
   const data = useSelector((state) => state.calendar.groupModalData);
-  const [boxing, setBoxing] = useState(localStorage.getItem('boxing'));
-  const [message, setMessage] = useState('')
+  const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
+  const [message, setMessage] = useState("");
 
+  let user = localStorage.getItem("boxing");
+  if (user) {
+    user = JSON.parse(user);
+  }
 
   const [formData, setFormData] = useState({
-    trainer:'דוד',
-    name: '',
-    description: '',
+    trainer: "דוד",
+    name: "",
+    description: "",
     day: data.date.date,
-    startTime: '',
-    endTime: '',
+    startTime: "",
+    endTime: "",
     repeatsWeekly: false,
-    repeatMonth: '',
+    repeatMonth: "",
     isApproved: true,
-    type: 'group'
+    type: "group",
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === 'checkbox' ? checked : value;
+    const newValue = type === "checkbox" ? checked : value;
     setFormData({
       ...formData,
       [name]: newValue,
     });
 
-    if (name === 'repeatsWeekly' && newValue) {
+    if (name === "repeatsWeekly" && newValue) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        startTime: '',
-        endTime: '',
-        repeatMonth: '1',
+        startTime: "",
+        endTime: "",
+        repeatMonth: "1",
         isApproved: false,
       }));
     }
 
-    if (name === 'repeatMonth' && formData.repeatsWeekly) {
+    if (name === "repeatMonth" && formData.repeatsWeekly) {
       const endDate = repeatEndDate(formData.day, parseInt(value, 10));
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -53,26 +57,31 @@ const SetGroupLesson = () => {
     const { repeatMonth, ...formDataToSend } = formData;
 
     try {
-      const token = JSON.parse(boxing)?.token;
-      const response = await fetch('http://localhost:3000/api/lessons/group', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `${token}`
-
-        },
-        body: JSON.stringify(formDataToSend),
-      });
+      const token = user.token;
+      console.log("token: ", token);
+      const response = await fetch(
+        "https://boxing-back-prod.onrender.com/api/lessons/group",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `${token}`,
+          },
+          body: JSON.stringify(formDataToSend),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `HTTP error! Status: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
-      setMessage(data)
+      setMessage(data);
     } catch (error) {
-      console.error('Error creating group lesson:', error);
-      setMessage('error')
+      console.error("Error creating group lesson:", error);
+      setMessage("error");
     }
   };
 
@@ -86,7 +95,7 @@ const SetGroupLesson = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log('formData:', formData);
+    console.log("formData:", formData);
   }, [formData]);
 
   return (
@@ -94,13 +103,24 @@ const SetGroupLesson = () => {
       <div>
         <label>
           שם האימון:
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </label>
       </div>
       <div>
         <label>
           תיאור האימון:
-          <textarea name="description" value={formData.description} onChange={handleChange} required />
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
         </label>
       </div>
       <div>
@@ -134,14 +154,24 @@ const SetGroupLesson = () => {
       <div>
         <label>
           אימון חוזר
-          <input type="checkbox" name="repeatsWeekly" checked={formData.repeatsWeekly} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name="repeatsWeekly"
+            checked={formData.repeatsWeekly}
+            onChange={handleChange}
+          />
         </label>
       </div>
       {formData.repeatsWeekly && (
         <div>
           <label>
             לכמה חודשים:
-            <select name="repeatMonth" value={formData.repeatMonth} onChange={handleChange} required={formData.repeatsWeekly}>
+            <select
+              name="repeatMonth"
+              value={formData.repeatMonth}
+              onChange={handleChange}
+              required={formData.repeatsWeekly}
+            >
               {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                 <option key={month} value={month}>
                   {month}

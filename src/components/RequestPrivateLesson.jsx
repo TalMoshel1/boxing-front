@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { useSelector } from "react-redux";
 import { incrementHour } from "../functions/incrementHour.js";
+import styled from "styled-components";
 
 const RequestPrivateLesson = () => {
   const data = useSelector((state) => state.calendar.privateModalData);
@@ -80,31 +81,70 @@ const RequestPrivateLesson = () => {
     sendPostRequest();
   };
 
+  const formatDateInHebrew = (dateString) => {
+    const parsedDate = new Date(dateString);
+
+    if (isNaN(parsedDate)) {
+      throw new Error("Invalid date format");
+    }
+    const options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+
+    const hebrewDate = parsedDate.toLocaleDateString("he-IL", options);
+
+    return hebrewDate;
+  };
+
+  const RequestForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 1rem;
+    direction: rtl;
+    height: 100%;
+
+    p {
+      line-height: 1.6;
+    }
+  `;
+
   if (message) {
     return <p>{message}</p>;
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <RequestForm onSubmit={handleSubmit}>
+        <h1>
+          <strong>{formatDateInHebrew(data.date.displayedDate)}</strong>
+        </h1>
         {cantIn && (
           <>
-            <p>{cantIn}</p>
+            <p>
+              <strong>{cantIn}</strong>
+            </p>
           </>
         )}
-        <label htmlFor="startTime">Start Time (format xx:xx):</label>
+        <label htmlFor="startTime">
+          בחר שעה <strong>(פורמט xx:xx)</strong>:
+        </label>
         <input
           type="text"
           id="startTime"
           value={startTime}
           onChange={(e) => setStartTime(e.target.value)}
-          placeholder="e.g., 08:00"
+          placeholder="לדוגמא: 08:00"
           pattern="[0-9]{2}:[0-9]{2}"
           required
           title="Please enter time in format xx:xx"
         />
 
-        <label htmlFor="studentName">Student Name:</label>
+        <label htmlFor="studentName">שם מלא:</label>
         <input
           type="text"
           id="studentName"
@@ -113,7 +153,7 @@ const RequestPrivateLesson = () => {
           required
         />
 
-        <label htmlFor="studentPhone">Student Phone:</label>
+        <label htmlFor="studentPhone">מספר פלאפון ליצירת קשר:</label>
         <input
           type="text"
           id="studentPhone"
@@ -122,7 +162,7 @@ const RequestPrivateLesson = () => {
           required
         />
 
-        <label htmlFor="studentMail">Student Mail:</label>
+        <label htmlFor="studentMail">כתובת מייל מלאה:</label>
         <input
           type="email"
           id="studentMail"
@@ -131,9 +171,8 @@ const RequestPrivateLesson = () => {
           required
         />
 
-        <button type="submit">Submit</button>
-      </form>
-      <button onClick={handleToggleModal}>Close</button>
+        <button type="submit">שלח</button>
+      </RequestForm>
     </>
   );
 };

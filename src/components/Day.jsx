@@ -4,6 +4,8 @@ import LessonsContainer from './LessonContainer.tsx'
 import { toggleSetPrivateModal, toggleSetGroupModal } from '../redux/calendarSlice.js'
 import "../css-components/Day.css";
 import { useDispatch } from "react-redux";
+import styled from 'styled-components';
+
 
 export function Day({ date, lessons }) {
   const [thisDayLessons, setThisDayLessons] = useState([]);
@@ -46,11 +48,17 @@ export function Day({ date, lessons }) {
     dispatch(toggleSetGroupModal({ date, thisDayLessons}));
   }
 
+  const Day = styled.h1`
+    font-size:2rem;
+`;
+
+
+
   return (
     <div className="day">
-      <p>{formatDateInHebrew(date.displayedDate)}</p>
-      <button onClick={handleToggleSetPrivateModal}> בקש לקבוע שיעור פרטי</button>
-     {user?.user.role === 'admin' && <button onClick={handleToggleSetGroupModal}> קבע אימון קבוצתי</button>} 
+      <Day>{formatDateInHebrew(date.displayedDate)}</Day>
+      <button onClick={handleToggleSetPrivateModal}><strong>בקש לקבוע שיעור פרטי</strong></button>
+     {user?.user.role === 'admin' && <button onClick={handleToggleSetGroupModal}><strong>קבע אימון קבוצתי</strong></button>} 
 
       <LessonsContainer>
         {thisDayLessons.map((l, index) => {

@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import CalendarHeader from '../components/CalendarHeader.jsx';
 import Days from '../components/Days.jsx';
 import Modal from '../components/Modal.jsx'
@@ -12,23 +13,27 @@ const Calendar = () => {
   const isGroupModalOpen = useSelector((state)=>state.calendar.isGroupModalOpen)
   const isDeleteLessonModalOpen = useSelector((state)=>state.calendar.isDeleteLessonModalOpen)
 
+  const isModalOpen = isPrivateModalOpen || isGroupModalOpen || isDeleteLessonModalOpen;
 
+  const CalendarContainer = styled.div`
+    width: 100%;
+    margin: 0 auto;
+    pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+    opacity: ${props => (props.disabled ? 0.2 : 1)};
+  `;
 
-
+  const Content = styled.div`
+    display: flex;
+  `;
 
   return (
-    <div className="calendar">
+    <CalendarContainer className="calendar" disabled={isModalOpen}>
       <CalendarHeader />
-      <div className="content">
+      <Content className="content">
         <Days />
-      </div>
-      {isPrivateModalOpen && <Modal > <RequestPrivateLesson/></Modal>}
-      {isGroupModalOpen && <Modal > <SetGroupLesson/></Modal>}
-      {isDeleteLessonModalOpen && <Modal > <DeleteLesson/></Modal>}
+      </Content>
 
-
-      
-    </div>
+    </CalendarContainer>
   );
 };
 

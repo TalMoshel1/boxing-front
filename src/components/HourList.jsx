@@ -1,7 +1,53 @@
 import React, { useState, useEffect } from "react";
-import "../css-components/HourList.css";
 import { useDispatch } from "react-redux";
 import { toggleSetDeleteLessonModal } from '../redux/calendarSlice';
+import styled from 'styled-components';
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000; /* Ensure the modal is above other elements */
+  pointer-events: auto; /* Ensure the modal is always interactive */
+`;
+
+const HourContainer = styled.div`
+  display: flex;
+  direction: rtl;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  gap: 1rem;
+
+    @media (orientation: landscape) {
+    flex-direction: column;
+  }
+
+`;
+
+const Hour = styled.div`
+  font-size: 1rem;
+  width: max-content;
+    direction: ltr;
+
+`;
+
+const HourEventContainer = styled.div`
+
+`;
+
+const HourEvent = styled.div`
+  font-size: 0.9rem;
+`;
+
+const DeleteButton = styled.button`
+`;
 
 const Lesson = ({ lesson }) => {
   const [user, setUser] = useState(null);
@@ -21,37 +67,42 @@ const Lesson = ({ lesson }) => {
 
   if (lesson.lesson.type === 'private') {
     return (
-      <div className='hour-container'>
-        {user?.user?.role === 'admin' && <button onClick={() => handleOpenDeleteModal(lesson.lesson._id)}>מחק אימון</button>}
+      <HourContainer>
+
+        <Hour>
+          {lesson.lesson.startTime} - {lesson.lesson.endTime} 
+        </Hour>
         <strong>אימון אישי</strong>
-        <div className="hour">
-          {lesson.lesson.startTime} <br /> {lesson.lesson.endTime}
-        </div>
-        <div className="hour-event-container">
-          <div className="hour-event">
+
+        <HourEventContainer>
+          <HourEvent>
             {lesson.lesson.studentName}<br /> {lesson.lesson.studentMail} <br /> {lesson.lesson.studentPhone}
-          </div>
-        </div>
-      </div>
+          </HourEvent>
+        </HourEventContainer>
+        {user?.user?.role === 'admin' && (
+          <DeleteButton onClick={() => handleOpenDeleteModal(lesson.lesson._id)}><strong>בטל</strong></DeleteButton>
+        )}
+      </HourContainer>
     );
   }
 
   return (
-    <div className='hour-container'>
-      {user?.user?.role === 'admin' && <button onClick={() => handleOpenDeleteModal(lesson.lesson._id)}>מחק אימון</button>}
-      <strong>אימון קבוצתי</strong>
-      <div className="hour">
-        {lesson.lesson.startTime} <br /> {lesson.lesson.endTime}
-      </div>
-      <div className="hour-event-container">
-        <div className="hour-event">
+    <HourContainer>
+
+      <Hour>
+      {lesson.lesson.startTime} - {lesson.lesson.endTime} 
+      </Hour>
+      <HourEventContainer>
+        <HourEvent>
           {lesson.lesson.name} - {lesson.lesson.trainer}
-        </div>
-        <div className="hour-event">{lesson.lesson.description}</div>
-      </div>
-    </div>
+        </HourEvent>
+        <HourEvent>{lesson.lesson.description}</HourEvent>
+      </HourEventContainer>
+      {user?.user?.role === 'admin' && (
+        <DeleteButton onClick={() => handleOpenDeleteModal(lesson.lesson._id)}><strong>בטל</strong></DeleteButton>
+      )}
+    </HourContainer>
   );
 };
 
 export default Lesson;
-

@@ -20,7 +20,7 @@ const SetGroupLesson = () => {
     startTime: "",
     endTime: "",
     repeatsWeekly: false,
-    repeatMonth: "",
+    repeatMonth: "1", // Default to "1" as per your requirement
     isApproved: true,
     type: "group",
   });
@@ -38,7 +38,7 @@ const SetGroupLesson = () => {
         ...prevFormData,
         startTime: "",
         endTime: "",
-        repeatMonth: "1",
+        repeatMonth: "1", // Reset repeatMonth to "1" when repeatsWeekly is checked
         isApproved: false,
       }));
     }
@@ -56,9 +56,11 @@ const SetGroupLesson = () => {
     e.preventDefault();
     const { repeatMonth, ...formDataToSend } = formData;
 
+    // Calculate repeatEndDate here based on formData.day and repeatMonth
+    const repeatEnd = repeatEndDate(formData.day, parseInt(repeatMonth, 10));
+
     try {
       const token = user.token;
-      console.log("token: ", token);
       const response = await fetch(
         "https://boxing-back.onrender.com/api/lessons/group",
         {
@@ -67,17 +69,15 @@ const SetGroupLesson = () => {
             "Content-Type": "application/json",
             authorization: `${token}`,
           },
-          body: JSON.stringify(formDataToSend),
+          body: JSON.stringify({
+            ...formDataToSend,
+            repeatEndDate: repeatEnd, // Include repeatEndDate in formDataToSend
+          }),
         }
       );
 
-      if (!response.ok) {
-        throw new Error(
-          `HTTP error! Status: ${response.status} ${response.statusText}`
-        );
-      }
-
       const data = await response.json();
+      setMessage("");
       setMessage(data);
     } catch (error) {
       console.error("Error creating group lesson:", error);
@@ -94,9 +94,24 @@ const SetGroupLesson = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log("formData:", formData);
-  }, [formData]);
+  const handleCloseError = () => {
+    setMessage("");
+  };
+
+  if (message.message) {
+    return (
+      <main>
+        <div
+          onClick={() => {
+            handleCloseError();
+          }}
+        >
+          X
+        </div>
+        <strong>{message.message}</strong>
+      </main>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit}>

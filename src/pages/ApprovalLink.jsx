@@ -37,6 +37,7 @@ const ApprovalLink = () => {
           return setIsApproved(data);
         }
       } catch (error) {
+        console.log(error);
         setIsApproved({ message: "שיעור כבר קבוע במערכת בזמן זה" });
       }
     };
@@ -44,7 +45,7 @@ const ApprovalLink = () => {
     if (lessonId) {
       sendPostRequest();
     }
-  }, [lessonId, user]);
+  }, []);
 
   if (isApproved) {
     console.log(isApproved);

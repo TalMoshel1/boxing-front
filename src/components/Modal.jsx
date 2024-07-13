@@ -39,6 +39,10 @@ const CloseButton = styled.button`
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding:1rem;
 `;
 
 const Modal = ({ children, type }) => {

@@ -79,20 +79,17 @@ const SetGroupLesson = () => {
 
     try {
       const token = user.token;
-      const response = await fetch(
-        "https://boxing-back.onrender.com/api/lessons/group",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `${token}`,
-          },
-          body: JSON.stringify({
-            ...formDataToSend,
-            repeatEndDate: repeatEnd,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/lessons/group", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${token}`,
+        },
+        body: JSON.stringify({
+          ...formDataToSend,
+          repeatEndDate: repeatEnd,
+        }),
+      });
 
       const data = await response.json();
       setMessage(data);

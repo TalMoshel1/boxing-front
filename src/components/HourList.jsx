@@ -66,12 +66,13 @@ const Lesson = ({ lesson }) => {
   };
 
   if (lesson.lesson.type === 'private') {
+    console.log(lesson.lesson)
     return (
       <HourContainer>
         <Hour>
           {lesson.lesson.startTime} - {lesson.lesson.endTime} 
         </Hour>
-        <strong>אימון אישי</strong>
+        <strong>אימון אישי {lesson.lesson.trainer}</strong>
 
         <HourEventContainer>
           <HourEvent>

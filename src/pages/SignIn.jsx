@@ -10,17 +10,14 @@ const SignIn = () => {
 
   const sendPostRequest = async () => {
     try {
-      const response = await fetch(
-        "https://boxing-back.onrender.com/api/auth/signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
       if (!response.ok) {
         throw new Error(
           `HTTP error! Status: ${response.status} ${response.statusText}`
@@ -49,7 +46,7 @@ const SignIn = () => {
     try {
       const token = JSON.parse(boxing)?.token;
       const response = await fetch(
-        "https://boxing-back.onrender.com/api/auth/verify-token",
+        "http://localhost:3000/api/auth/verify-token",
         {
           method: "POST",
           headers: {

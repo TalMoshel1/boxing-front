@@ -154,7 +154,7 @@ const RequestPrivateLesson = () => {
     try {
       const endTime = incrementHour(startTime);
       const response = await fetch(
-        "http://localhost:3000/api/lessons/requestPrivateLesson",
+        "https://boxing-back.onrender.com/api/lessons/requestPrivateLesson",
         {
           method: "POST",
           headers: {

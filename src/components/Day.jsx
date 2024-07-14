@@ -1,80 +1,79 @@
 import React, { useState, useEffect } from "react";
 import Lesson from "./HourList";
-import LessonsContainer from './LessonContainer.tsx'
-import { toggleSetPrivateModal, toggleSetGroupModal } from '../redux/calendarSlice.js'
+import LessonsContainer from "./LessonContainer.tsx";
+import {
+  toggleSetPrivateModal,
+  toggleSetGroupModal,
+} from "../redux/calendarSlice.js";
 import "../css-components/Day.css";
 import { useDispatch } from "react-redux";
-import styled from 'styled-components';
+import styled from "styled-components";
 
+const DayHeader = styled.h1`
+  font-size: 2rem;
+`;
 
-export function Day({ date, lessons }) {
+const Day = ({ date, lessons }) => {
   const [thisDayLessons, setThisDayLessons] = useState([]);
   const dispatch = useDispatch();
-  let user = localStorage.getItem('boxing')
-  // const {user} = JSON.parse(localStorage.getItem('boxing'))
-  if (user) {
-    user = JSON.parse(user)
-    console.log(user)
-  }
-
+  const user = JSON.parse(localStorage.getItem("boxing") || "{}");
 
   const formatDateInHebrew = (dateString) => {
     const parsedDate = new Date(dateString);
-
     if (isNaN(parsedDate)) {
-      throw new Error('Invalid date format');
+      throw new Error("Invalid date format");
     }
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-
-    const hebrewDate = parsedDate.toLocaleDateString('he-IL', options);
-
+    const options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    const hebrewDate = parsedDate.toLocaleDateString("he-IL", options);
     return hebrewDate;
-  }
-
+  };
 
   useEffect(() => {
-    const filteredLessons = lessons.filter(l => l.displayedDate === date.displayedDate);
-    setThisDayLessons(filteredLessons);
+
+    const filteredLessons = lessons.filter(
+      (l) => l.displayedDate === date.displayedDate
+    );
+    const mappedLessons = filteredLessons.map((l) => {
+      return l;
+    });
+
+
+    setThisDayLessons(mappedLessons);
   }, [lessons, date.displayedDate]);
 
   const handleToggleSetPrivateModal = () => {
-    console.log({ date, thisDayLessons})
-
-    dispatch(toggleSetPrivateModal({ date, thisDayLessons}));
-  }
+    dispatch(toggleSetPrivateModal({ date, thisDayLessons }));
+  };
 
   const handleToggleSetGroupModal = () => {
-    console.log('data: ',{ date, thisDayLessons})
-    dispatch(toggleSetGroupModal({ date, thisDayLessons}));
-  }
-
-  const Day = styled.h1`
-    font-size:2rem;
-`;
-
+    dispatch(toggleSetGroupModal({ date, thisDayLessons }));
+  };
 
 
   return (
     <div className="day">
-      <Day>{formatDateInHebrew(date.displayedDate)}</Day>
-      <button onClick={handleToggleSetPrivateModal}><strong>בקש לקבוע שיעור פרטי</strong></button>
-     {user?.user.role === 'admin' && <button onClick={handleToggleSetGroupModal}><strong>קבע אימון קבוצתי</strong></button>} 
+      <DayHeader>{formatDateInHebrew(date.displayedDate)}</DayHeader>
+      <button onClick={handleToggleSetPrivateModal}>
+        <strong>בקש לקבוע שיעור פרטי</strong>
+      </button>
+      {user?.user?.role === "admin" && (
+        <button onClick={handleToggleSetGroupModal}>
+          <strong>קבע אימון קבוצתי</strong>
+        </button>
+      )}
 
       <LessonsContainer>
-        {thisDayLessons.map((l, index) => {
-          if (user?.user.role === 'admin' && l.lesson.type === 'private' && l.lesson.isApproved === true)  {
-            return <Lesson key={index} lesson={l} />
-
-          }
-          if (l.lesson.type !== 'private') {
-            return <Lesson key={index} lesson={l} />
-
-          }
-        }
-        )}
+        {thisDayLessons.map((l, index) => (
+          <Lesson key={index} lesson={l} />
+        ))}
       </LessonsContainer>
     </div>
-  )
-}
+  );
+};
 
 export default Day;

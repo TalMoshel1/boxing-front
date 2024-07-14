@@ -23,7 +23,6 @@ const CalendarHeader = () => {
   const calendar = useSelector((state) => state.calendar);
   const view = useSelector((state) => state.calendar.view);
 
-  console.log(calendar);
 
   const handleNext = () => {
     if (view === 'month') {

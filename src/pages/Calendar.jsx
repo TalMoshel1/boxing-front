@@ -28,6 +28,7 @@ const Calendar = () => {
     margin: 0 auto;
     pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
     opacity: ${(props) => (props.disabled ? 0.2 : 1)};
+
   `;
 
   const Content = styled.div`
@@ -38,9 +39,7 @@ const Calendar = () => {
     <CalendarContainer className="calendar" disabled={isModalOpen}>
       <CalendarHeader />
       <Content className="content">
-        <Suspense fallback={<p>loading</p>}>
           <Days />
-        </Suspense>
       </Content>
     </CalendarContainer>
   );

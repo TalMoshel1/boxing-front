@@ -1,210 +1,10 @@
-// import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
-// import { incrementHour } from "../functions/incrementHour.js";
-// import styled from "styled-components";
-
-// const RequestForm = styled.form`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   padding: 2rem;
-//   gap: 1rem;
-//   direction: rtl;
-//   width: 100%;
-//   max-width: 30vw;
-//   text-align: center;
-
-//   p {
-//     line-height: 1.6;
-//   }
-
-//   label {
-//     width: 100%;
-//     text-align: center;
-//   }
-
-//   input {
-//     width: 100%;
-//     padding: 0.5rem;
-//     margin-top: 0.5rem;
-//     box-sizing: border-box;
-//     text-align: center;
-//   }
-
-//   button {
-//     padding: 0.5rem 1rem;
-//     margin-top: 1rem;
-//   }
-// `;
-
-// const CantInContainer = styled.section`
-//   & > div {
-//     margin-bottom: 1.5rem;
-//   }
-
-//   div > :first-child {
-//   margin-top: 1.5rem;
-//   }
-
-
-
-// `
-
-// const RequestPrivateLesson = () => {
-//   const data = useSelector((state) => state.calendar.privateModalData);
-//   const dispatch = useDispatch();
-
-//   const [day, setDay] = useState(data.date.date);
-//   const [startTime, setStartTime] = useState("");
-//   const [studentName, setStudentName] = useState("");
-//   const [studentPhone, setStudentPhone] = useState("");
-//   const [studentMail, setStudentMail] = useState("");
-//   const [cantIn, setCantIn] = useState([]);
-//   const [message, setMessage] = useState("");
-
-//   useEffect(() => {
-//     if (data.thisDayLessons) {
-//       const lessonsArray = data.thisDayLessons
-//         .filter(l => l.lesson.isApproved)
-//         .map((l, index) => (
-//           <div key={index} style={{direction: 'ltr'}}>
-//             {l.lesson.startTime} - {l.lesson.endTime}
-//             <br />
-//           </div>
-//         ));
-//       setCantIn(lessonsArray);
-//     }
-//   }, [data.thisDayLessons]);
-
-//   const handleToggleModal = () => {
-//     dispatch(toggleSetPrivateModal());
-//   };
-
-//   const sendPostRequest = async () => {
-//     try {
-//       const endTime = incrementHour(startTime);
-//       const response = await fetch(
-//         "https://boxing-back.onrender.com/api/lessons/requestPrivateLesson",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({
-//             day,
-//             startTime,
-//             endTime,
-//             studentName,
-//             studentPhone,
-//             studentMail,
-//           }),
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error(
-//           `HTTP error! Status: ${response.status} ${response.statusText}`
-//         );
-//       }
-
-//       const data = await response.json();
-//       setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
-//     } catch (error) {
-//       console.error("Error sending POST request:", error);
-//     }
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     sendPostRequest();
-//   };
-
-//   const formatDateInHebrew = (dateString) => {
-//     const parsedDate = new Date(dateString);
-//     if (isNaN(parsedDate)) {
-//       throw new Error("Invalid date format");
-//     }
-//     const options = {
-//       weekday: "short",
-//       year: "numeric",
-//       month: "short",
-//       day: "numeric",
-//     };
-//     return parsedDate.toLocaleDateString("he-IL", options);
-//   };
-
-//   if (message) {
-//     return <p>{message}</p>;
-//   }
-
-//   return (
-//     <RequestForm onSubmit={handleSubmit}>
-//       <h1>
-//         <strong>{formatDateInHebrew(data.date.displayedDate)}</strong>
-//       </h1>
-//       {cantIn.length > 0 && (
-//         <CantInContainer>
-//           <p><strong style={{marginBottom: '1.5rem'}}>המאמן תפוס בשעות:</strong></p>
-//           {cantIn}
-//         </CantInContainer>
-//       )}
-//       <label htmlFor="startTime">
-//         בחר שעה <strong>(פורמט xx:xx)</strong>:
-//       </label>
-//       <input
-//         type="text"
-//         id="startTime"
-//         value={startTime}
-//         onChange={(e) => setStartTime(e.target.value)}
-//         placeholder="לדוגמא: 08:00"
-//         pattern="[0-9]{2}:[0-9]{2}"
-//         required
-//         title="Please enter time in format xx:xx"
-//       />
-
-//       <label htmlFor="studentName">שם מלא:</label>
-//       <input
-//         type="text"
-//         id="studentName"
-//         value={studentName}
-//         onChange={(e) => setStudentName(e.target.value)}
-//         required
-//       />
-
-//       <label htmlFor="studentPhone">מספר פלאפון ליצירת קשר:</label>
-//       <input
-//         type="text"
-//         id="studentPhone"
-//         value={studentPhone}
-//         onChange={(e) => setStudentPhone(e.target.value)}
-//         required
-//       />
-
-//       <label htmlFor="studentMail">כתובת מייל מלאה:</label>
-//       <input
-//         type="email"
-//         id="studentMail"
-//         value={studentMail}
-//         onChange={(e) => setStudentMail(e.target.value)}
-//         required
-//       />
-
-//       <button type="submit">שלח</button>
-//     </RequestForm>
-//   );
-// };
-
-// export default RequestPrivateLesson;
-
-
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
 
-const RequestForm = styled.form`
+export const RequestForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -224,7 +24,8 @@ const RequestForm = styled.form`
     text-align: center;
   }
 
-  input, select {
+  input,
+  select {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.5rem;
@@ -264,7 +65,6 @@ const StyledSelectContainer = styled.div`
     box-sizing: border-box;
     text-align: center;
     border: 1px solid grey;
-    border-radius: 4px;
     cursor: pointer;
     background-color: white;
   }
@@ -308,6 +108,7 @@ const RequestPrivateLesson = () => {
 
   const [day, setDay] = useState(data.date.date);
   const [startTime, setStartTime] = useState("");
+  const [trainer, setTrainer] = useState("David");
   const [studentName, setStudentName] = useState("");
   const [studentPhone, setStudentPhone] = useState("");
   const [studentMail, setStudentMail] = useState("");
@@ -317,12 +118,14 @@ const RequestPrivateLesson = () => {
 
   const selectRef = useRef(null);
 
+  console.log("day to create the private lesson: ", day);
+
   useEffect(() => {
     if (data.thisDayLessons) {
       const lessonsArray = data.thisDayLessons
-        .filter(l => l.lesson.isApproved)
+        .filter((l) => l.lesson.isApproved)
         .map((l, index) => (
-          <div key={index} style={{ direction: 'ltr' }}>
+          <div key={index} style={{ direction: "ltr" }}>
             {l.lesson.startTime} - {l.lesson.endTime}
             <br />
           </div>
@@ -364,6 +167,7 @@ const RequestPrivateLesson = () => {
             studentName,
             studentPhone,
             studentMail,
+            trainer,
           }),
         }
       );
@@ -411,8 +215,11 @@ const RequestPrivateLesson = () => {
     let minute = 0;
 
     while (hour < 20 || (hour === 20 && minute === 0)) {
-      const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-      const isDisabled = cantIn.some(l => {
+      const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(
+        2,
+        "0"
+      )}`;
+      const isDisabled = cantIn.some((l) => {
         const start = l.props.children[0];
         const end = l.props.children[2];
         return time === start || (time > start && time < end) || time === end;
@@ -421,7 +228,7 @@ const RequestPrivateLesson = () => {
       options.push(
         <div
           key={time}
-          className={`option ${isDisabled ? 'disabled' : ''}`}
+          className={`option ${isDisabled ? "disabled" : ""}`}
           onClick={() => !isDisabled && handleSelectOption(time)}
         >
           {time}
@@ -446,20 +253,28 @@ const RequestPrivateLesson = () => {
       <h1>
         <strong>{formatDateInHebrew(data.date.displayedDate)}</strong>
       </h1>
-      {/* <label htmlFor="startTime">
-        בחר שעה:
-      </label> */}
+
       <StyledSelectContainer ref={selectRef}>
         <div
           className="custom-select"
           onClick={() => setShowOptions(!showOptions)}
         >
-          {startTime || 'בחר שעה'}
+          {startTime || "בחר שעה"}
         </div>
-        <div className={`options-container ${showOptions ? 'show' : ''}`}>
+        <div className={`options-container ${showOptions ? "show" : ""}`}>
           {generateTimeOptions()}
         </div>
       </StyledSelectContainer>
+
+      <label htmlFor="trainer">מאמן:</label>
+      <select
+        id="trainer"
+        value={trainer}
+        onChange={(e) => setTrainer(e.target.value)}
+      >
+        <option value="David">David</option>
+        <option value="Eldad">Eldad</option>
+      </select>
 
       <label htmlFor="studentName">שם מלא:</label>
       <input

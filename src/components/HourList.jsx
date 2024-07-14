@@ -68,7 +68,6 @@ const Lesson = ({ lesson }) => {
   if (lesson.lesson.type === 'private') {
     return (
       <HourContainer>
-
         <Hour>
           {lesson.lesson.startTime} - {lesson.lesson.endTime} 
         </Hour>
@@ -80,7 +79,16 @@ const Lesson = ({ lesson }) => {
           </HourEvent>
         </HourEventContainer>
         {user?.user?.role === 'admin' && (
-          <DeleteButton onClick={() => handleOpenDeleteModal(lesson.lesson._id)}><strong>בטל</strong></DeleteButton>
+          // <DeleteButton onClick={() => {
+          //   handleOpenDeleteModal(lesson.lesson._id)
+
+          // }
+
+          // }><strong>בטל</strong></DeleteButton>
+          <DeleteButton onClick={() => {
+            console.log(lesson);
+            handleOpenDeleteModal(lesson); // Commented out to prevent modal from opening
+          }}><strong>בטל</strong></DeleteButton>
         )}
       </HourContainer>
     );
@@ -98,9 +106,10 @@ const Lesson = ({ lesson }) => {
         </HourEvent>
         <HourEvent>{lesson.lesson.description}</HourEvent>
       </HourEventContainer>
-      {user?.user?.role === 'admin' && (
-        <DeleteButton onClick={() => handleOpenDeleteModal(lesson.lesson._id)}><strong>בטל</strong></DeleteButton>
-      )}
+      <DeleteButton onClick={() => {
+            console.log(lesson);
+            handleOpenDeleteModal(lesson); // Commented out to prevent modal from opening
+          }}><strong>בטל</strong></DeleteButton>
     </HourContainer>
   );
 };

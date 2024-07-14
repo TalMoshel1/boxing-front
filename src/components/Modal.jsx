@@ -30,8 +30,8 @@ const ModalContainer = styled.div`
 `;
 
 const ModalHeader = styled.div`
-  display: flex;
-  justify-content: flex-end;
+  // display: flex;
+  // justify-content: flex-end;
 `;
 
 const CloseButton = styled.button`

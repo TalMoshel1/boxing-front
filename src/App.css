@@ -45,10 +45,24 @@ button {
   /* border-radius: 10px; */
 }
 
+.slick-dots {
+  display: none; 
+}
+
 .slider-container {
-  width: 100%; /* Full width of the parent container */
-  max-width: 800px; /* Limit max width for better responsiveness */
-  margin: 0 auto; /* Center the slider horizontally */
-  padding: 20px; /* Add padding for spacing */
-  touch-action: pan-y; /* Allow vertical scroll without interference */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  touch-action: pan-y;
+  margin-top: 10svh;
+}
+
+.slick-slide > div {
+  text-align: center;
+  padding: 10px;
+}
+
+.slick-list {
+  margin: 0 -10px; 
 }

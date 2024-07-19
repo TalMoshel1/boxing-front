@@ -9,7 +9,7 @@ const DateSlider = () => {
   const [loading, setLoading] = useState(false);
 
   const settings = {
-    dots: true,
+    dots: false, // Disable dots
     infinite: true,
     speed: 500,
     slidesToShow: 6,

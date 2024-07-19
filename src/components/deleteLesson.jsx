@@ -21,7 +21,7 @@ const DeleteLesson = () => {
   const deleteLesson = async (lessonId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/lessons/${lessonId}`,
+        `https://boxing-back.onrender.com/api/lessons/${lessonId}`,
         {
           method: "DELETE",
           headers: {

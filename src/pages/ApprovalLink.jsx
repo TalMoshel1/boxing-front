@@ -15,7 +15,7 @@ const ApprovalLink = () => {
     const sendPostRequest = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/lessons/approveLink/${lessonId}`,
+          `https://boxing-back.onrender.com/api/lessons/approveLink/${lessonId}`,
           {
             method: "PUT",
             headers: {

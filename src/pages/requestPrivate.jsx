@@ -4,9 +4,7 @@ import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
 
-
 export const RequestForm = styled.form`
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,7 +106,7 @@ const StyledSelectContainer = styled.div`
 `;
 
 const RequestPrivateLesson = () => {
-  console.log('great working, remove others in component folder')
+  console.log("great working, remove others in component folder");
   const data = useSelector((state) => state.calendar.privateModalData);
   const dispatch = useDispatch();
 
@@ -121,19 +119,19 @@ const RequestPrivateLesson = () => {
   const [cantIn, setCantIn] = useState([]);
   const [message, setMessage] = useState("");
   const [showOptions, setShowOptions] = useState(false);
-  const [thisDayLessons, setThisDayLessons] = useState([])
+  const [thisDayLessons, setThisDayLessons] = useState([]);
 
   const getDayLessons = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/lessons/day",
+        "https://boxing-back.onrender.com/api/lessons/day",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            date: day
+            date: day,
           }),
         }
       );
@@ -151,15 +149,15 @@ const RequestPrivateLesson = () => {
     }
   };
 
-  useEffect(()=>{
-    if(day) {
-      getDayLessons()
+  useEffect(() => {
+    if (day) {
+      getDayLessons();
     }
-  },[day])
+  }, [day]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (thisDayLessons.length > 0) {
-       const lessonsArray = thisDayLessons
+      const lessonsArray = thisDayLessons
         .filter((l) => l.isApproved)
         .map((l, index) => (
           <div key={index} style={{ direction: "ltr" }}>
@@ -169,7 +167,7 @@ const RequestPrivateLesson = () => {
         ));
       setCantIn(lessonsArray);
     }
-  },[thisDayLessons])
+  }, [thisDayLessons]);
 
   function formatDateToYYYYMMDD(date) {
     const year = date.getFullYear();
@@ -180,7 +178,7 @@ const RequestPrivateLesson = () => {
 
   const handleInputChange = (e) => {
     const date = new Date(e.target.value);
-    
+
     setDay(date);
   };
 
@@ -202,7 +200,7 @@ const RequestPrivateLesson = () => {
     try {
       const endTime = incrementHour(startTime);
       const response = await fetch(
-        "http://localhost:3000/api/lessons/requestPrivateLesson",
+        "https://boxing-back.onrender.com/api/lessons/requestPrivateLesson",
         {
           method: "POST",
           headers: {

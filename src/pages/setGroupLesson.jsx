@@ -26,7 +26,9 @@ const RequestForm = styled.section`
     text-align: center;
   }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.5rem;
@@ -43,11 +45,11 @@ const RequestForm = styled.section`
 
 const Main = styled.main`
   margin-top: 10svh;
-`
+`;
 
 const SetGroupLesson = () => {
   const dispatch = useDispatch();
-  
+
   const [day, setDay] = useState("");
   const [formData, setFormData] = useState({
     trainer: "דוד",
@@ -62,14 +64,12 @@ const SetGroupLesson = () => {
     type: "group",
   });
   const [message, setMessage] = useState("");
-  
+
   const [datePlaceholder, setDatePlaceholder] = useState("בחר תאריך"); // Default placeholder
 
   const [cantIn, setCantIn] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
-  const [thisDayLessons, setThisDayLessons] = useState([])
-
-
+  const [thisDayLessons, setThisDayLessons] = useState([]);
 
   // Handle form data change
   const handleChange = (e) => {
@@ -104,9 +104,9 @@ const SetGroupLesson = () => {
     });
   };
 
-  useEffect(()=>{
-    console.log('day: ', new Date(day))
-  },[day])
+  useEffect(() => {
+    console.log("day: ", new Date(day));
+  }, [day]);
 
   // Handle date input change
   const handleDateChange = (e) => {
@@ -116,7 +116,9 @@ const SetGroupLesson = () => {
       ...prevFormData,
       day: selectedDate,
     }));
-    setDatePlaceholder(selectedDate ? `תאריך שנבחר: ${selectedDate}` : "בחר תאריך");
+    setDatePlaceholder(
+      selectedDate ? `תאריך שנבחר: ${selectedDate}` : "בחר תאריך"
+    );
   };
 
   // Handle form submission
@@ -128,20 +130,23 @@ const SetGroupLesson = () => {
 
     try {
       const token = localStorage.getItem("boxing");
-      const response = await fetch("http://localhost:3000/api/lessons/group", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `${token}`,
-        },
-        body: JSON.stringify({
-          ...formDataToSend,
-          repeatEndDate: repeatEnd,
-        }),
-      });
+      const response = await fetch(
+        "https://boxing-back.onrender.com/api/lessons/group",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            ...formDataToSend,
+            repeatEndDate: repeatEnd,
+          }),
+        }
+      );
 
       const data = await response.json();
-      console.log('group data: ', data)
+      console.log("group data: ", data);
       setMessage(data.message || "Success");
       handleCloseCreateGroupLesson();
     } catch (error) {
@@ -261,7 +266,9 @@ const SetGroupLesson = () => {
         />
       </FormItemContainer>
 
-      <button type="submit" onClick={handleSubmit}>צור אימון</button>
+      <button type="submit" onClick={handleSubmit}>
+        צור אימון
+      </button>
     </RequestForm>
   );
 };

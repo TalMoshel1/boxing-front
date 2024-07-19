@@ -15,7 +15,7 @@ const Days = () => {
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
 
-  console.log('currentDateStr: ', currentDateStr)
+  console.log("currentDateStr: ", currentDateStr);
 
   const startOfWeek = (date) => {
     const day = date.getDay();
@@ -27,13 +27,18 @@ const Days = () => {
     const sendPostRequest = async () => {
       setIsDisplay(false);
       try {
-        const response = await fetch("http://localhost:3000/api/lessons/week", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ startOfWeek: startOfWeek(new Date(currentDateStr)) }),
-        });
+        const response = await fetch(
+          "https://boxing-back.onrender.com/api/lessons/week",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              startOfWeek: startOfWeek(new Date(currentDateStr)),
+            }),
+          }
+        );
         if (!response.ok) {
           setIsDisplay(true);
           throw new Error(
@@ -43,7 +48,7 @@ const Days = () => {
 
         const data = await response.json();
 
-        console.log('data: ', data)
+        console.log("data: ", data);
 
         if (data.length === 0) {
           return setIsDisplay(true);

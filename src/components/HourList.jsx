@@ -54,6 +54,8 @@ const Lesson = ({ lesson }) => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
+  console.log('user: ', user)
+
   useEffect(() => {
     const storedUser = localStorage.getItem('boxing');
     if (storedUser) {
@@ -79,10 +81,10 @@ const Lesson = ({ lesson }) => {
           </HourEvent>
         </HourEventContainer>
         {user?.user?.role === 'admin' && (
-
-          <DeleteButton onClick={() => {
+            <DeleteButton onClick={() => {
             handleOpenDeleteModal(lesson); 
           }}><strong>בטל</strong></DeleteButton>
+  
         )}
       </HourContainer>
     );
@@ -100,9 +102,12 @@ const Lesson = ({ lesson }) => {
         </HourEvent>
         <HourEvent>{lesson.lesson.description}</HourEvent>
       </HourEventContainer>
-      <DeleteButton onClick={() => {
-            handleOpenDeleteModal(lesson); // Commented out to prevent modal from opening
+      {user?.user?.role === 'admin' && (
+            <DeleteButton onClick={() => {
+            handleOpenDeleteModal(lesson); 
           }}><strong>בטל</strong></DeleteButton>
+  
+        )}
     </HourContainer>
   );
 };

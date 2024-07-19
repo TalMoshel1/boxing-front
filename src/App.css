@@ -44,3 +44,11 @@ body {
 button {
   /* border-radius: 10px; */
 }
+
+.slider-container {
+  width: 100%; /* Full width of the parent container */
+  max-width: 800px; /* Limit max width for better responsiveness */
+  margin: 0 auto; /* Center the slider horizontally */
+  padding: 20px; /* Add padding for spacing */
+  touch-action: pan-y; /* Allow vertical scroll without interference */
+}

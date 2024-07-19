@@ -2,9 +2,10 @@ import React, { useState, useCallback } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import '../App.css'
 
 const DateSlider = () => {
-  const [dates, setDates] = useState(generateDates(new Date(), 180)); // Generate 6 months worth of dates
+  const [dates, setDates] = useState(generateDates(new Date(), 30)); // Initial 30 days
   const [loading, setLoading] = useState(false);
 
   const settings = {
@@ -13,15 +14,15 @@ const DateSlider = () => {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 6,
-    swipeToSlide: true,
+    swipe: true,
     touchMove: true,
+    swipeToSlide: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
-          infinite: true,
         }
       },
       {
@@ -32,10 +33,9 @@ const DateSlider = () => {
         }
       }
     ],
-    afterChange: (index) => handleScrollEnd(index),
+    afterChange: (currentIndex) => handleScrollEnd(currentIndex),
   };
 
-  // Generate a list of dates starting from a given date
   function generateDates(start, count) {
     const dates = [];
     const startDate = new Date(start);
@@ -49,24 +49,22 @@ const DateSlider = () => {
     return dates;
   }
 
-  // Load more dates when scrolled to the end
   const loadMoreDates = useCallback(() => {
     if (loading) return;
 
     setLoading(true);
     const newStartDate = new Date(dates[dates.length - 1]);
     newStartDate.setDate(newStartDate.getDate() + 1);
-    const newDates = generateDates(newStartDate, 180); // Generate additional dates
+    const newDates = generateDates(newStartDate, 30);
 
     setDates((prevDates) => [...prevDates, ...newDates]);
     setLoading(false);
   }, [dates, loading]);
 
-  // Check if scrolled to the end
   const handleScrollEnd = (currentIndex) => {
-    const slideCount = dates.length;
-    const slidesToShow = 6; // Number of slides visible at a time
-    const isNearEnd = currentIndex >= slideCount - slidesToShow;
+    const totalSlides = dates.length;
+    const slidesToShow = 6;
+    const isNearEnd = currentIndex >= totalSlides - slidesToShow;
 
     if (isNearEnd) {
       loadMoreDates();

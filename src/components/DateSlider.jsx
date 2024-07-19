@@ -4,8 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const DateSlider = () => {
-  const [dates, setDates] = useState(generateDates(new Date(), 6));
-  const [startDate, setStartDate] = useState(new Date());
+  const [dates, setDates] = useState(generateDates(new Date(), 180)); // Generate 6 months worth of dates
   const [loading, setLoading] = useState(false);
 
   const settings = {
@@ -16,6 +15,23 @@ const DateSlider = () => {
     slidesToScroll: 6,
     swipeToSlide: true,
     touchMove: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          infinite: true,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      }
+    ],
     afterChange: (index) => handleScrollEnd(index),
   };
 
@@ -40,8 +56,8 @@ const DateSlider = () => {
     setLoading(true);
     const newStartDate = new Date(dates[dates.length - 1]);
     newStartDate.setDate(newStartDate.getDate() + 1);
-    const newDates = generateDates(newStartDate, 6);
-    
+    const newDates = generateDates(newStartDate, 180); // Generate additional dates
+
     setDates((prevDates) => [...prevDates, ...newDates]);
     setLoading(false);
   }, [dates, loading]);

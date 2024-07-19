@@ -8,32 +8,33 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  z-index: 1000; /* Ensure the modal is above other elements */
-  pointer-events: auto; /* Ensure the modal is always interactive */
+  z-index: 1000; 
+  pointer-events: auto; 
 `;
 
 const HourContainer = styled.div`
   display: flex;
   direction: rtl;
   align-items: center;
-  justify-content: space-between;
-  margin: 1rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   border-radius: 8px;
   gap: 1rem;
+  color: black;
+  padding-top: 1rem;
+  padding-bottom: 1em;
+  width:100%;
 
-    @media (orientation: landscape) {
+
+    @media (orientation: portrait) {
     flex-direction: column;
   }
 
 `;
 
 const Hour = styled.div`
-  font-size: 1rem;
-  width: max-content;
+  font-size:0.8rem;
+  width: min-content;
     direction: ltr;
 
 `;
@@ -43,7 +44,7 @@ const HourEventContainer = styled.div`
 `;
 
 const HourEvent = styled.div`
-  font-size: 0.9rem;
+  font-size:0.8rem;
 `;
 
 const DeleteButton = styled.button`
@@ -61,12 +62,10 @@ const Lesson = ({ lesson }) => {
   }, []);
 
   const handleOpenDeleteModal = (lessonId) => {
-    console.log('modal need to be opened');
     return dispatch(toggleSetDeleteLessonModal(lessonId));
   };
 
   if (lesson.lesson.type === 'private') {
-    console.log(lesson.lesson)
     return (
       <HourContainer>
         <Hour>
@@ -75,20 +74,14 @@ const Lesson = ({ lesson }) => {
         <strong>אימון אישי {lesson.lesson.trainer}</strong>
 
         <HourEventContainer>
-          <HourEvent>
-            {lesson.lesson.studentName}<br /> {lesson.lesson.studentMail} <br /> {lesson.lesson.studentPhone}
+          <HourEvent style={{fontSize: '0.4rem'}}>
+          <strong> {lesson.lesson.studentName}<br /> {lesson.lesson.studentMail} <br /> {lesson.lesson.studentPhone}</strong> 
           </HourEvent>
         </HourEventContainer>
         {user?.user?.role === 'admin' && (
-          // <DeleteButton onClick={() => {
-          //   handleOpenDeleteModal(lesson.lesson._id)
 
-          // }
-
-          // }><strong>בטל</strong></DeleteButton>
           <DeleteButton onClick={() => {
-            console.log(lesson);
-            handleOpenDeleteModal(lesson); // Commented out to prevent modal from opening
+            handleOpenDeleteModal(lesson); 
           }}><strong>בטל</strong></DeleteButton>
         )}
       </HourContainer>
@@ -108,7 +101,6 @@ const Lesson = ({ lesson }) => {
         <HourEvent>{lesson.lesson.description}</HourEvent>
       </HourEventContainer>
       <DeleteButton onClick={() => {
-            console.log(lesson);
             handleOpenDeleteModal(lesson); // Commented out to prevent modal from opening
           }}><strong>בטל</strong></DeleteButton>
     </HourContainer>

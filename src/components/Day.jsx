@@ -5,12 +5,22 @@ import {
   toggleSetPrivateModal,
   toggleSetGroupModal,
 } from "../redux/calendarSlice.js";
+import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
 import "../css-components/Day.css";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const DayHeader = styled.h1`
-  font-size: 2rem;
+    @media (orientation: portrait) {
+      font-size: 1rem;
+  }
+  padding:1rem;
+`;
+
+const DayStyle = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Day = ({ date, lessons }) => {
@@ -33,6 +43,7 @@ const Day = ({ date, lessons }) => {
     return hebrewDate;
   };
 
+
   useEffect(() => {
 
     const filteredLessons = lessons.filter(
@@ -46,33 +57,17 @@ const Day = ({ date, lessons }) => {
     setThisDayLessons(mappedLessons);
   }, [lessons, date.displayedDate]);
 
-  const handleToggleSetPrivateModal = () => {
-    dispatch(toggleSetPrivateModal({ date, thisDayLessons }));
-  };
-
-  const handleToggleSetGroupModal = () => {
-    dispatch(toggleSetGroupModal({ date, thisDayLessons }));
-  };
-
+  const dayOfTheWeek = date.displayedDate.split(',')[0]
 
   return (
-    <div className="day">
-      <DayHeader>{formatDateInHebrew(date.displayedDate)}</DayHeader>
-      <button onClick={handleToggleSetPrivateModal}>
-        <strong>בקש לקבוע שיעור פרטי</strong>
-      </button>
-      {user?.user?.role === "admin" && (
-        <button onClick={handleToggleSetGroupModal}>
-          <strong>קבע אימון קבוצתי</strong>
-        </button>
-      )}
-
+    <DayStyle className="day">
+      <DayHeader>{formatThreeLettersMonthAndDaysToHebrew('day',dayOfTheWeek)}</DayHeader>
       <LessonsContainer>
         {thisDayLessons.map((l, index) => (
           <Lesson key={index} lesson={l} />
         ))}
       </LessonsContainer>
-    </div>
+    </DayStyle>
   );
 };
 

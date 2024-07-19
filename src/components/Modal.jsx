@@ -6,6 +6,7 @@ import {
   toggleSetDeleteLessonModal,
 } from "../redux/calendarSlice.js";
 import styled from "styled-components";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ModalContainer = styled.div`
   display: flex;
@@ -15,9 +16,8 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: lightgrey;
-  z-index: 1000; /* Ensure the modal is above other elements */
-  pointer-events: auto; /* Ensure the modal is always interactive */
+  z-index: 1000;
+  pointer-events: auto; 
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
   perspective: 1000px;
@@ -27,6 +27,7 @@ const ModalContainer = styled.div`
   padding: 20px;
   width: 80%;
   max-height: 80%;
+  background-color: white;
 `;
 
 const ModalHeader = styled.div`
@@ -61,7 +62,7 @@ const Modal = ({ children, type }) => {
   return (
     <ModalContainer className="modal">
       <ModalHeader>
-        <CloseButton onClick={handleClose}>×</CloseButton>
+        <CloseButton onClick={handleClose}><CloseIcon/></CloseButton>
       </ModalHeader>
       {children}
     </ModalContainer>

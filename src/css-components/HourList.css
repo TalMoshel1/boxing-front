@@ -1,7 +1,6 @@
 .hour-list {
   display: flex;
   flex-direction: column;
-  padding: 10px;
   max-height: 90vh;
   overflow-y: auto;
 }

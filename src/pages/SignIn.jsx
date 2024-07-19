@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import {useMenu} from '../context/useMenu'
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
+  const {isMenuOpen, toggleMenu}= useMenu()
+
+  console.log(isMenuOpen)
+
 
   const navigate = useNavigate();
 
+  console.log('!')
+
   const sendPostRequest = async () => {
     try {
-      const response = await fetch(
-        "https://boxing-back.onrender.com/api/auth/signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
       if (!response.ok) {
         throw new Error(
           `HTTP error! Status: ${response.status} ${response.statusText}`
@@ -49,7 +53,7 @@ const SignIn = () => {
     try {
       const token = JSON.parse(boxing)?.token;
       const response = await fetch(
-        "https://boxing-back.onrender.com/api/auth/verify-token",
+        "http://localhost:3000/api/auth/verify-token",
         {
           method: "POST",
           headers: {
@@ -66,9 +70,8 @@ const SignIn = () => {
 
       const data = await response.json();
       if (data.message === "Token is valid") {
-        navigate("/calendar");
+        navigate("/setgrouplesson");
       }
-      console.log("authenticate token: ", data);
     } catch (error) {
       console.error("Error sending POST request:", error);
     }

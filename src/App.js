@@ -1,33 +1,73 @@
-import React from 'react';
+import React from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import Calendar from './pages/Calendar';
-import SignIn from './pages/SignIn.jsx';
-import ApproveLink from './pages/ApprovalLink.jsx';
-import Modal from './components/Modal.jsx';
-import RequestPrivateLesson from './components/RequestPrivateLesson.jsx';
-import SetGroupLesson from './components/setGroupLesson.jsx';
-import DeleteLesson from './components/deleteLesson.jsx';
-import './App.css';
-import { useSelector } from 'react-redux';
+import { ThemeProvider } from "styled-components";
+import { Navbar } from "./components/Navbar.jsx";
+import Calendar from "./pages/Calendar";
+import DeleteLesson from './components/deleteLesson.jsx'
+import SignIn from "./pages/SignIn.jsx";
+import ApproveLink from "./pages/ApprovalLink.jsx";
+import Modal from "./components/Modal.jsx";
+import SetGroupLesson from "./pages/setGroupLesson.jsx";
+import "./App.css";
+import { useSelector } from "react-redux";
+import Home from "./pages/Home.jsx";
+import RequestPrivateLesson from "./pages/requestPrivate.jsx";
+import FormContainer from "./components/formContainer.jsx";
+import MenuList from "./components/MenuList.jsx";
+import { MenuProvider } from "./context/useMenu";
+import { useMenu } from "./context/useMenu.jsx";
+import styled from "styled-components";
+import DateSlider from "./components/DateSlider.jsx";
 
 function App() {
-  const isPrivateModalOpen = useSelector((state) => state.calendar.isPrivateModalOpen);
-  const isGroupModalOpen = useSelector((state) => state.calendar.isGroupModalOpen);
-  const isDeleteLessonModalOpen = useSelector((state) => state.calendar.isDeleteLessonModalOpen);
+  const theme = useSelector((state) => state.theme);
 
   return (
     <BrowserRouter>
-      {isPrivateModalOpen && <Modal type="private"> <RequestPrivateLesson /></Modal>}
-      {isGroupModalOpen && <Modal type="group"> <SetGroupLesson /></Modal>}
-      {isDeleteLessonModalOpen && <Modal type="delete"> <DeleteLesson /></Modal>}
-      <Routes>
-        <Route path="/" element={<Navigate to="/signin" />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
-      </Routes>
+      <ThemeProvider theme={theme}>
+        <MenuProvider>
+          <AppContent />
+        </MenuProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
+
+function AppContent() {
+  const { isMenuOpen } = useMenu();
+  const isDeleteLessonModalOpen = useSelector((state) => state.calendar.isDeleteLessonModalOpen);
+
+  return (
+    <>
+      <Navbar />
+      {isMenuOpen && <MenuList />}
+      {isDeleteLessonModalOpen && <Modal type="delete"> <DeleteLesson /></Modal>}
+
+      <Routes>
+        <Route path="/" element={<Navigate to="/signin" />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/calendar" element={
+          <DisabledWrapper isDisabled={isDeleteLessonModalOpen}>
+            <Calendar />
+          </DisabledWrapper>
+        } />
+        <Route path="/setgrouplesson" element={<FormContainer><SetGroupLesson /></FormContainer>} />
+        <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/requestPrivte" element={<FormContainer><RequestPrivateLesson /></FormContainer>} />
+        <Route path='/dateslider' element={<DateSlider/>}/>
+      </Routes>
+    </>
+  );
+}
+
+const DisabledWrapper = styled.div`
+  ${(props) => props.isDisabled && `
+    opacity: 0.5;
+    pointer-events: none;
+  `}
+`;
 
 export default App;

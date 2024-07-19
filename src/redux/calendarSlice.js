@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const startOfWeek = (date) => {
+  const day = date.getDay();
+  const diff = date.getDate() - day;
+  return new Date(date.setDate(diff));
+};
+
 const initialState = {
-  currentDate: new Date(),
+  currentDate: new Date().toISOString(),
   view: 'week',
   isPrivateModalOpen: false,
   privateModalData: null,
@@ -20,11 +26,15 @@ const calendarSlice = createSlice({
     },
     incrementDate: (state, action) => {
       const days = action.payload;
-      state.currentDate = new Date(state.currentDate.getTime() + days * 86400000);
+      const date = new Date(state.currentDate)
+      const newDate = new Date(date.getTime() + days * 86400000)
+      const newDate2 = startOfWeek(newDate)
+      state.currentDate = `${newDate2}`
     },
     setMonth: (state, action) => {
-      const months = action.payload;
-      state.currentDate = new Date(state.currentDate.setMonth(state.currentDate.getMonth() + months));
+      // const months = action.payload;
+      // date = new Date(state.currentDate)
+      // state.currentDate = new Date(state.currentDate.setMonth(state.currentDate.getMonth() + months));
     },
     toggleSetPrivateModal(state, action) {
       state.isPrivateModalOpen = !state.isPrivateModalOpen;

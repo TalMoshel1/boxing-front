@@ -1,27 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setView, incrementDate, setMonth } from '../redux/calendarSlice';
 import styled from 'styled-components';
+import { renderDays } from '../functions/renderDays';
+import { current } from '@reduxjs/toolkit';
+import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
 
 const Header = styled.header`
-  display: flex;
-  align-items: center;
-  margin: 0.75rem;
-  padding: 1rem;
-  gap: 0.75rem;
-  direction: rtl;
-  position: sticky;
-  top: 0;
-  /* z-index: 1; */
-  justify-content: space-evenly;
-  background-color: white;
+@media (orientation: portrait) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    direction: rtl;
+    position: sticky;
+    top: 0;
+    justify-content: center;
+    height: 5svh;
+    padding: 0.5rem
+}
 `;
 
 const CalendarHeader = () => {
   const dispatch = useDispatch();
-  const currentDate = useSelector((state) => state.calendar.currentDate);
-  const calendar = useSelector((state) => state.calendar);
+  const currentDateString = useSelector((state) => state.calendar.currentDate);
   const view = useSelector((state) => state.calendar.view);
+  let [currentDate, setCurrentDate] = useState(null)
+  
+  useEffect(()=>{
+    if (currentDateString) {
+      setCurrentDate(new Date(currentDateString))
+    }
+  },[currentDateString])
 
 
   const handleNext = () => {
@@ -44,25 +53,34 @@ const CalendarHeader = () => {
     }
   };
 
+  const daysweek = renderDays(new Date(currentDate), 'week')
+  const today = new Date(currentDate).toDateString();
+
+ let firstDate = daysweek[0].displayedDate.split(' ')
+ let endDate = daysweek[daysweek.length-2].displayedDate.split(' ')
+
+  const monthInHebrew = formatThreeLettersMonthAndDaysToHebrew('month',endDate[1])
+
+
+ const DateString = `${firstDate[2].split(',')[0]} - ${endDate[2].split(',')[0]} ל${monthInHebrew} ${endDate[3]}`
+
   return (
     <Header>
       <button onClick={handlePrev}>
         {view === 'week' ? 'שבוע קודם' : view === 'day' ? 'יום קודם' : ''}
       </button>
-      <span>
-        {currentDate.toLocaleDateString('en-US', { month: 'long' })}{' '}
-        {currentDate.getFullYear()}
+      <span style={{direction: 'rtl'}}>
+        {currentDate && <>
+           {/* {currentDate.toLocaleDateString('en-US', { month: 'long' })}{' '} */}
+           {DateString}
+          </>
+          }
+
       </span>
       <button onClick={handleNext}>
         {view === 'week' ? 'שבוע הבא' : view === 'day' ? 'יום הבא' : ''}
       </button>
-      <select
-        onChange={(e) => dispatch(setView(e.target.value))}
-        value={view}
-      >
-        <option value="week">תצוגת שבועית</option>
-        <option value="day">תצוגה יומית</option>
-      </select>
+
     </Header>
   );
 };

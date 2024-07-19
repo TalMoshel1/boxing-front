@@ -4,7 +4,9 @@ import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
 
+
 export const RequestForm = styled.form`
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +17,9 @@ export const RequestForm = styled.form`
   max-width: 30vw;
   text-align: center;
 
+  .date {
+    margin-bottom: 1rem;
+  }
   p {
     line-height: 1.6;
   }
@@ -40,15 +45,15 @@ export const RequestForm = styled.form`
   }
 `;
 
-const CantInContainer = styled.section`
-  & > div {
-    margin-bottom: 1.5rem;
-  }
+// const CantInContainer = styled.section`
+//   & > div {
+//     margin-bottom: 1.5rem;
+//   }
 
-  div > :first-child {
-    margin-top: 1.5rem;
-  }
-`;
+//   div > :first-child {
+//     margin-top: 1.5rem;
+//   }
+// `;
 
 const StyledSelectContainer = styled.div`
   position: relative;
@@ -66,7 +71,7 @@ const StyledSelectContainer = styled.div`
     text-align: center;
     border: 1px solid grey;
     cursor: pointer;
-    background-color: white;
+    // background-color: white;
   }
 
   .options-container {
@@ -93,7 +98,7 @@ const StyledSelectContainer = styled.div`
     text-align: center;
     cursor: pointer;
     &:hover {
-      background-color: #f1f1f1;
+      // background-color: #f1f1f1;
     }
     &.disabled {
       color: #ccc;
@@ -103,10 +108,11 @@ const StyledSelectContainer = styled.div`
 `;
 
 const RequestPrivateLesson = () => {
+  console.log('great working, remove others in component folder')
   const data = useSelector((state) => state.calendar.privateModalData);
   const dispatch = useDispatch();
 
-  const [day, setDay] = useState(data.date.date);
+  const [day, setDay] = useState();
   const [startTime, setStartTime] = useState("");
   const [trainer, setTrainer] = useState("David");
   const [studentName, setStudentName] = useState("");
@@ -115,24 +121,70 @@ const RequestPrivateLesson = () => {
   const [cantIn, setCantIn] = useState([]);
   const [message, setMessage] = useState("");
   const [showOptions, setShowOptions] = useState(false);
+  const [thisDayLessons, setThisDayLessons] = useState([])
 
-  const selectRef = useRef(null);
+  const getDayLessons = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/lessons/day",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            date: day
+          }),
+        }
+      );
 
-  console.log("day to create the private lesson: ", day);
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! Status: ${response.status} ${response.statusText}`
+        );
+      }
 
-  useEffect(() => {
-    if (data.thisDayLessons) {
-      const lessonsArray = data.thisDayLessons
-        .filter((l) => l.lesson.isApproved)
+      const data = await response.json();
+      setThisDayLessons(data);
+    } catch (error) {
+      console.error("Error sending POST request:", error);
+    }
+  };
+
+  useEffect(()=>{
+    if(day) {
+      getDayLessons()
+    }
+  },[day])
+
+  useEffect(()=>{
+    if (thisDayLessons.length > 0) {
+       const lessonsArray = thisDayLessons
+        .filter((l) => l.isApproved)
         .map((l, index) => (
           <div key={index} style={{ direction: "ltr" }}>
-            {l.lesson.startTime} - {l.lesson.endTime}
+            {l.startTime} - {l.endTime}
             <br />
           </div>
         ));
       setCantIn(lessonsArray);
     }
-  }, [data.thisDayLessons]);
+  },[thisDayLessons])
+
+  function formatDateToYYYYMMDD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleInputChange = (e) => {
+    const date = new Date(e.target.value);
+    
+    setDay(date);
+  };
+
+  const selectRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -146,15 +198,11 @@ const RequestPrivateLesson = () => {
     };
   }, [selectRef]);
 
-  const handleToggleModal = () => {
-    dispatch(toggleSetPrivateModal());
-  };
-
-  const sendPostRequest = async () => {
+  const sendPostPrivateRequest = async () => {
     try {
       const endTime = incrementHour(startTime);
       const response = await fetch(
-        "https://boxing-back.onrender.com/api/lessons/requestPrivateLesson",
+        "http://localhost:3000/api/lessons/requestPrivateLesson",
         {
           method: "POST",
           headers: {
@@ -187,26 +235,26 @@ const RequestPrivateLesson = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    sendPostRequest();
+    sendPostPrivateRequest();
   };
 
-  const formatDateInHebrew = (dateString) => {
-    const parsedDate = new Date(dateString);
-    if (isNaN(parsedDate)) {
-      throw new Error("Invalid date format");
-    }
-    const options = {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    return parsedDate.toLocaleDateString("he-IL", options);
-  };
+  //   const formatDateInHebrew = (dateString) => {
+  //     const parsedDate = new Date(dateString);
+  //     if (isNaN(parsedDate)) {
+  //       throw new Error("Invalid date format");
+  //     }
+  //     const options = {
+  //       weekday: "short",
+  //       year: "numeric",
+  //       month: "short",
+  //       day: "numeric",
+  //     };
+  //     return parsedDate.toLocaleDateString("he-IL", options);
+  //   };
 
   const handleSelectOption = (time) => {
     setStartTime(time);
-    setShowOptions(false); // Close the options container after selecting an option
+    setShowOptions(false);
   };
 
   const generateTimeOptions = () => {
@@ -234,7 +282,7 @@ const RequestPrivateLesson = () => {
           {time}
         </div>
       );
-      minute += 5;
+      minute += 30; // Increment by 30 minutes
       if (minute === 60) {
         minute = 0;
         hour += 1;
@@ -250,9 +298,13 @@ const RequestPrivateLesson = () => {
 
   return (
     <RequestForm onSubmit={handleSubmit}>
-      <h1>
-        <strong>{formatDateInHebrew(data.date.displayedDate)}</strong>
-      </h1>
+      <input
+        className="date"
+        type="date"
+        onChange={handleInputChange}
+        min={formatDateToYYYYMMDD(new Date())}
+        required
+      />
 
       <StyledSelectContainer ref={selectRef}>
         <div
@@ -271,6 +323,7 @@ const RequestPrivateLesson = () => {
         id="trainer"
         value={trainer}
         onChange={(e) => setTrainer(e.target.value)}
+        required
       >
         <option value="David">David</option>
         <option value="Eldad">Eldad</option>

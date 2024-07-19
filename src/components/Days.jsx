@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Day from "./Day.jsx";
 import { compareDates } from "../functions/compareTime.js";
-import { renderDays } from "../functions/computingDays.js";
 import "../css-components/Days.css";
-import { current } from "@reduxjs/toolkit";
 import ClipLoader from "react-spinners/ClipLoader";
 import styled from "styled-components";
+import { renderDays } from "../functions/renderDays.js";
 
 const Days = () => {
   const [fetchedLessons, setFetchedLessons] = useState([]);
-  const currentDate = useSelector((state) => state.calendar.currentDate);
+  const currentDateStr = useSelector((state) => state.calendar.currentDate);
+  const currentDate = new Date(currentDateStr);
   const view = useSelector((state) => state.calendar.view);
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
 
-  console.log("currentDate: ", currentDate);
+  console.log('currentDateStr: ', currentDateStr)
 
   const startOfWeek = (date) => {
     const day = date.getDay();
@@ -23,50 +23,17 @@ const Days = () => {
     return new Date(date.setDate(diff));
   };
 
-  const addDays = (date, days) => {
-    return new Date(date.getTime() + days * 86400000);
-  };
-
-  const formatDate = (date) => {
-    return {
-      displayedDate: date.toLocaleDateString("en-US", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }),
-      date: date,
-    };
-  };
-
-  const renderDays = () => {
-    let days = [];
-    let startDate;
-    if (view === "week") {
-      startDate = startOfWeek(currentDate);
-      for (let i = 0; i < 7; i++) {
-        days.push(formatDate(addDays(startDate, i)));
-      }
-    } else if (view === "day") {
-      days.push(formatDate(currentDate));
-    }
-    return days;
-  };
-
   useEffect(() => {
     const sendPostRequest = async () => {
       setIsDisplay(false);
       try {
-        const response = await fetch(
-          "https://boxing-back.onrender.com/api/lessons/week",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ startOfWeek: currentDate }),
-          }
-        );
+        const response = await fetch("http://localhost:3000/api/lessons/week", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ startOfWeek: startOfWeek(new Date(currentDateStr)) }),
+        });
         if (!response.ok) {
           setIsDisplay(true);
           throw new Error(
@@ -76,8 +43,9 @@ const Days = () => {
 
         const data = await response.json();
 
+        console.log('data: ', data)
+
         if (data.length === 0) {
-          console.log("great");
           return setIsDisplay(true);
         }
 
@@ -87,13 +55,13 @@ const Days = () => {
       }
     };
     sendPostRequest();
-  }, [currentDate]);
+  }, [currentDateStr]);
 
   useEffect(() => {
     if (fetchedLessons?.length > 0) {
       let list = [];
 
-      renderDays().forEach((date) => {
+      renderDays(currentDate, "week").forEach((date) => {
         fetchedLessons.forEach((l) => {
           const isEqual = compareDates(l.day, date.date);
           if (isEqual) {
@@ -109,16 +77,19 @@ const Days = () => {
 
   const SpinnerContainer = styled.div`
     position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translatex(-50%, -50%);
+    transform: translate(-50%, -50%);
   `;
+
   if (isDisplay) {
-    console.log("displayedLessons: ", displayedLessons);
     return (
       <div className="days">
-        {renderDays().map((day, index) => (
-          <Day key={index} date={day} lessons={displayedLessons} />
-        ))}
+        {renderDays(currentDate, "week").map((day, index) => {
+          if (!day.displayedDate.includes("Sat")) {
+            return <Day key={index} date={day} lessons={displayedLessons} />;
+          }
+        })}
       </div>
     );
   } else {

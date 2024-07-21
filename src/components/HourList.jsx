@@ -12,7 +12,7 @@ const ModalContainer = styled.div`
   pointer-events: auto; 
 `;
 
-const HourContainer = styled.div`
+export const HourContainer = styled.div`
   display: flex;
   direction: rtl;
   align-items: center;

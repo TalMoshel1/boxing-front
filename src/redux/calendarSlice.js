@@ -14,7 +14,8 @@ const initialState = {
   isGroupModalOpen: false,
   groupModalData: null,
   isDeleteLessonModalOpen: false,
-  deleteLessonModalData: null
+  deleteLessonModalData: null,
+  lessonsToDisplay: null
 };
 
 const calendarSlice = createSlice({
@@ -31,10 +32,9 @@ const calendarSlice = createSlice({
       const newDate2 = startOfWeek(newDate)
       state.currentDate = `${newDate2}`
     },
-    setMonth: (state, action) => {
-      // const months = action.payload;
-      // date = new Date(state.currentDate)
-      // state.currentDate = new Date(state.currentDate.setMonth(state.currentDate.getMonth() + months));
+    setLessonsToDisplay: (state, action) => {
+      const lessons = action.payload;
+      state.lessonsToDisplay = lessons
     },
     toggleSetPrivateModal(state, action) {
       state.isPrivateModalOpen = !state.isPrivateModalOpen;
@@ -51,5 +51,5 @@ const calendarSlice = createSlice({
   },
 });
 
-export const { setView, incrementDate, setMonth, toggleSetPrivateModal, toggleSetGroupModal, toggleSetDeleteLessonModal} = calendarSlice.actions;
+export const { setView, incrementDate, setMonth, toggleSetPrivateModal, toggleSetGroupModal, toggleSetDeleteLessonModal, setLessonsToDisplay} = calendarSlice.actions;
 export default calendarSlice.reducer;

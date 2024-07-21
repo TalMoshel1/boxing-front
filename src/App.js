@@ -19,7 +19,8 @@ import MenuList from "./components/MenuList.jsx";
 import { MenuProvider } from "./context/useMenu";
 import { useMenu } from "./context/useMenu.jsx";
 import styled from "styled-components";
-import DateSlider from "./components/DateSlider.jsx";
+import DateSliderDays from "./components/DateSliderDays.jsx";
+import DateSliderWeeks from "./components/DateSliderWeeks.jsx";
 
 function App() {
   const theme = useSelector((state) => state.theme);
@@ -57,7 +58,9 @@ function AppContent() {
         <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
         <Route path="/home" element={<Home />} />
         <Route path="/requestPrivte" element={<FormContainer><RequestPrivateLesson /></FormContainer>} />
-        <Route path='/dateslider' element={<DateSlider/>}/>
+        <Route path='/datesliderdays' element={<DateSliderDays/>}/>
+        <Route path='/datesliderweeks' element={<DateSliderWeeks/>}/>
+
       </Routes>
     </>
   );

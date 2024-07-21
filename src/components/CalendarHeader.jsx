@@ -25,6 +25,8 @@ const CalendarHeader = () => {
   const currentDateString = useSelector((state) => state.calendar.currentDate);
   const view = useSelector((state) => state.calendar.view);
   let [currentDate, setCurrentDate] = useState(null)
+
+  console.log('view: ', view)
   
   useEffect(()=>{
     if (currentDateString) {
@@ -66,20 +68,39 @@ const CalendarHeader = () => {
 
   return (
     <Header>
-      <button onClick={handlePrev}>
+
+<select onChange={(e) => dispatch(setView(e.target.value))} value={view}>
+        <option value="week">תצוגת שבועית</option>
+        <option value="day">תצוגה יומית</option>
+      </select>
+      
+      {view === 'week' &&  <>
+            
+        <button onClick={handlePrev}>
         {view === 'week' ? 'שבוע קודם' : view === 'day' ? 'יום קודם' : ''}
       </button>
-      <span style={{direction: 'rtl'}}>
-        {currentDate && <>
-           {/* {currentDate.toLocaleDateString('en-US', { month: 'long' })}{' '} */}
-           {DateString}
-          </>
-          }
 
-      </span>
-      <button onClick={handleNext}>
+<span style={{direction: 'rtl'}}>
+{currentDate && <>
+   {/* {currentDate.toLocaleDateString('en-US', { month: 'long' })}{' '} */}
+   {DateString}
+  </>
+  }
+
+</span>
+      
+      </>
+      
+
+      
+      }
+
+
+      {view === 'week' && <button onClick={handleNext}>
         {view === 'week' ? 'שבוע הבא' : view === 'day' ? 'יום הבא' : ''}
-      </button>
+      </button>}
+
+
 
     </Header>
   );

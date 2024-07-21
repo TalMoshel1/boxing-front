@@ -15,7 +15,6 @@ const Days = () => {
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
 
-  console.log("currentDateStr: ", currentDateStr);
 
   const startOfWeek = (date) => {
     const day = date.getDay();

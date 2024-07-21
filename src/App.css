@@ -51,8 +51,9 @@ button {
 
 .slider-container {
   width: 100%;
-  overflow: hidden;
-  position: relative;
+  overflow:hidden;
+
+  
 }
 
 .slick-slide {
@@ -68,4 +69,16 @@ button {
 
 .slick-track {
   display: flex;
+}
+
+.hasLesson {
+  background-color: red;
+}
+
+.slider-item {
+  margin: 2rem;
+}
+
+.item-h {
+  padding:1rem;
 }

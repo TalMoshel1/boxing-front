@@ -78,7 +78,7 @@ const DateSlider = () => {
 
   const sendLessonsRequest = async (startDate, endDate) => {
     try {
-      const response = await fetch("http://localhost:3000/api/lessons/days", {
+      const response = await fetch("https://boxing-front.onrender.com//api/lessons/days", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

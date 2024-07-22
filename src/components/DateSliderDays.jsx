@@ -14,7 +14,7 @@ const DateSlider = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
-  const [displayedData, setDisplayedData] = useState();
+  // const [displayedData, setDisplayedData] = useState();
 
   useEffect(() => {
     console.log(lessonsMap);
@@ -24,10 +24,11 @@ const DateSlider = () => {
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
       dispatch(setLessonsToDisplay(lessons));
-      setDisplayedData(lessons);
+      // setDisplayedData(lessons);
     } else {
+      console.log("??");
       dispatch(setLessonsToDisplay([]));
-      setDisplayedData([]);
+      // setDisplayedData([]);
     }
   };
 

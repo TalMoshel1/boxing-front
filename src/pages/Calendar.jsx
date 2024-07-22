@@ -9,15 +9,9 @@ import { IndividualDay } from "../components/IndividualDay.jsx";
 
 const Calendar = () => {
   const view = useSelector((state) => state.calendar.view);
-  const dayToDisplay = useSelector((state) => state.calendar.dayToDisplay);
+  const lessonsToDisplay = useSelector((state) => state.calendar.lessonsToDisplay);
 
-  useEffect(()=>{
-    if (dayToDisplay) {
-      console.log(dayToDisplay)
 
-    }
-
-  },[dayToDisplay])
 
   const CalendarContainer = styled.div`
     width: 100%;
@@ -50,7 +44,7 @@ const Calendar = () => {
 
           <DateSliderDays />
 
-          {dayToDisplay && <ul style={{position:'relative', left: '0', right: '0' }}>
+          {lessonsToDisplay && <ul style={{position:'relative', left: '0', right: '0' }}>
           <IndividualDay/>
 
           </ul>}

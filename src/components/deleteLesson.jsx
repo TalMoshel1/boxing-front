@@ -19,8 +19,8 @@ const DeleteLesson = () => {
   };
 
   const deleteLesson = async (lessonId) => {
-    console.log(lessonId)
-    console.log(token)
+    console.log(lessonId);
+    console.log(token);
     try {
       const response = await fetch(
         `https://boxing-back.onrender.com/api/lessons/${lessonId}`,

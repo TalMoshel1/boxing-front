@@ -74,7 +74,7 @@ const StyledSelectContainer = styled.div`
 
   .options-container {
     position: absolute;
-    bottom: 100%; /* Display the options above the select */
+    top: 0;
     left: 0;
     width: 100%;
     max-height: 200px; /* Adjust height as needed */

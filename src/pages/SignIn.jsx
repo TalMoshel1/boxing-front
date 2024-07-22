@@ -2,17 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useMenu } from "../context/useMenu";
+import styled from "styled-components";
+  const LoginContainer = styled.main`
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  direction: rtl;
+
+  .input-group {
+  padding-bottom: 1rem;
+  }
+  `
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
   const { isMenuOpen, toggleMenu } = useMenu();
 
-  console.log(isMenuOpen);
-
   const navigate = useNavigate();
-
-  console.log("!");
 
   const sendPostRequest = async () => {
     try {
@@ -86,11 +94,11 @@ const SignIn = () => {
   }, [boxing]);
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
+    <LoginContainer className="login-container">
+      <h2>התחברות מנהל</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">אימייל</label>
           <input
             type="email"
             id="email"
@@ -100,7 +108,7 @@ const SignIn = () => {
           />
         </div>
         <div className="input-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">סיסמה</label>
           <input
             type="password"
             id="password"
@@ -111,7 +119,7 @@ const SignIn = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-    </div>
+    </LoginContainer>
   );
 };
 

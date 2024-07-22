@@ -8,6 +8,7 @@ const FormItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const RequestForm = styled.section`
@@ -20,6 +21,7 @@ const RequestForm = styled.section`
   width: 100%;
   max-width: 30vw;
   text-align: center;
+  position: relative;
 
   label {
     width: 100%;
@@ -33,13 +35,21 @@ const RequestForm = styled.section`
     padding: 0.5rem;
     margin-top: 0.5rem;
     box-sizing: border-box;
-    text-align: center;
+    text-align: center; /* Center text in inputs and selects */
     border: 1px solid grey;
   }
 
   button {
     padding: 0.5rem 1rem;
     margin-top: 1rem;
+  }
+
+  .repeatMonth {
+    // appearance: none; /* Remove default styling in some browsers */
+    // text-align-last: center; /* Center text in the dropdown options */
+    // text-align: center; /* Align text center in the field itself */
+    // max-height: 300px; /* Increase maximum height for dropdown */
+    // overflow-y: auto; /* Enable vertical scrolling if options exceed max-height */
   }
 `;
 
@@ -71,7 +81,6 @@ const SetGroupLesson = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [thisDayLessons, setThisDayLessons] = useState([]);
 
-  // Handle form data change
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
@@ -104,11 +113,6 @@ const SetGroupLesson = () => {
     });
   };
 
-  useEffect(() => {
-    console.log("day: ", new Date(day));
-  }, [day]);
-
-  // Handle date input change
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setDay(selectedDate);
@@ -121,7 +125,6 @@ const SetGroupLesson = () => {
     );
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { repeatMonth, ...formDataToSend } = formData;
@@ -156,7 +159,6 @@ const SetGroupLesson = () => {
     }
   };
 
-  // Handle modal close
   const handleCloseCreateGroupLesson = () => {
     dispatch(toggleSetGroupModal());
   };
@@ -165,7 +167,6 @@ const SetGroupLesson = () => {
     setMessage("");
   };
 
-  // Update formData when day changes
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -214,24 +215,27 @@ const SetGroupLesson = () => {
           checked={formData.repeatsWeekly}
           onChange={handleChange}
         />
+
+        {formData.repeatsWeekly && (
+          <FormItemContainer>
+            <label>לכמה חודשים:</label>
+            <select
+              name="repeatMonth"
+              className="repeatMonth"
+              value={formData.repeatMonth}
+              onChange={handleChange}
+              required={formData.repeatsWeekly}
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </FormItemContainer>
+        )}
       </FormItemContainer>
-      {formData.repeatsWeekly && (
-        <FormItemContainer>
-          <label>לכמה חודשים:</label>
-          <select
-            name="repeatMonth"
-            value={formData.repeatMonth}
-            onChange={handleChange}
-            required={formData.repeatsWeekly}
-          >
-            {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-              <option key={month} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </FormItemContainer>
-      )}
+
       <FormItemContainer>
         <label>תיאור האימון:</label>
         <textarea

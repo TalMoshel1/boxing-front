@@ -5,39 +5,42 @@ import "slick-carousel/slick/slick-theme.css";
 import "../App.css";
 import { useDispatch } from "react-redux";
 import { isSameDate } from "../functions/compareDatesFormats";
-import {IndividualDay} from './IndividualDay.jsx'
-import {setLessonsToDisplay} from '../redux/calendarSlice.js'
-import {formatDateInHebrew} from '../functions/formatDateInHebrew.js'
+import { IndividualDay } from "./IndividualDay.jsx";
+import { setLessonsToDisplay } from "../redux/calendarSlice.js";
+import { formatDateInHebrew } from "../functions/formatDateInHebrew.js";
 
 const DateSlider = () => {
   const [dates, setDates] = useState(generateDatesFrom(new Date(), 30));
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
-  const [displayedData, setDisplayedData] = useState()
-
-
-  const handleDisplayData = (data) => {
-    const lessons = Object.values(data)[0]
-    if (lessons.length > 0) {
-      dispatch(setLessonsToDisplay(lessons))
-    }
-  }
-
-
+  const [displayedData, setDisplayedData] = useState();
 
   useEffect(() => {
-    if (lessonsMap.length > 0) {
+    console.log(lessonsMap);
+  }, [lessonsMap]);
+
+  const handleDisplayData = (data) => {
+    const lessons = Object.values(data)[0];
+    if (lessons && lessons.length > 0) {
+      dispatch(setLessonsToDisplay(lessons));
+      setDisplayedData(lessons);
+    } else {
+      dispatch(setLessonsToDisplay([]));
+      setDisplayedData([]);
+    }
+  };
+
+  useEffect(() => {
+    if (lessonsMap && lessonsMap.length > 0) {
       const mergedData = mergeDateWithLessons();
       setDates(mergedData);
     }
   }, [lessonsMap]);
 
-
-
   const settings = {
     dots: false,
-    // infinite: true,
+    infinite: true,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
@@ -78,25 +81,29 @@ const DateSlider = () => {
 
   const sendLessonsRequest = async (startDate, endDate) => {
     try {
-      const response = await fetch("https://boxing-front.onrender.com//api/lessons/days", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          start: startDate,
-          end: endDate,
-        }),
-      });
+      const response = await fetch(
+        "https://boxing-back.onrender.com/api/lessons/days",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            start: startDate,
+            end: endDate,
+          }),
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {
       console.error("Error:", error);
+      return [];
     }
   };
 
   const mergeDateWithLessons = () => {
-    const lessonsMapByDate = lessonsMap.reduce((map, lesson) => {
+    const lessonsMapByDate = (lessonsMap || []).reduce((map, lesson) => {
       const lessonDate = new Date(lesson.day).toDateString();
       if (!map[lessonDate]) {
         map[lessonDate] = [];
@@ -137,7 +144,9 @@ const DateSlider = () => {
       Object.keys(newDates[newDates.length - 1])[0]
     );
 
-    setLessonsMap((prevLessons) => [...prevLessons, ...newLessons]);
+    if (newLessons && newLessons.length > 0) {
+      setLessonsMap((prevLessons) => [...prevLessons, ...newLessons]);
+    }
 
     setLoading(false);
   }, [dates, loading]);
@@ -159,7 +168,9 @@ const DateSlider = () => {
         Object.keys(dates[dates.length - 1])[0]
       );
 
-      setLessonsMap(lessons);
+      if (lessons && lessons.length > 0) {
+        setLessonsMap(lessons);
+      }
     };
 
     fetchInitialData();
@@ -167,39 +178,27 @@ const DateSlider = () => {
 
   return (
     <>
-     <div className="slider-container">
-      <Slider {...settings}>
-        {dates.map((dateObj, index) => {
-          const dateKey = Object.keys(dateObj)[0];
-          const hasLesson = lessonsMap.some((lesson) =>
-            isSameDate(dateKey, new Date(lesson.day).toDateString())
-          );
+      <div className="slider-container">
+        <Slider {...settings}>
+          {dates.map((dateObj, index) => {
+            const dateKey = Object.keys(dateObj)[0];
+            const hasLesson = (lessonsMap || []).some((lesson) =>
+              isSameDate(dateKey, new Date(lesson.day).toDateString())
+            );
 
-
-          return (
-            <div
-              key={index}
-              onClick={() => handleDisplayData(dateObj)}
-              className={hasLesson ? 'hasLesson slider-item': 'slider-item'}
-            >
-              <h3 className='item-h'>{formatDateInHebrew(dateKey)}</h3>
-            </div>
-          );
-        })}
-      </Slider>
-    </div>
-
-
-    {displayedData &&
-    <ul>
-          <IndividualDay displayedData={displayedData}/>
-
-    </ul>
-
-
-    }
+            return (
+              <div
+                key={index}
+                onClick={() => handleDisplayData(dateObj)}
+                className={hasLesson ? "hasLesson slider-item" : "slider-item"}
+              >
+                <h3 className="item-h">{formatDateInHebrew(dateKey)}</h3>
+              </div>
+            );
+          })}
+        </Slider>
+      </div>
     </>
-   
   );
 };
 

@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { Navbar } from "./components/Navbar.jsx";
 import Calendar from "./pages/Calendar";
-import DeleteLesson from './components/deleteLesson.jsx'
+import DeleteLesson from "./components/deleteLesson.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import ApproveLink from "./pages/ApprovalLink.jsx";
 import Modal from "./components/Modal.jsx";
@@ -38,36 +38,65 @@ function App() {
 
 function AppContent() {
   const { isMenuOpen } = useMenu();
-  const isDeleteLessonModalOpen = useSelector((state) => state.calendar.isDeleteLessonModalOpen);
+  const isDeleteLessonModalOpen = useSelector(
+    (state) => state.calendar.isDeleteLessonModalOpen
+  );
 
   return (
     <>
       <Navbar />
       {isMenuOpen && <MenuList />}
-      {isDeleteLessonModalOpen && <Modal type="delete"> <DeleteLesson /></Modal>}
+      {isDeleteLessonModalOpen && (
+        <Modal type="delete">
+          <DeleteLesson />
+        </Modal>
+      )}
 
       <Routes>
         <Route path="/" element={<Navigate to="/signin" />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/calendar" element={
-          <DisabledWrapper isDisabled={isDeleteLessonModalOpen}>
-            <Calendar />
-          </DisabledWrapper>
-        } />
-        <Route path="/setgrouplesson" element={<FormContainer><SetGroupLesson /></FormContainer>} />
+        <Route
+          path="/calendar"
+          element={
+            <StyledDisabledWrapper isDisabled={isDeleteLessonModalOpen}>
+              <Calendar />
+            </StyledDisabledWrapper>
+          }
+        />
+        <Route
+          path="/setgrouplesson"
+          element={
+            <FormContainer>
+              <SetGroupLesson />
+            </FormContainer>
+          }
+        />
         <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/requestPrivte" element={<FormContainer><RequestPrivateLesson /></FormContainer>} />
-        <Route path='/datesliderdays' element={<DateSliderDays/>}/>
-        <Route path='/datesliderweeks' element={<DateSliderWeeks/>}/>
-
+        <Route
+          path="/requestPrivte"
+          element={
+            <FormContainer>
+              <RequestPrivateLesson />
+            </FormContainer>
+          }
+        />
+        <Route path="/datesliderdays" element={<DateSliderDays />} />
+        <Route path="/datesliderweeks" element={<DateSliderWeeks />} />
       </Routes>
     </>
   );
 }
 
-const DisabledWrapper = styled.div`
-  ${(props) => props.isDisabled && `
+// Custom wrapper to prevent passing the isDisabled prop to the DOM
+const DisabledWrapper = ({ isDisabled, children, ...props }) => (
+  <div {...props}>{children}</div>
+);
+
+const StyledDisabledWrapper = styled(DisabledWrapper)`
+  ${({ isDisabled }) =>
+    isDisabled &&
+    `
     opacity: 0.5;
     pointer-events: none;
   `}

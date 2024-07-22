@@ -47,11 +47,14 @@ const Calendar = () => {
         </Content>
       ) : (
         <>
+
           <DateSliderDays />
-          <ul style={{position:'relative', left: '0', right: '0' }}>
+
+          {dayToDisplay && <ul style={{position:'relative', left: '0', right: '0' }}>
           <IndividualDay/>
 
-          </ul>
+          </ul>}
+
         </>
       )}
     </CalendarContainer>

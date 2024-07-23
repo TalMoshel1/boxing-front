@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
+import {openWhatsApp} from '../functions/sendWhatsApp.js'
 
 export const RequestForm = styled.form`
   display: flex;
@@ -225,6 +226,7 @@ const RequestPrivateLesson = () => {
       }
 
       const data = await response.json();
+      openWhatsApp(data)
       setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
     } catch (error) {
       console.error("Error sending POST request:", error);

@@ -13,6 +13,7 @@ const Calendar = () => {
 
 
 
+
   const CalendarContainer = styled.div`
     width: 100%;
     margin: 0 auto;
@@ -34,18 +35,18 @@ const Calendar = () => {
 
   return (
     <CalendarContainer className="calendar">
-      <CalendarHeader />
+      <CalendarHeader className='calendar header' />
       {view === "week" ? (
         <Content className="content">
-          <Days />
+          <Days  />
         </Content>
       ) : (
         <>
 
-          <DateSliderDays />
+          <DateSliderDays className='dateSliderDays'/>
 
           {lessonsToDisplay && <ul style={{position:'relative', left: '0', right: '0' }}>
-          <IndividualDay/>
+          <IndividualDay className='individualDay'/>
 
           </ul>}
 

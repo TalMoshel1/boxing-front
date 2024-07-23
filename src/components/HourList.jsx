@@ -54,7 +54,6 @@ const Lesson = ({ lesson }) => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
-  console.log('user: ', user)
 
   useEffect(() => {
     const storedUser = localStorage.getItem('boxing');
@@ -67,7 +66,8 @@ const Lesson = ({ lesson }) => {
     return dispatch(toggleSetDeleteLessonModal(lessonId));
   };
 
-  if (lesson.lesson.type === 'private') {
+  if (lesson.lesson.type === 'private' && lesson.lesson.isApproved === true) {
+    console.log(lesson.lesson)
     return (
       <HourContainer>
         <Hour>
@@ -89,27 +89,30 @@ const Lesson = ({ lesson }) => {
       </HourContainer>
     );
   }
+  if (lesson.lesson.type === 'group' ) { 
 
-  return (
-    <HourContainer>
-
-      <Hour>
-      {lesson.lesson.startTime} - {lesson.lesson.endTime} 
-      </Hour>
-      <HourEventContainer>
-        <HourEvent>
-          {lesson.lesson.name} - {lesson.lesson.trainer}
-        </HourEvent>
-        <HourEvent>{lesson.lesson.description}</HourEvent>
-      </HourEventContainer>
-      {user?.user?.role === 'admin' && (
-            <DeleteButton onClick={() => {
-            handleOpenDeleteModal(lesson); 
-          }}><strong>בטל</strong></DeleteButton>
+    return (
+      <HourContainer>
   
-        )}
-    </HourContainer>
-  );
+        <Hour>
+        {lesson.lesson.startTime} - {lesson.lesson.endTime} 
+        </Hour>
+        <HourEventContainer>
+          <HourEvent>
+            {lesson.lesson.name} - {lesson.lesson.trainer}
+          </HourEvent>
+          <HourEvent>{lesson.lesson.description}</HourEvent>
+        </HourEventContainer>
+        {user?.user?.role === 'admin' && (
+              <DeleteButton onClick={() => {
+              handleOpenDeleteModal(lesson); 
+            }}><strong>בטל</strong></DeleteButton>
+    
+          )}
+      </HourContainer>
+    );
+  }
+
 };
 
 export default Lesson;

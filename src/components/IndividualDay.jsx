@@ -20,6 +20,8 @@ export const IndividualDay = () => {
     }
   }, []);
 
+
+  console.log(displayedData)
   if (displayedData) {
     return (
       <ul style={styles.listContainer}>

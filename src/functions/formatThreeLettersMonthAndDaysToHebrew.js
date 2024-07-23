@@ -1,8 +1,8 @@
 export function formatThreeLettersMonthAndDaysToHebrew(type, threeLetters) {
     const monthsEnglish = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const monthsHebrew = ["ינואר", "פבואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
-    const daysEnglish = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']; // No 'Sat'
-    const daysHebrew = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי']; // No 'שבת'
+    const daysEnglish = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']; 
+    const daysHebrew = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי']; 
     
 
 

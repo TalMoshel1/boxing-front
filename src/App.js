@@ -99,6 +99,7 @@ const StyledDisabledWrapper = styled(DisabledWrapper)`
     `
     opacity: 0.5;
     pointer-events: none;
+    width:100vw;
   `}
 `;
 

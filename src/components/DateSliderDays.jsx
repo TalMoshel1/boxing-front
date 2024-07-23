@@ -3,32 +3,43 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../App.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isSameDate } from "../functions/compareDatesFormats";
 import { IndividualDay } from "./IndividualDay.jsx";
 import { setLessonsToDisplay } from "../redux/calendarSlice.js";
-import { formatDateInHebrew } from "../functions/formatDateInHebrew.js";
+// import { formatDateInHebrew } from "../functions/formatDateInHebrew.js";
+import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
+
 
 const DateSlider = () => {
   const [dates, setDates] = useState(generateDatesFrom(new Date(), 30));
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
-  // const [displayedData, setDisplayedData] = useState();
+  const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
 
-  useEffect(() => {
-    console.log(lessonsMap);
-  }, [lessonsMap]);
+  // useEffect(() => {
+  //   const today = new Date().toDateString();
+  //   const firstItemInList = dates[0]?.[today];
+  //   const biggerThanZero = displayedData && displayedData.length > 0;
+
+  //   if (dates?.length === 30 && firstItemInList?.length > 0 && biggerThanZero) {
+  //     if (displayedData[0]?.day.toDateString() !== new Date().toDateString()) {
+  //       console.log("great");
+  //       dispatch(setLessonsToDisplay(dates[0]?.[today]));
+  //     } else {
+  //       console.log("shit");
+  //     }
+  //   }
+  // }, [dates]);
 
   const handleDisplayData = (data) => {
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
       dispatch(setLessonsToDisplay(lessons));
-      // setDisplayedData(lessons);
     } else {
-      console.log("??");
+      console.log('!')
       dispatch(setLessonsToDisplay([]));
-      // setDisplayedData([]);
     }
   };
 
@@ -48,6 +59,7 @@ const DateSlider = () => {
     swipe: true,
     touchMove: true,
     swipeToSlide: true,
+    variableWidth: true,
     responsive: [
       {
         breakpoint: 600,
@@ -137,7 +149,6 @@ const DateSlider = () => {
 
     const newDates = generateDatesFrom(lastDate, 30);
 
-    console.log("This update is from here");
     setDates((prevDates) => [...prevDates, ...newDates]);
 
     const newLessons = await sendLessonsRequest(
@@ -187,13 +198,28 @@ const DateSlider = () => {
               isSameDate(dateKey, new Date(lesson.day).toDateString())
             );
 
+            const day = dateKey.split(',')[0].split(' ')[0]
+
             return (
               <div
                 key={index}
                 onClick={() => handleDisplayData(dateObj)}
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
+                // style={{width:'20%'}}
               >
-                <h3 className="item-h">{formatDateInHebrew(dateKey)}</h3>
+                <h3
+                  className="item-h"
+                >
+                  {/* {formatDateInHebrew(dateKey)} */}
+
+                  {/* ראשון
+                  30/10/2024 */}
+                  {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
+                  <br/>
+
+
+                   {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth()}/{new Date(dateKey).getFullYear()}
+                </h3>
               </div>
             );
           })}

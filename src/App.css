@@ -49,22 +49,37 @@ button {
   display: none; 
 }
 
-.slider-container {
-  width: 100%;
-  overflow:hidden;
-
+@media (orientation: landscape) {
+  .slider-container {
+    width: 50%;
   
+    
+  }
+
+}
+
+@media (orientation: portrait) {
+  .slider-container {
+    width: 100%;
+  
+    
+  }
+
 }
 
 .slick-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* margin: 0 10px; */
+  z-index: 998;
   text-align: center;
 }
 
+.slick-active.slick-current {
+  z-index: 999;
+  }
+
 .slick-list {
-  margin: 0 auto;
+  margin: 0 -10px;
+
 }
 
 .slick-track {
@@ -76,9 +91,37 @@ button {
 }
 
 .slider-item {
-  margin: 2rem;
+  border: 1px solid black;
+  margin-right:1rem;
+  /* width: 16.6666666667vw; */
+}
+
+@media (orientation: portrait) {
+
+  
+  .slider-item {
+    height: 7rem;
+  
+  }
+}
+
+@media (orientation: landscape) {
+
+  
+.slider-item {
+  height:3rem;
+
+}
+
 }
 
 .item-h {
-  padding:1rem;
+  width:100%;
+  z-index: 1000;
+
+}
+
+h3 { 
+  width:100px
+
 }

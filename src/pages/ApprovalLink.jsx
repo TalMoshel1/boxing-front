@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import {openWhatsApp} from '../functions/sendWhatsApp'
 
 const ApprovalLink = () => {
   const { lessonId } = useParams();
@@ -33,6 +34,7 @@ const ApprovalLink = () => {
 
         const data = await response.json();
         if (data) {
+          openWhatsApp(data.lesson, '0522233573')
           return setIsApproved(data);
         }
       } catch (error) {

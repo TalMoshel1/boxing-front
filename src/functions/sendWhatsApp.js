@@ -1,15 +1,24 @@
-export function openWhatsApp(lesson) {
+export function openWhatsApp(lesson, phone) {
+    const trainersPhone = ['0544541145', '0502323574']
+    let encodedMessage
+    let message
+    let formattedNumber = `972${phone.substring(1)}`;
 
-    console.log(lesson)
-    const  phoneNumber = '0522233573'
-    // const formattedNumber = `972${phoneNumber.substring(1)}`;
-    const formattedNumber = `972522233573`;
-    const message = `
-    http://localhost:3001/approveLink/${lesson._id}
-    `
-    const encodedMessage = encodeURIComponent(message);
-    
+    if (trainersPhone.includes(phone)) {
+      message = `
+      https://boxing-front.onrender.com/approveLink/${lesson._id}
+      `
+    } else {
+      message = `
+      היי ${lesson.studentName}
+      האימון נקבע ליום: ${new Date(lesson.day).getDate()}/${new Date(lesson.day).getMonth()}/${new Date(lesson.day).getFullYear()}
+      בשעות: ${lesson.startTime} - ${lesson.endTime}
+      עם המאמן: ${lesson.trainer}
+      `
+
+    }
+
+    encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
-    
     window.open(whatsappUrl, '_blank');
   }

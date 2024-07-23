@@ -122,6 +122,8 @@ const RequestPrivateLesson = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [thisDayLessons, setThisDayLessons] = useState([]);
 
+  console.log(trainer)
+
   const getDayLessons = async () => {
     try {
       const response = await fetch(
@@ -226,7 +228,14 @@ const RequestPrivateLesson = () => {
       }
 
       const data = await response.json();
-      openWhatsApp(data)
+      if (trainer === 'David') { 
+        openWhatsApp(data, '0502323574')
+
+      }
+      if (trainer === 'Eldad') {
+        openWhatsApp(data, '0544541145')
+
+      }
       setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
     } catch (error) {
       console.error("Error sending POST request:", error);

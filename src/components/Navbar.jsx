@@ -9,19 +9,18 @@ import MenuList from "./MenuList.jsx";
 import { toggle } from "../redux/menuReducer.js";
 import { useMenu } from '../context/useMenu';
 
-export function Navbar() {
-  const { isMenuOpen, toggleMenu } = useMenu();
-
+export function Navbar({ isMenuOpen, handleToggleMenu }) {
   return (
     <>
       <Nav className={"sticky-nav"}>
         <MenuIcon
           className="menu"
-          onClick={toggleMenu}
+          onClick={handleToggleMenu}
           style={{
-            marginRight: '0.5rem',
-            boxShadow: isMenuOpen ? '0 4px 8px rgba(0, 0, 0, 0.2)' : 'none', // Apply shadow when menu is open
-            transform: isMenuOpen ? 'scale(1.2)' : 'none'
+            transform: isMenuOpen ? "rotate(90deg)" : "rotate(0deg)",
+            marginRight: "0.5rem",
+            // boxShadow: isMenuOpen ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none", 
+            transition: "transform 0.3s ease", 
           }}
         />
       </Nav>
@@ -36,22 +35,29 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 5svh;
+  height: 3rem;
   margin-bottom: 0;
   width: 100%;
   direction: rtl;
   border-radius: 2px;
   position: absolute;
   top: 0;
-  overflow: hidden;
-  z-index: 5;
-
+  overflow:hidden;
+  z-index:1000;
   .menu:hover {
     cursor: pointer;
     transform: scale(1.1);
   }
 
+      @media (orientation: landscape) {
+    height: 5rem;
+    }
+
+
+
   @media (orientation: portrait) {
+      height: 3rem;
+
     .list-container {
       width: 100%;
       justify-content: space-evenly;
@@ -131,3 +137,5 @@ const Nav = styled.nav`
     }
   }
 `;
+
+export default Navbar;

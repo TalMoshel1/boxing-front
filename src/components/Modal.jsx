@@ -35,7 +35,7 @@ const ModalHeader = styled.div`
   // justify-content: flex-end;
 `;
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   background: none;
   border: none;
   font-size: 1.5rem;

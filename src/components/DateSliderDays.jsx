@@ -16,7 +16,6 @@ const DateSlider = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
-  const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
 
   // useEffect(() => {
   //   const today = new Date().toDateString();
@@ -190,7 +189,7 @@ const DateSlider = () => {
 
   return (
     <>
-      <div className="slider-container">
+      <div className="slider-container" style={{position:'absolute'}}>
         <Slider {...settings}>
           {dates.map((dateObj, index) => {
             const dateKey = Object.keys(dateObj)[0];
@@ -210,15 +209,9 @@ const DateSlider = () => {
                 <h3
                   className="item-h"
                 >
-                  {/* {formatDateInHebrew(dateKey)} */}
-
-                  {/* ראשון
-                  30/10/2024 */}
                   {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
                   <br/>
-
-
-                   {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth()}/{new Date(dateKey).getFullYear()}
+                   {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth()+1}/{new Date(dateKey).getFullYear()}
                 </h3>
               </div>
             );

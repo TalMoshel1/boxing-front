@@ -9,24 +9,42 @@ import { IndividualDay } from "../components/IndividualDay.jsx";
 
 const Calendar = () => {
   const view = useSelector((state) => state.calendar.view);
-  const lessonsToDisplay = useSelector((state) => state.calendar.lessonsToDisplay);
-
-
-
+  const lessonsToDisplay = useSelector(
+    (state) => state.calendar.lessonsToDisplay
+  );
 
   const CalendarContainer = styled.div`
     width: 100%;
-    margin: 0 auto;
-    margin-top: calc(5svh);
-    min-height: 95svh;
+
+    @media (orientation: landscape) {
+      margin-top: 5rem;
+      min-height: calc(100svh - 5rem);
+    }
+
+    @media (orientation: portrait) {
+      margin-top: 3rem;
+      min-height: calc(100svh - 3rem);
+    }
+
     display: flex;
     flex-direction: column;
-    // align-items: center;
   `;
 
   const Content = styled.div`
     display: flex;
     flex-grow: 1;
+    
+      @media (orientation: landscape) {
+
+        margin-top: 0.5rem;
+
+    }
+
+          @media (orientation: portrait) {
+
+        margin-top: 3rem;
+
+    }
   `;
 
   const DayContainer = styled.ul`
@@ -35,21 +53,31 @@ const Calendar = () => {
 
   return (
     <CalendarContainer className="calendar">
-      <CalendarHeader className='calendar header' />
+      <CalendarHeader className="calendar header" />
       {view === "week" ? (
         <Content className="content">
-          <Days  />
+          <Days />
         </Content>
       ) : (
         <>
+          {/* <DateSliderDays className="dateSliderDays" style={{border: '1px solid red'}} />
+          {lessonsToDisplay && (
+            <ul style={{ position: "relative", left: "0", right: "0" }}>
+              <IndividualDay className="individualDay" />
+            </ul>
+          )} 
+           */}
+          <div style={{position: 'relative'}}><DateSliderDays className="dateSliderDays" style={{border: '1px solid red'}} />
+          </div> 
 
-          <DateSliderDays className='dateSliderDays'/>
-
-          {lessonsToDisplay && <ul style={{position:'relative', left: '0', right: '0' }}>
-          <IndividualDay className='individualDay'/>
-
-          </ul>}
-
+          {lessonsToDisplay && (
+            <ul 
+            className='individual day'
+            style={{ position: "relative", marginTop: '10rem', paddingInlinestart: '0'}}
+            >
+              <IndividualDay className="individualDay" style={{position:'absolute'}} />
+            </ul>
+          )} 
         </>
       )}
     </CalendarContainer>

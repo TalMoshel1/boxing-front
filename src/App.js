@@ -1,6 +1,4 @@
-import React from "react";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { Navbar } from "./components/Navbar.jsx";
@@ -37,58 +35,63 @@ function App() {
 }
 
 function AppContent() {
-  const { isMenuOpen } = useMenu();
+  const [isMenuOpen, toggleMenu] = useState(false);
+
+  const handleToggleMenu = () => {
+    toggleMenu(!isMenuOpen);
+  };
+
   const isDeleteLessonModalOpen = useSelector(
     (state) => state.calendar.isDeleteLessonModalOpen
   );
 
   return (
-    <>
-      <Navbar />
-      {isMenuOpen && <MenuList />}
-      {isDeleteLessonModalOpen && (
-        <Modal type="delete">
-          <DeleteLesson />
-        </Modal>
-      )}
-
-      <Routes>
-        <Route path="/" element={<Navigate to="/signin" />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route
-          path="/calendar"
-          element={
-            <StyledDisabledWrapper isDisabled={isDeleteLessonModalOpen}>
-              <Calendar />
-            </StyledDisabledWrapper>
-          }
-        />
-        <Route
-          path="/setgrouplesson"
-          element={
-            <FormContainer>
-              <SetGroupLesson />
-            </FormContainer>
-          }
-        />
-        <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
-        <Route path="/home" element={<Home />} />
-        <Route
-          path="/requestPrivte"
-          element={
-            <FormContainer>
-              <RequestPrivateLesson />
-            </FormContainer>
-          }
-        />
-        <Route path="/datesliderdays" element={<DateSliderDays />} />
-        <Route path="/datesliderweeks" element={<DateSliderWeeks />} />
-      </Routes>
-    </>
+    <HorizontalContainer>
+      <MenuList isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
+      <VerticalContainer>
+        <Navbar isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
+        {isDeleteLessonModalOpen && (
+          <Modal type="delete">
+            <DeleteLesson />
+          </Modal>
+        )}
+        <Routes>
+          <Route path="/" element={<Navigate to="/signin" />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route
+            path="/calendar"
+            element={
+              <StyledDisabledWrapper isDisabled={isDeleteLessonModalOpen}>
+                <Calendar />
+              </StyledDisabledWrapper>
+            }
+          />
+          <Route
+            path="/setgrouplesson"
+            element={
+              <FormContainer>
+                <SetGroupLesson />
+              </FormContainer>
+            }
+          />
+          <Route path="/approveLink/:lessonId" element={<ApproveLink />} />
+          <Route path="/home" element={<Home />} />
+          <Route
+            path="/requestPrivte"
+            element={
+              <FormContainer>
+                <RequestPrivateLesson />
+              </FormContainer>
+            }
+          />
+          <Route path="/datesliderdays" element={<DateSliderDays />} />
+          <Route path="/datesliderweeks" element={<DateSliderWeeks />} />
+        </Routes>
+      </VerticalContainer>
+    </HorizontalContainer>
   );
 }
 
-// Custom wrapper to prevent passing the isDisabled prop to the DOM
 const DisabledWrapper = ({ isDisabled, children, ...props }) => (
   <div {...props}>{children}</div>
 );
@@ -99,8 +102,23 @@ const StyledDisabledWrapper = styled(DisabledWrapper)`
     `
     opacity: 0.5;
     pointer-events: none;
-    width:100vw;
+    width: 100vw;
   `}
+`;
+
+const VerticalContainer = styled.div`
+  flex: 1; // Allow it to grow and fill the available space
+  // display: flex;
+  flex-direction: column;
+  min-height: 100svh; // Ensure it covers the full viewport height
+`;
+
+const HorizontalContainer = styled.div`
+  display: flex;
+  direction: rtl;
+  max-width: 100vw;
+  min-height: 100svh; 
+  overflow: hidden;
 `;
 
 export default App;

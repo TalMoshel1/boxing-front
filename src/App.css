@@ -44,14 +44,16 @@ body {
 button {
   /* border-radius: 10px; */
 }
-
 .slick-dots {
   display: none; 
 }
 
 @media (orientation: landscape) {
   .slider-container {
-    width: 50%;
+    width: 60%;
+     left:50%;
+    transform: translate(-50%, -50%) ;
+    margin-top: 8%;
   
     
   }
@@ -109,7 +111,7 @@ button {
 
   
 .slider-item {
-  height:3rem;
+  height:7rem;
 
 }
 

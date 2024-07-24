@@ -29,7 +29,7 @@ export const IndividualDay = () => {
           if (user?.user?.role === "admin" && l.type === "private") {
             return (
               <li key={index} style={styles.listItem}>
-                {l.lesson} {l.trainer} {l.startTime} - {l.endTime}
+                <span>{l.startTime} - {l.endTime}</span><span><strong>אימון אישי</strong></span><span>מתאמן: {l.studentName}</span><span>מאמן: {l.trainer}</span><span>{l.lesson}</span>
                 <button onClick={() => handleOpenDeleteModal(l)}>
                   <strong>בטל</strong>
                 </button>
@@ -39,7 +39,7 @@ export const IndividualDay = () => {
 
           return (
             <li key={index} style={styles.listItem}>
-              {l.startTime} - {l.endTime} {l.name} {l.trainer} {l.description}
+              <span>{l.startTime} - {l.endTime}</span> <span>{l.name}</span> <span>{l.trainer}</span> <span>{l.description}</span>
               {user?.user?.role === "admin" && (
                 <button onClick={() => handleOpenDeleteModal(l)}>
                   <strong>בטל</strong>
@@ -63,7 +63,8 @@ const styles = {
     listStyleType: "none", // Removes bullet points from list
     // padding: 0, // Removes default padding
     margin: 0, // Removes default margin
-    direction: 'rtl'
+    direction: 'rtl',
+    paddingInlineStart: '0'
   },
   listItem: {
     position: "relative",
@@ -74,6 +75,8 @@ const styles = {
     borderRadius: "5px", // Rounds the corners of the border
     width: "80%", // Sets a fixed width for each item
     maxWidth: "400px", // Sets a maximum width for each item
+    display: "flex",
+    justifyContent: "space-evenly"
   },
 };
 

@@ -6,20 +6,33 @@ import { renderDays } from '../functions/renderDays';
 import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
 
 const Header = styled.header`
-  @media (orientation: portrait) {
+    direction: rtl;
     display: flex;
     align-items: center;
+
+  @media (orientation: portrait) {
     gap: 0.75rem;
     direction: rtl;
     position: sticky;
     top: 0;
     justify-content: center;
-    height: 5svh;
     padding: 0.5rem;
-    background-color: white; /* Ensures header has a white background */
-    z-index: 2; /* Ensures header is above other content */
+    background-color: white; 
+    z-index: 2; 
+    margin-top: 0.4rem;
+
   }
 
+      @media (orientation: landscape) {
+    justify-content: center;
+    height: 5rem;
+        margin-top: 1rem;
+
+    }
+
+    @media (orientation: portrait) { 
+    height: 3rem;
+    }
   .viewController {
     background-color: white;
     z-index: 2; /* Ensure the select control is also above other content */

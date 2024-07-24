@@ -4,5 +4,6 @@
     flex-grow: 1;
     flex-direction: row-reverse;
     direction: rtl;
+    /* gap:1rem; */
     
   }

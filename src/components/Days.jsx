@@ -15,6 +15,8 @@ const Days = () => {
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
 
+  console.log('rendered')
+
   const startOfWeek = (date) => {
     const day = date.getDay();
     const diff = date.getDate() - day;

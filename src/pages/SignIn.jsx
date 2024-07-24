@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useMenu } from "../context/useMenu";
 import styled from "styled-components";
   const LoginContainer = styled.main`
   position:absolute;
@@ -18,7 +17,6 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
-  const { isMenuOpen, toggleMenu } = useMenu();
 
   const navigate = useNavigate();
 

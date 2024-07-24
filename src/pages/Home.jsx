@@ -7,7 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 
 const MainHome = styled.main`
-  margin-top: calc(5vh);
+  margin-top: 3rem;
   height: 95vh;
   display: flex;
   align-items: center;
@@ -39,6 +39,8 @@ const MainHome = styled.main`
 `;
 
 const Home = () => {
+
+  console.log('rendered')
   const navigate = useNavigate();
 
   return (

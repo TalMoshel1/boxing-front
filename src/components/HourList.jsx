@@ -26,10 +26,23 @@ export const HourContainer = styled.div`
   padding-bottom: 1em;
   width: 100%;
   position: relative;
-
-  // @media (orientation: portrait) {
+  height:30vh;
   flex-direction: column;
-  // }
+
+
+
+  @media (orientation: portrait) { 
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+
+  @media (orientation: landscape) {
+    border: 1px solid #ccc;
+  }
+
+
+
+
 `;
 
 const Hour = styled.div`
@@ -105,8 +118,6 @@ const Lesson = ({ lesson }) => {
             <h2>{lesson.lesson.trainer}</h2>
             <br />
             <h3>{lesson.lesson.name}</h3>
-            {/* <br />
-            <p>{lesson.lesson.description}</p> */}
           </HourEvent>
         </HourEventContainer>
       </HourContainer>

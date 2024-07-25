@@ -40,11 +40,6 @@ const Calendar = () => {
 
     }
 
-          @media (orientation: portrait) {
-
-        margin-top: 3rem;
-
-    }
   `;
 
   const DayContainer = styled.ul`
@@ -60,13 +55,6 @@ const Calendar = () => {
         </Content>
       ) : (
         <>
-          {/* <DateSliderDays className="dateSliderDays" style={{border: '1px solid red'}} />
-          {lessonsToDisplay && (
-            <ul style={{ position: "relative", left: "0", right: "0" }}>
-              <IndividualDay className="individualDay" />
-            </ul>
-          )} 
-           */}
           <div style={{position: 'relative'}}><DateSliderDays className="dateSliderDays" style={{border: '1px solid red'}} />
           </div> 
 

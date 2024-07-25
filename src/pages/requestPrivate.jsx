@@ -55,6 +55,8 @@ export const RequestForm = styled.form`
 // `;
 
 const StyledSelectContainer = styled.div`
+
+
   position: relative;
   width: 100%;
 
@@ -62,6 +64,7 @@ const StyledSelectContainer = styled.div`
     color: #ccc;
   }
 
+  
   .custom-select {
     width: 100%;
     padding: 0.5rem;
@@ -97,7 +100,7 @@ const StyledSelectContainer = styled.div`
     text-align: center;
     cursor: pointer;
     &:hover {
-      // background-color: #f1f1f1;
+      background-color: #f1f1f1;
     }
     &.disabled {
       color: #ccc;
@@ -364,7 +367,7 @@ const RequestPrivateLesson = () => {
         onChange={(e) => setStudentMail(e.target.value)}
         required
       />
-
+      <p><strong>לאחר לחיצה על שלח, אנא אשר שימוש בווצאפ ושלח את ההודעה המוכנה שתראה למאמן שבחרת</strong></p>
       <button type="submit">שלח</button>
     </RequestForm>
   );

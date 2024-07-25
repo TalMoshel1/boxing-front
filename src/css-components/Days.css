@@ -6,4 +6,29 @@
     direction: rtl;
     /* gap:1rem; */
     
+    
   }
+
+  @media (orientation: landscape) {
+    .days {
+      gap: 1rem;
+    }
+
+
+  }
+
+  @media (orientation: portrait) {
+    .days {
+      border-right: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+
+    }
+
+    .day {
+      border: 1px solid #ccc;
+
+    }
+
+
+  }
+

@@ -7,9 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isSameDate } from "../functions/compareDatesFormats";
 import { IndividualDay } from "./IndividualDay.jsx";
 import { setLessonsToDisplay } from "../redux/calendarSlice.js";
-// import { formatDateInHebrew } from "../functions/formatDateInHebrew.js";
 import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
-
 
 const DateSlider = () => {
   const [dates, setDates] = useState(generateDatesFrom(new Date(), 30));
@@ -17,31 +15,17 @@ const DateSlider = () => {
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
 
-  // useEffect(() => {
-  //   const today = new Date().toDateString();
-  //   const firstItemInList = dates[0]?.[today];
-  //   const biggerThanZero = displayedData && displayedData.length > 0;
-
-  //   if (dates?.length === 30 && firstItemInList?.length > 0 && biggerThanZero) {
-  //     if (displayedData[0]?.day.toDateString() !== new Date().toDateString()) {
-  //       console.log("great");
-  //       dispatch(setLessonsToDisplay(dates[0]?.[today]));
-  //     } else {
-  //       console.log("shit");
-  //     }
-  //   }
-  // }, [dates]);
-
+  // Function to display lessons based on the selected date
   const handleDisplayData = (data) => {
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
       dispatch(setLessonsToDisplay(lessons));
     } else {
-      console.log('!')
       dispatch(setLessonsToDisplay([]));
     }
   };
 
+  // Update dates when lessonsMap changes
   useEffect(() => {
     if (lessonsMap && lessonsMap.length > 0) {
       const mergedData = mergeDateWithLessons();
@@ -49,12 +33,14 @@ const DateSlider = () => {
     }
   }, [lessonsMap]);
 
+  // Slider settings
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false, // Disable infinite scrolling
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 4,
     slidesToScroll: 1,
+    initialSlide: 0, // Start at the first slide
     swipe: true,
     touchMove: true,
     swipeToSlide: true,
@@ -63,14 +49,14 @@ const DateSlider = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 6,
+          slidesToShow: 4,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 400,
         settings: {
-          slidesToShow: 6,
+          slidesToShow: 4,
           slidesToScroll: 1,
         },
       },
@@ -78,6 +64,7 @@ const DateSlider = () => {
     afterChange: (currentIndex) => handleScrollEnd(currentIndex),
   };
 
+  // Generate a range of dates from the starting date
   function generateDatesFrom(startDate, count) {
     const dates = [];
     for (let i = 0; i < count; i++) {
@@ -91,6 +78,7 @@ const DateSlider = () => {
     return dates;
   }
 
+  // Send request to fetch lessons within a date range
   const sendLessonsRequest = async (startDate, endDate) => {
     try {
       const response = await fetch(
@@ -114,6 +102,7 @@ const DateSlider = () => {
     }
   };
 
+  // Merge fetched lessons with the current dates
   const mergeDateWithLessons = () => {
     const lessonsMapByDate = (lessonsMap || []).reduce((map, lesson) => {
       const lessonDate = new Date(lesson.day).toDateString();
@@ -135,6 +124,7 @@ const DateSlider = () => {
     return updatedDates;
   };
 
+  // Load more dates when scrolling to the end
   const loadMoreDates = useCallback(async () => {
     if (loading) {
       return;
@@ -162,16 +152,19 @@ const DateSlider = () => {
     setLoading(false);
   }, [dates, loading]);
 
+  // Handle scrolling to the end of the current date list
   const handleScrollEnd = (currentIndex) => {
-    const slidesToShow = 6;
+    const slidesToShow = 4;
     const totalSlides = dates.length;
     const isNearEnd = currentIndex >= totalSlides - slidesToShow;
 
+    // Only load more dates if we're scrolling forward and at the end
     if (isNearEnd) {
       loadMoreDates();
     }
   };
 
+  // Fetch initial lessons data
   useEffect(() => {
     const fetchInitialData = async () => {
       const lessons = await sendLessonsRequest(
@@ -189,7 +182,7 @@ const DateSlider = () => {
 
   return (
     <>
-      <div className="slider-container" style={{position:'absolute'}}>
+      <div className="slider-container" style={{ position: 'absolute' }}>
         <Slider {...settings}>
           {dates.map((dateObj, index) => {
             const dateKey = Object.keys(dateObj)[0];
@@ -204,14 +197,11 @@ const DateSlider = () => {
                 key={index}
                 onClick={() => handleDisplayData(dateObj)}
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
-                // style={{width:'20%'}}
               >
-                <h3
-                  className="item-h"
-                >
-                  {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
-                  <br/>
-                   {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth()+1}/{new Date(dateKey).getFullYear()}
+                <h3 className="item-h">
+                  {day}
+                  <br />
+                  {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth() + 1}/{new Date(dateKey).getFullYear()}
                 </h3>
               </div>
             );

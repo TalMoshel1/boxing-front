@@ -25,6 +25,6 @@ export function openWhatsApp(lesson, phone) {
 
     encodedMessage = encodeURIComponent(message);
     
-    const whatsappUrl2 = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   }

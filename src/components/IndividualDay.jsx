@@ -22,34 +22,49 @@ export const IndividualDay = () => {
 
 
   console.log(displayedData)
-  if (displayedData) {
-    return (
-      <ul style={styles.listContainer}>
-        {displayedData.map((l, index) => {
-          if (user?.user?.role === "admin" && l.type === "private") {
+  if (displayedData.length > 0) {
+    console.log(displayedData)
+    const time = displayedData[0].day
+    const date = new Date(time)
+
+    if (displayedData.length > 0) { 
+      return (
+        <ul style={styles.listContainer}>
+                  <h1>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}</h1>
+  
+          {displayedData.map((l, index) => {
+            if (user?.user?.role === "admin" && l.type === "private") {
+              return (
+                <li key={index} style={styles.listItem}>
+                  <span>{l.startTime} - {l.endTime}</span><span><strong>אימון אישי</strong></span><span>מתאמן: {l.studentName}</span><span>מאמן: {l.trainer}</span><span>{l.lesson}</span>
+                  <button onClick={() => handleOpenDeleteModal(l)}>
+                    <strong>בטל</strong>
+                  </button>
+                </li>
+              );
+            }
+  
             return (
               <li key={index} style={styles.listItem}>
-                <span>{l.startTime} - {l.endTime}</span><span><strong>אימון אישי</strong></span><span>מתאמן: {l.studentName}</span><span>מאמן: {l.trainer}</span><span>{l.lesson}</span>
-                <button onClick={() => handleOpenDeleteModal(l)}>
-                  <strong>בטל</strong>
-                </button>
+                <span>{l.startTime} - {l.endTime}</span> <span>{l.name}</span> <span>{l.trainer}</span> <span>{l.description}</span>
+                {user?.user?.role === "admin" && (
+                  <button onClick={() => handleOpenDeleteModal(l)}>
+                    <strong>בטל</strong>
+                  </button>
+                )}
               </li>
             );
-          }
+          })}
+        </ul>
+      );
 
-          return (
-            <li key={index} style={styles.listItem}>
-              <span>{l.startTime} - {l.endTime}</span> <span>{l.name}</span> <span>{l.trainer}</span> <span>{l.description}</span>
-              {user?.user?.role === "admin" && (
-                <button onClick={() => handleOpenDeleteModal(l)}>
-                  <strong>בטל</strong>
-                </button>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
+    }
+
+    return (
+      <h1>לחץ על תאריך צבוע</h1>
+    )
+
+ 
   }
 };
 
@@ -59,12 +74,10 @@ const styles = {
     flexDirection: "column",
     alignItems: "center", // Centers items horizontally
     justifyContent: "center", // Centers items vertically
-    // minHeight: "100vh", // Ensures full viewport height
     listStyleType: "none", // Removes bullet points from list
-    // padding: 0, // Removes default padding
+    border: "none",
     margin: 0, // Removes default margin
     direction: 'rtl',
-    paddingInlineStart: '0'
   },
   listItem: {
     position: "relative",

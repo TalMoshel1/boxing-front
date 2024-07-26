@@ -199,7 +199,9 @@ const DateSlider = () => {
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
               >
                 <h3 className="item-h">
-                  {day}
+                  {/* {day} */}
+                  {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
+
                   <br />
                   {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth() + 1}/{new Date(dateKey).getFullYear()}
                 </h3>

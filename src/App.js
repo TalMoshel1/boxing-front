@@ -46,9 +46,9 @@ function AppContent() {
   );
 
   return (
-    <HorizontalContainer>
-      <MenuList isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
+    // <HorizontalContainer>
       <VerticalContainer>
+        <MenuList isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
         <Navbar isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
         {isDeleteLessonModalOpen && (
           <Modal type="delete">
@@ -88,7 +88,6 @@ function AppContent() {
           <Route path="/datesliderweeks" element={<DateSliderWeeks />} />
         </Routes>
       </VerticalContainer>
-    </HorizontalContainer>
   );
 }
 
@@ -107,10 +106,12 @@ const StyledDisabledWrapper = styled(DisabledWrapper)`
 `;
 
 const VerticalContainer = styled.div`
-  flex: 1; // Allow it to grow and fill the available space
-  // display: flex;
+  flex: 1; 
+  display: flex;
+  max-width: 100vw;
   flex-direction: column;
-  min-height: 100svh; // Ensure it covers the full viewport height
+  min-height: 100svh;
+  overflow-x: hidden;
 `;
 
 const HorizontalContainer = styled.div`

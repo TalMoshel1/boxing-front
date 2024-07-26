@@ -40,7 +40,6 @@ const Nav = styled.nav`
   width: 100%;
   direction: rtl;
   border-radius: 2px;
-  position: absolute;
   top: 0;
   overflow:hidden;
   z-index:1000;

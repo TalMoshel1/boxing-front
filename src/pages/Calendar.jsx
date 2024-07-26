@@ -22,7 +22,7 @@ const Calendar = () => {
     }
 
     @media (orientation: portrait) {
-      margin-top: 3rem;
+      // margin-top: 3rem;
       min-height: calc(100svh - 3rem);
     }
 
@@ -58,14 +58,16 @@ const Calendar = () => {
           <div style={{position: 'relative'}}><DateSliderDays className="dateSliderDays" style={{border: '1px solid red'}} />
           </div> 
 
-          {lessonsToDisplay && (
+          {lessonsToDisplay?
             <ul 
             className='individual day'
             style={{ position: "relative", marginTop: '10rem', paddingInlinestart: '0'}}
             >
               <IndividualDay className="individualDay" style={{position:'absolute'}} />
-            </ul>
-          )} 
+            </ul> : <h1 style={{position: 'absolute', left:'50%', top:'50%', transform: 'translate(-50%, -50%)', direction: 'rtl'}}>גרור את התאריכים ובחר תאריך צבוע</h1>
+          } 
+
+
         </>
       )}
     </CalendarContainer>

@@ -13,8 +13,8 @@ const Header = styled.header`
   @media (orientation: portrait) {
     gap: 0.75rem;
     direction: rtl;
-    position: sticky;
-    top: 0;
+    // position: sticky;
+    // top: 0;
     justify-content: center;
     padding: 0.5rem;
     background-color: white; 

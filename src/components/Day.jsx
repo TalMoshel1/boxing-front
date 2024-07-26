@@ -21,6 +21,17 @@ const DayStyle = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  h1 {
+    position:sticky;
+  top:0;
+  background-color:white;
+    z-index: 50;
+    margin-block-start: 0;
+
+
+  }
+    
+
 `;
 
 const Day = ({ date, lessons }) => {

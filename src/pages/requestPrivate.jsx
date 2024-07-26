@@ -4,6 +4,8 @@ import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
 import {openWhatsApp} from '../functions/sendWhatsApp.js'
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 export const RequestForm = styled.form`
   display: flex;
@@ -124,11 +126,12 @@ const RequestPrivateLesson = () => {
   const [message, setMessage] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [thisDayLessons, setThisDayLessons] = useState([]);
+  const [loading, setLoading] = useState(false)
 
-  console.log(trainer)
 
   const getDayLessons = async () => {
     try {
+      setLoading(true)
       const response = await fetch(
         "https://boxing-back.onrender.com/api/lessons/day",
         {
@@ -143,6 +146,7 @@ const RequestPrivateLesson = () => {
       );
 
       if (!response.ok) {
+        setLoading(false)
         throw new Error(
           `HTTP error! Status: ${response.status} ${response.statusText}`
         );
@@ -150,6 +154,7 @@ const RequestPrivateLesson = () => {
 
       const data = await response.json();
       setThisDayLessons(data);
+      setLoading(false)
     } catch (error) {
       console.error("Error sending POST request:", error);
     }
@@ -250,19 +255,6 @@ const RequestPrivateLesson = () => {
     sendPostPrivateRequest();
   };
 
-  //   const formatDateInHebrew = (dateString) => {
-  //     const parsedDate = new Date(dateString);
-  //     if (isNaN(parsedDate)) {
-  //       throw new Error("Invalid date format");
-  //     }
-  //     const options = {
-  //       weekday: "short",
-  //       year: "numeric",
-  //       month: "short",
-  //       day: "numeric",
-  //     };
-  //     return parsedDate.toLocaleDateString("he-IL", options);
-  //   };
 
   const handleSelectOption = (time) => {
     setStartTime(time);
@@ -308,6 +300,7 @@ const RequestPrivateLesson = () => {
     return <p>{message}</p>;
   }
 
+
   return (
     <RequestForm onSubmit={handleSubmit}>
       <input
@@ -318,7 +311,7 @@ const RequestPrivateLesson = () => {
         required
       />
 
-      <StyledSelectContainer ref={selectRef}>
+      {loading ? <ClipLoader/>:       <StyledSelectContainer ref={selectRef}>
         <div
           className="custom-select"
           onClick={() => setShowOptions(!showOptions)}
@@ -328,7 +321,8 @@ const RequestPrivateLesson = () => {
         <div className={`options-container ${showOptions ? "show" : ""}`}>
           {generateTimeOptions()}
         </div>
-      </StyledSelectContainer>
+      </StyledSelectContainer>}
+
 
       <label htmlFor="trainer">מאמן:</label>
       <select

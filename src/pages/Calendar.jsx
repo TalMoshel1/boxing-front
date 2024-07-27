@@ -17,8 +17,8 @@ const Calendar = () => {
     width: 100%;
 
     @media (orientation: landscape) {
-      margin-top: 5rem;
-      min-height: calc(100svh - 5rem);
+      // margin-top: 5rem;
+      // min-height: calc(100svh - 5rem);
     }
 
     @media (orientation: portrait) {

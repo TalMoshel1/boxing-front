@@ -24,7 +24,7 @@ const Header = styled.header`
   }
 
       @media (orientation: landscape) {
-    justify-content: center;
+    justify-content: space-evenly;
     height: 5rem;
         margin-top: 1rem;
 

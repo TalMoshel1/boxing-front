@@ -30,7 +30,7 @@ export const IndividualDay = () => {
     if (displayedData.length > 0) { 
       return (
         <ul style={styles.listContainer}>
-                  <h1>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}</h1>
+                  <h1>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</h1>
   
           {displayedData.map((l, index) => {
             if (user?.user?.role === "admin" && l.type === "private") {

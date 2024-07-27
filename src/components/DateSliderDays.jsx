@@ -78,7 +78,6 @@ const DateSlider = () => {
     return dates;
   }
 
-  // Send request to fetch lessons within a date range
   const sendLessonsRequest = async (startDate, endDate) => {
     try {
       const response = await fetch(

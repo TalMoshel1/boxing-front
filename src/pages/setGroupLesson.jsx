@@ -185,6 +185,34 @@ const SetGroupLesson = () => {
 
   return (
     <RequestForm onSubmit={handleSubmit}>
+            <FormItemContainer>
+        <label>אימון חוזר</label>
+        <input
+          type="checkbox"
+          name="repeatsWeekly"
+          checked={formData.repeatsWeekly}
+          onChange={handleChange}
+        />
+
+        {formData.repeatsWeekly && (
+          <FormItemContainer className='monthes-container'>
+            <label>לכמה חודשים:</label>
+            <select
+              name="repeatMonth"
+              className="repeatMonth"
+              value={formData.repeatMonth}
+              onChange={handleChange}
+              required={formData.repeatsWeekly}
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </FormItemContainer>
+        )}
+      </FormItemContainer>
       <FormItemContainer>
         <label>תאריך האימון:</label>
         <input
@@ -207,34 +235,7 @@ const SetGroupLesson = () => {
           required
         />
       </FormItemContainer>
-      <FormItemContainer>
-        <label>אימון חוזר</label>
-        <input
-          type="checkbox"
-          name="repeatsWeekly"
-          checked={formData.repeatsWeekly}
-          onChange={handleChange}
-        />
 
-        {formData.repeatsWeekly && (
-          <FormItemContainer>
-            <label>לכמה חודשים:</label>
-            <select
-              name="repeatMonth"
-              className="repeatMonth"
-              value={formData.repeatMonth}
-              onChange={handleChange}
-              required={formData.repeatsWeekly}
-            >
-              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
-          </FormItemContainer>
-        )}
-      </FormItemContainer>
 
       <FormItemContainer>
         <label>תיאור האימון:</label>

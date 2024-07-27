@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-  const LoginContainer = styled.main`
-  position:absolute;
-  top:50%;
-  left:50%;
+
+const LoginContainer = styled.main`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   direction: rtl;
 
   .input-group {
-  padding-bottom: 1rem;
+    padding-bottom: 1rem;
   }
-  `
+`;
+
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,6 +61,7 @@ const SignIn = () => {
   const authenticateRequest = async () => {
     try {
       const token = JSON.parse(boxing)?.token;
+      if (!token) throw new Error("No token found");
       const response = await fetch(
         "https://boxing-back.onrender.com/api/auth/verify-token",
         {
@@ -81,7 +83,7 @@ const SignIn = () => {
         navigate("/setgrouplesson");
       }
     } catch (error) {
-      console.error("Error sending POST request:", error);
+      console.error("Error verifying token:", error);
     }
   };
 
@@ -103,6 +105,7 @@ const SignIn = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
           />
         </div>
         <div className="input-group">
@@ -113,6 +116,7 @@ const SignIn = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">Login</button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import { repeatEndDate } from "../functions/repeatEndDate.js";
 import styled from "styled-components";
 import { toggleSetGroupModal } from "../redux/calendarSlice.js";
@@ -35,21 +36,13 @@ const RequestForm = styled.section`
     padding: 0.5rem;
     margin-top: 0.5rem;
     box-sizing: border-box;
-    text-align: center; /* Center text in inputs and selects */
+    text-align: center;
     border: 1px solid grey;
   }
 
   button {
     padding: 0.5rem 1rem;
     margin-top: 1rem;
-  }
-
-  .repeatMonth {
-    // appearance: none; /* Remove default styling in some browsers */
-    // text-align-last: center; /* Center text in the dropdown options */
-    // text-align: center; /* Align text center in the field itself */
-    // max-height: 300px; /* Increase maximum height for dropdown */
-    // overflow-y: auto; /* Enable vertical scrolling if options exceed max-height */
   }
 `;
 
@@ -59,7 +52,8 @@ const Main = styled.main`
 
 const SetGroupLesson = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [day, setDay] = useState("");
   const [formData, setFormData] = useState({
     trainer: "דוד",
@@ -74,9 +68,7 @@ const SetGroupLesson = () => {
     type: "group",
   });
   const [message, setMessage] = useState("");
-
-  const [datePlaceholder, setDatePlaceholder] = useState("בחר תאריך"); // Default placeholder
-
+  const [datePlaceholder, setDatePlaceholder] = useState("בחר תאריך");
   const [cantIn, setCantIn] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
   const [thisDayLessons, setThisDayLessons] = useState([]);
@@ -132,7 +124,7 @@ const SetGroupLesson = () => {
     const repeatEnd = repeatEndDate(formData.day, parseInt(repeatMonth, 10));
 
     try {
-      const token = localStorage.getItem("boxing");
+      const token = JSON.parse(localStorage.getItem("boxing"))?.token;
       const response = await fetch(
         "https://boxing-back.onrender.com/api/lessons/group",
         {
@@ -174,6 +166,40 @@ const SetGroupLesson = () => {
     }));
   }, [day]);
 
+  const authenticateRequest = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("boxing"))?.token;
+      if (!token) throw new Error("No token found");
+      const response = await fetch(
+        "https://boxing-back.onrender.com/api/auth/verify-token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `${token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! Status: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      if (data.message !== "Token is valid") {
+        navigate("/signin", { state: { from: location.pathname } });
+      }
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      navigate("/signin", { state: { from: location.pathname } });
+    }
+  };
+
+  useEffect(() => {
+    authenticateRequest();
+  }, []);
+
   if (message) {
     return (
       <Main>
@@ -185,7 +211,7 @@ const SetGroupLesson = () => {
 
   return (
     <RequestForm onSubmit={handleSubmit}>
-            <FormItemContainer>
+      <FormItemContainer>
         <label>אימון חוזר</label>
         <input
           type="checkbox"
@@ -195,7 +221,7 @@ const SetGroupLesson = () => {
         />
 
         {formData.repeatsWeekly && (
-          <FormItemContainer className='monthes-container'>
+          <FormItemContainer className="monthes-container">
             <label>לכמה חודשים:</label>
             <select
               name="repeatMonth"
@@ -236,7 +262,6 @@ const SetGroupLesson = () => {
         />
       </FormItemContainer>
 
-
       <FormItemContainer>
         <label>תיאור האימון:</label>
         <textarea
@@ -271,9 +296,7 @@ const SetGroupLesson = () => {
         />
       </FormItemContainer>
 
-      <button type="submit" onClick={handleSubmit}>
-        צור אימון
-      </button>
+      <button type="submit">צור אימון</button>
     </RequestForm>
   );
 };

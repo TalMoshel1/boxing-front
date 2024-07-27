@@ -1,27 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import {openWhatsApp} from '../functions/sendWhatsApp'
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { openWhatsApp } from '../functions/sendWhatsApp';
 
 const ApprovalLink = () => {
   const { lessonId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isApproved, setIsApproved] = useState(false);
-  // const [token, setToken] = useState(JSON.parse(localStorage.getItem('boxing')).token);
-  let user = localStorage.getItem("boxing");
-  // const {user} = JSON.parse(localStorage.getItem('boxing'))
-  if (user) {
-    user = JSON.parse(user);
-  }
+  const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
+
+  useEffect(() => {
+    const authenticateRequest = async () => {
+      try {
+        const token = JSON.parse(boxing)?.token;
+        const response = await fetch(
+          "https://boxing-back.onrender.com/api/auth/verify-token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(
+            `HTTP error! Status: ${response.status} ${response.statusText}`
+          );
+        }
+
+        const data = await response.json();
+        if (data.message !== "Token is valid") {
+          // Navigate to Sign In page
+          navigate("/signin", { state: { from: location } });
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        navigate("/signin", { state: { from: location } });
+      }
+    };
+
+    authenticateRequest();
+  }, [boxing, navigate, location]);
 
   useEffect(() => {
     const sendPostRequest = async () => {
       try {
+        const token = JSON.parse(boxing)?.token;
         const response = await fetch(
           `https://boxing-back.onrender.com/api/lessons/approveLink/${lessonId}`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              authorization: user.token,
+              authorization: token,
             },
           }
         );
@@ -34,7 +66,7 @@ const ApprovalLink = () => {
 
         const data = await response.json();
         if (data) {
-          openWhatsApp(data.lesson, '0522233573')
+          openWhatsApp(data.lesson, '0522233573');
           return setIsApproved(data);
         }
       } catch (error) {
@@ -42,10 +74,10 @@ const ApprovalLink = () => {
       }
     };
 
-    if (lessonId) {
+    if (lessonId && JSON.parse(boxing)?.token) {
       sendPostRequest();
     }
-  }, []);
+  }, [lessonId, boxing]);
 
   if (isApproved) {
     return <p>{isApproved.message}</p>;

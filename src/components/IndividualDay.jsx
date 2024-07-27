@@ -36,7 +36,7 @@ export const IndividualDay = () => {
             if (user?.user?.role === "admin" && l.type === "private") {
               return (
                 <li key={index} style={styles.listItem}>
-                  <span>{l.startTime} - {l.endTime}</span><span><strong>אימון אישי</strong></span><span>מתאמן: {l.studentName}</span><span>מאמן: {l.trainer}</span><span>{l.lesson}</span>
+                  <span style={{direction: 'ltr'}}>{l.startTime} - {l.endTime}</span><span><strong>אימון אישי</strong></span><span>מתאמן: {l.studentName}</span><span>מאמן: {l.trainer}</span><span>{l.lesson}</span>
                   <button onClick={() => handleOpenDeleteModal(l)}>
                     <strong>בטל</strong>
                   </button>
@@ -46,7 +46,7 @@ export const IndividualDay = () => {
   
             return (
               <li key={index} style={styles.listItem}>
-                <span>{l.startTime} - {l.endTime}</span> <span>{l.name}</span> <span>{l.trainer}</span> <span>{l.description}</span>
+                <span style={{direction: 'ltr'}}>{l.startTime} - {l.endTime}</span> <span>{l.name}</span> <span>{l.trainer}</span> <span>{l.description}</span>
                 {user?.user?.role === "admin" && (
                   <button onClick={() => handleOpenDeleteModal(l)}>
                     <strong>בטל</strong>
@@ -76,7 +76,7 @@ const styles = {
     justifyContent: "center", // Centers items vertically
     listStyleType: "none", // Removes bullet points from list
     border: "none",
-    margin: 0, // Removes default margin
+    margin: 0, 
     direction: 'rtl',
   },
   listItem: {

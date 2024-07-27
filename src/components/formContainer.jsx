@@ -6,12 +6,12 @@ const Container = styled.main`
   // height: 95svh;
   
   @media (orientation: landscape) { 
-    margin-top:5rem;
+    // margin-top:5rem;
 
   }
 
     @media (orientation: portrait) { 
-      margin-top:3rem;
+      // margin-top:3rem;
 
   }
   align-items: center;

@@ -22,7 +22,6 @@ const Calendar = () => {
     }
 
     @media (orientation: portrait) {
-      // margin-top: 3rem;
       min-height: calc(100svh - 3rem);
     }
 

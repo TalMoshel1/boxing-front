@@ -303,11 +303,14 @@ const RequestPrivateLesson = () => {
 
   return (
     <RequestForm onSubmit={handleSubmit}>
+            <label htmlFor="date">תאריך</label>
+
       <input
         className="date"
         type="date"
         onChange={handleInputChange}
         min={formatDateToYYYYMMDD(new Date())}
+        value={'בחר תאריך'}
         required
       />
 

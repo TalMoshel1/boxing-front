@@ -7,17 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { isSameDate } from "../functions/compareDatesFormats";
 import { IndividualDay } from "./IndividualDay.jsx";
 import { setLessonsToDisplay } from "../redux/calendarSlice.js";
-import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
+import { formatThreeLettersMonthAndDaysToHebrew } from "../functions/formatThreeLettersMonthAndDaysToHebrew";
 import ClipLoader from "react-spinners/ClipLoader";
-
 
 const DateSlider = () => {
   const [dates, setDates] = useState(generateDatesFrom(new Date(), 30));
   const [loading, setLoading] = useState(false);
+  const [clickDisabled, setClickDisabled] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
 
   const handleDisplayData = (data) => {
+    if (clickDisabled) return;
+
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
       dispatch(setLessonsToDisplay(lessons));
@@ -26,25 +28,21 @@ const DateSlider = () => {
     }
   };
 
-  // Update dates when lessonsMap changes
   useEffect(() => {
     if (lessonsMap && lessonsMap.length > 0) {
       const mergedData = mergeDateWithLessons();
       setDates(mergedData);
-      setLoading(false)
+      setLoading(false);
     }
   }, [lessonsMap]);
 
-  console.log('dates: ',dates)
-
-  // Slider settings
   const settings = {
     dots: false,
-    infinite: false, // Disable infinite scrolling
+    infinite: false, 
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    initialSlide: 0, // Start at the first slide
+    initialSlide: 0, 
     swipe: true,
     touchMove: true,
     swipeToSlide: true,
@@ -66,9 +64,9 @@ const DateSlider = () => {
       },
     ],
     afterChange: (currentIndex) => handleScrollEnd(currentIndex),
+    beforeChange: () => handleSlideInteraction(),
   };
 
-  // Generate a range of dates from the starting date
   function generateDatesFrom(startDate, count) {
     const dates = [];
     for (let i = 0; i < count; i++) {
@@ -105,7 +103,6 @@ const DateSlider = () => {
     }
   };
 
-  // Merge fetched lessons with the current dates
   const mergeDateWithLessons = () => {
     const lessonsMapByDate = (lessonsMap || []).reduce((map, lesson) => {
       const lessonDate = new Date(lesson.day).toDateString();
@@ -127,7 +124,6 @@ const DateSlider = () => {
     return updatedDates;
   };
 
-  // Load more dates when scrolling to the end
   const loadMoreDates = useCallback(async () => {
     if (loading) {
       return;
@@ -155,21 +151,26 @@ const DateSlider = () => {
     setLoading(false);
   }, [dates, loading]);
 
-  // Handle scrolling to the end of the current date list
   const handleScrollEnd = (currentIndex) => {
     const slidesToShow = 4;
     const totalSlides = dates.length;
     const isNearEnd = currentIndex >= totalSlides - slidesToShow;
 
-    // Only load more dates if we're scrolling forward and at the end
     if (isNearEnd) {
       loadMoreDates();
     }
   };
 
+  const handleSlideInteraction = () => {
+    setClickDisabled(true);
+    setTimeout(() => {
+      setClickDisabled(false);
+    }, 200); 
+  };
+
   // Fetch initial lessons data
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const fetchInitialData = async () => {
       const lessons = await sendLessonsRequest(
         Object.keys(dates[0])[0],
@@ -177,12 +178,10 @@ const DateSlider = () => {
       );
 
       if (lessons && lessons.length > 0) {
-        console.log('??????')
-        setLoading(true)
+        setLoading(true);
         return setLessonsMap(lessons);
       }
-      setLoading(false)
-
+      setLoading(false);
     };
 
     fetchInitialData();
@@ -190,7 +189,7 @@ const DateSlider = () => {
 
   return (
     <>
-      <div className="slider-container" style={{ position: 'absolute' }}>
+      <div className="slider-container" style={{ position: "absolute" }}>
         <Slider {...settings}>
           {dates.map((dateObj, index) => {
             const dateKey = Object.keys(dateObj)[0];
@@ -198,9 +197,13 @@ const DateSlider = () => {
               isSameDate(dateKey, new Date(lesson.day).toDateString())
             );
 
-            const day = dateKey.split(',')[0].split(' ')[0]
+            const day = dateKey.split(",")[0].split(" ")[0];
             if (loading) {
-              return <div className="slider-item" ><ClipLoader/></div>
+              return (
+                <div className="slider-item">
+                  <ClipLoader />
+                </div>
+              );
             }
             return (
               <div
@@ -209,10 +212,11 @@ const DateSlider = () => {
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
               >
                 <h3 className="item-h">
-                  {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
-
+                  {formatThreeLettersMonthAndDaysToHebrew("day", day) ?? "שבת"}
                   <br />
-                  {new Date(dateKey).getDate()}/{new Date(dateKey).getMonth() + 1}/{new Date(dateKey).getFullYear()}
+                  {new Date(dateKey).getDate()}/
+                  {new Date(dateKey).getMonth() + 1}/
+                  {new Date(dateKey).getFullYear()}
                 </h3>
               </div>
             );

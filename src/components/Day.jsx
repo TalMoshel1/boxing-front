@@ -24,8 +24,6 @@ const DayStyle = styled.section`
   h1 {
     position:sticky;
   top:0;
-  background-color:white;
-    z-index: 50;
     margin-block-start: 0;
 
 

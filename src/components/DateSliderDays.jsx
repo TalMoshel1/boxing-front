@@ -8,6 +8,8 @@ import { isSameDate } from "../functions/compareDatesFormats";
 import { IndividualDay } from "./IndividualDay.jsx";
 import { setLessonsToDisplay } from "../redux/calendarSlice.js";
 import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 const DateSlider = () => {
   const [dates, setDates] = useState(generateDatesFrom(new Date(), 30));
@@ -15,7 +17,6 @@ const DateSlider = () => {
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
 
-  // Function to display lessons based on the selected date
   const handleDisplayData = (data) => {
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
@@ -30,8 +31,11 @@ const DateSlider = () => {
     if (lessonsMap && lessonsMap.length > 0) {
       const mergedData = mergeDateWithLessons();
       setDates(mergedData);
+      setLoading(false)
     }
   }, [lessonsMap]);
+
+  console.log('dates: ',dates)
 
   // Slider settings
   const settings = {
@@ -165,6 +169,7 @@ const DateSlider = () => {
 
   // Fetch initial lessons data
   useEffect(() => {
+    setLoading(true)
     const fetchInitialData = async () => {
       const lessons = await sendLessonsRequest(
         Object.keys(dates[0])[0],
@@ -172,8 +177,12 @@ const DateSlider = () => {
       );
 
       if (lessons && lessons.length > 0) {
-        setLessonsMap(lessons);
+        console.log('??????')
+        setLoading(true)
+        return setLessonsMap(lessons);
       }
+      setLoading(false)
+
     };
 
     fetchInitialData();
@@ -190,7 +199,9 @@ const DateSlider = () => {
             );
 
             const day = dateKey.split(',')[0].split(' ')[0]
-
+            if (loading) {
+              return <div className="slider-item" ><ClipLoader/></div>
+            }
             return (
               <div
                 key={index}
@@ -198,7 +209,6 @@ const DateSlider = () => {
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
               >
                 <h3 className="item-h">
-                  {/* {day} */}
                   {formatThreeLettersMonthAndDaysToHebrew('day',day) ?? 'שבת'}
 
                   <br />

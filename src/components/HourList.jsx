@@ -11,7 +11,7 @@ export const CloseButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
-  right: 0;
+  right: 0.5rem;
 top: 0.5rem;
 `;
 export const HourContainer = styled.div`
@@ -51,6 +51,10 @@ const HourEvent = styled.div`
   h3 {
     margin-block-start: 0em;
     margin-block-end: 0em;
+    width:100%;
+    word-wrap: break-word;  
+    overflow-wrap: break-word;
+    white-space: normal; 
   }
   font-size: 0.8rem;
 `;
@@ -61,7 +65,7 @@ export const InfoButton = styled.button `
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
-  left: 0;
+  left: 0.5rem;
 top: 0.5rem;
 `
 
@@ -83,6 +87,8 @@ const Lesson = ({ lesson }) => {
   const handleOpenDetailsModal = (details) => {
     return dispatch(toggleSetDetailsLessonModal(details))
   }
+
+
 
   if (lesson.lesson.type === "private" && lesson.lesson.isApproved === true) {
     console.log(lesson.lesson);
@@ -115,6 +121,8 @@ const Lesson = ({ lesson }) => {
     );
   }
   if (lesson.lesson.type === "group") {
+    lesson.lesson.name.match(/[a-zA-Z-]+/g)
+    const wordsArray = lesson.lesson.name.match(/[a-zA-Z0-9-]+/g)
     return (
       <HourContainer>
         {user?.user?.role === "admin" && (
@@ -132,7 +140,18 @@ const Lesson = ({ lesson }) => {
           <HourEvent>
             <h2>{lesson.lesson.trainer}</h2>
             <br />
-            <h3>{lesson.lesson.name}</h3>
+            <h3>{wordsArray.map((w,i)=>{
+              if (i !== wordsArray.length -1) {
+                console.log('w: ', w)
+                return <>{w}<br/></>
+              } else {
+                console.log('w: ', w)
+
+                return <>{w}</>
+              }
+            })}
+
+            </h3>
           </HourEvent>
         </HourEventContainer>
       </HourContainer>

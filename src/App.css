@@ -13,6 +13,10 @@
   }
 }
 
+select, option {
+  all: unset;
+}
+
 .App-header {
   min-height: 100vh;
   display: flex;
@@ -105,4 +109,8 @@ body {
 
 h3 { 
   width:100px
+}
+
+button {
+  all: unset;
 }

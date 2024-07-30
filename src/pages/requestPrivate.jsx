@@ -19,9 +19,15 @@ export const RequestForm = styled.form`
   text-align: center;
 
   @media (orientation: portrait) {
+  max-width: 40vw;
     .whatsapp {
       width: 90vw;
     }
+  }
+
+  button {
+  background-color: white;
+  color: #2E3A46;
   }
 
   .whatsapp {
@@ -41,13 +47,16 @@ export const RequestForm = styled.form`
   }
 
   input,
-  select {
+  select, custom-select {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.5rem;
     box-sizing: border-box;
     text-align: center;
     border: 1px solid grey;
+    background-color: white;
+    color: black;
+    font-size:1rem;
   }
 
   button {
@@ -83,6 +92,7 @@ const StyledSelectContainer = styled.div`
     border: 1px solid grey;
     cursor: pointer;
     background-color: white;
+    color: black;
   }
 
   .options-container {
@@ -98,6 +108,7 @@ const StyledSelectContainer = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: none;
+    color: black;
   }
 
   .options-container.show {

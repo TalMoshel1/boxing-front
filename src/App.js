@@ -37,7 +37,7 @@ function App() {
 }
 
 function AppContent() {
-  const [isMenuOpen, toggleMenu] = useState(true);
+  const [isMenuOpen, toggleMenu] = useState(false);
 
   const handleToggleMenu = () => {
     toggleMenu(!isMenuOpen);

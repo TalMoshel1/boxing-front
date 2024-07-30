@@ -25,9 +25,12 @@ export const RequestForm = styled.form`
     }
   }
 
+
   button {
+  all: unset;
   background-color: white;
   color: #2E3A46;
+  cursor: pointer;
   }
 
   .whatsapp {

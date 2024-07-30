@@ -45,7 +45,7 @@ const Header = styled.header`
     }
 
     @media (orientation: portrait) { 
-    height: 3rem;
+    height: fit-content;
     }
   // .viewController {
   //   background-color: white;

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
-import {openWhatsApp} from '../functions/sendWhatsApp.js'
+import { openWhatsApp } from "../functions/sendWhatsApp.js";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 export const RequestForm = styled.form`
   display: flex;
@@ -17,6 +17,16 @@ export const RequestForm = styled.form`
   width: 100%;
   max-width: 30vw;
   text-align: center;
+
+  @media (orientation: portrait) {
+    .whatsapp {
+      width: 90vw;
+    }
+  }
+
+  .whatsapp {
+    margin-top: 1rem;
+  }
 
   .date {
     margin-bottom: 1rem;
@@ -57,8 +67,6 @@ export const RequestForm = styled.form`
 // `;
 
 const StyledSelectContainer = styled.div`
-
-
   position: relative;
   width: 100%;
 
@@ -66,7 +74,6 @@ const StyledSelectContainer = styled.div`
     color: #ccc;
   }
 
-  
   .custom-select {
     width: 100%;
     padding: 0.5rem;
@@ -75,7 +82,7 @@ const StyledSelectContainer = styled.div`
     text-align: center;
     border: 1px solid grey;
     cursor: pointer;
-    // background-color: white;
+    background-color: white;
   }
 
   .options-container {
@@ -90,7 +97,7 @@ const StyledSelectContainer = styled.div`
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    display: none; 
+    display: none;
   }
 
   .options-container.show {
@@ -126,12 +133,11 @@ const RequestPrivateLesson = () => {
   const [message, setMessage] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [thisDayLessons, setThisDayLessons] = useState([]);
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   const getDayLessons = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch(
         "https://boxing-back.onrender.com/api/lessons/day",
         {
@@ -146,7 +152,7 @@ const RequestPrivateLesson = () => {
       );
 
       if (!response.ok) {
-        setLoading(false)
+        setLoading(false);
         throw new Error(
           `HTTP error! Status: ${response.status} ${response.statusText}`
         );
@@ -154,7 +160,7 @@ const RequestPrivateLesson = () => {
 
       const data = await response.json();
       setThisDayLessons(data);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.error("Error sending POST request:", error);
     }
@@ -236,13 +242,11 @@ const RequestPrivateLesson = () => {
       }
 
       const data = await response.json();
-      if (trainer === 'David') { 
-        openWhatsApp(data, '0502323574')
-
+      if (trainer === "David") {
+        openWhatsApp(data, "0502323574");
       }
-      if (trainer === 'Eldad') {
-        openWhatsApp(data, '0544541145')
-
+      if (trainer === "Eldad") {
+        openWhatsApp(data, "0544541145");
       }
       setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
     } catch (error) {
@@ -254,7 +258,6 @@ const RequestPrivateLesson = () => {
     event.preventDefault();
     sendPostPrivateRequest();
   };
-
 
   const handleSelectOption = (time) => {
     setStartTime(time);
@@ -300,32 +303,37 @@ const RequestPrivateLesson = () => {
     return <p>{message}</p>;
   }
 
+  const handleFakeSubmit = () => {
+    console.log("fakes work");
+  };
 
   return (
     <RequestForm onSubmit={handleSubmit}>
-            <label htmlFor="date">תאריך</label>
+      <label htmlFor="trainer">תאריך</label>
 
       <input
         className="date"
         type="date"
         onChange={handleInputChange}
         min={formatDateToYYYYMMDD(new Date())}
-        value={'בחר תאריך'}
         required
       />
 
-      {loading ? <ClipLoader/>:       <StyledSelectContainer ref={selectRef}>
-        <div
-          className="custom-select"
-          onClick={() => setShowOptions(!showOptions)}
-        >
-          {startTime || "בחר שעה"}
-        </div>
-        <div className={`options-container ${showOptions ? "show" : ""}`}>
-          {generateTimeOptions()}
-        </div>
-      </StyledSelectContainer>}
-
+      {loading ? (
+        <ClipLoader />
+      ) : (
+        <StyledSelectContainer ref={selectRef}>
+          <div
+            className="custom-select"
+            onClick={() => setShowOptions(!showOptions)}
+          >
+            {startTime || "בחר שעה"}
+          </div>
+          <div className={`options-container ${showOptions ? "show" : ""}`}>
+            {generateTimeOptions()}
+          </div>
+        </StyledSelectContainer>
+      )}
 
       <label htmlFor="trainer">מאמן:</label>
       <select
@@ -364,7 +372,30 @@ const RequestPrivateLesson = () => {
         onChange={(e) => setStudentMail(e.target.value)}
         required
       />
-      <p><strong>לאחר לחיצה על שלח, אנא אשר שימוש בווצאפ ושלח את ההודעה המוכנה שתראה למאמן שבחרת</strong></p>
+      <section
+        className="whatsapp"
+        style={{
+          background:
+            "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          position: "relative",
+        }}
+      >
+        <WhatsAppIcon
+          style={{
+            color: "green",
+            transform: "scale(2)",
+            position: "relative",
+            top: "1.5rem",
+          }}
+        />
+        <p>
+          <br /> לאחר הלחיצה על <button disabled>שלח</button>, אנא אשר שימוש ב <br/>WhatsApp ושלח
+          את ההודעה המוכנה שתראה למאמן שבחרת
+        </p>
+      </section>
       <button type="submit">שלח</button>
     </RequestForm>
   );

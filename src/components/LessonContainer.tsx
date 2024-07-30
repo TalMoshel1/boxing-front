@@ -7,6 +7,7 @@ const Container = styled.section`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+
 `;
 const LessonsContainer = ({ children }) => {
   return <Container>{children}</Container>;

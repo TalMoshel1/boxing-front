@@ -4,6 +4,7 @@ import {
   toggleSetGroupModal,
   toggleSetPrivateModal,
   toggleSetDeleteLessonModal,
+  toggleSetDetailsLessonModal
 } from "../redux/calendarSlice.js";
 import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
@@ -54,6 +55,8 @@ const Modal = ({ children, type }) => {
       dispatch(toggleSetGroupModal());
     } else if (type === "private") {
       dispatch(toggleSetPrivateModal());
+    } else if (type === "details") {
+      dispatch(toggleSetDetailsLessonModal());
     } else {
       dispatch(toggleSetDeleteLessonModal());
     }

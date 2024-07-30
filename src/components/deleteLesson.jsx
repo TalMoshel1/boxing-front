@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { toggleSetDeleteLessonModal } from "../redux/calendarSlice.js";
+import { toggleSetDeleteLessonModal, setLessonsToDisplay } from "../redux/calendarSlice.js";
 
 const DeleteLesson = () => {
   const dispatch = useDispatch();
@@ -10,9 +10,14 @@ const DeleteLesson = () => {
   const token = JSON.parse(boxing)?.token;
   const [isDeleteAll, setIsDeleteAll] = useState(false);
 
-  const handleToggleModal = () => {
+  const handleToggleModal = (obj) => {
     dispatch(toggleSetDeleteLessonModal());
+    if (obj) {
+      dispatch(setLessonsToDisplay(obj))
+
+    }
   };
+
 
   const handleDeleteAllChange = (event) => {
     setIsDeleteAll(event.target.checked);
@@ -42,7 +47,8 @@ const DeleteLesson = () => {
       }
 
       const data = await response.json();
-      handleToggleModal();
+      console.log('deleted: ',data)
+      handleToggleModal({type: 'deleteDisplayedLesson', id: lessonId});
     } catch (error) {
       console.error("Error deleting lesson:", error);
     }

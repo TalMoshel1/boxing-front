@@ -118,7 +118,9 @@ const SetGroupLesson = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log('???')
     e.preventDefault();
+    e.stopPropagation(); // Add this line to stop propagation
     const { repeatMonth, ...formDataToSend } = formData;
 
     const repeatEnd = repeatEndDate(formData.day, parseInt(repeatMonth, 10));
@@ -296,7 +298,7 @@ const SetGroupLesson = () => {
         />
       </FormItemContainer>
 
-      <button type="submit">צור אימון</button>
+      <button type="submit" onClick={handleSubmit}>צור אימון</button>
     </RequestForm>
   );
 };

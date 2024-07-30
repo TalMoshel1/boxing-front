@@ -37,6 +37,7 @@ const DateSlider = () => {
   }, [lessonsMap]);
 
   const settings = {
+    arrows: false,
     dots: false,
     infinite: false, 
     speed: 500,

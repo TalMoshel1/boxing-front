@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const Item = styled.li`
+  color: ${(props) => props.theme.colors.dropDownText};
   padding: 2rem;
   all: unset;
   display: flex;
@@ -15,6 +16,10 @@ const Item = styled.li`
   text-align: center;
   cursor: pointer;
   height: 100%;
+
+  &:hover, &:active{
+    color: ${(props) => props.theme.colors.dropDownTextActiveHover};
+  }
 
     h2 { 
       padding: 1rem;
@@ -45,9 +50,9 @@ const MenuList = ({ isMenuOpen, handleToggleMenu }) => {
   if (isMenuOpen) {
     return (
       <StyledMenuList
-      initial={{ y: "-100vh" }} // Start off-screen above
-      animate={{ y: isMenuOpen ? 0 : "-100vh" }} // Animate into view and out of view
-      transition={{ duration: 0.2, ease: "easeOut" }} // Smooth animation
+      initial={{ y: "-100vh" }} 
+      animate={{ y: isMenuOpen ? 0 : "-100vh" }} 
+      transition={{ duration: 0.4, ease: "easeOut" }} 
       >
         <Item onClick={() => handleClick("calendar")}>
           <h2 style={{ fontSize: "1rem" }}>מערכת שעות</h2>
@@ -70,7 +75,10 @@ const MenuList = ({ isMenuOpen, handleToggleMenu }) => {
 };
 
 const StyledMenuList = styled(motion.ul)`
-  background-color: pink;
+  &:hover{
+    background-color: ${(props) => props.theme.colors.dropDownBackgroundActiveHover};
+  }
+  background-color: ${(props) => props.theme.colors.dropDownBackground};
   width: 100%;
   height:10svh;
   top: 0;

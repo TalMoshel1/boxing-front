@@ -29,9 +29,9 @@ export function Navbar({ isMenuOpen, handleToggleMenu }) {
 }
 
 const Nav = styled.nav`
-  background-color: ${(props) => props.theme.colors.headerBackground};
-  border: 1px solid ${(props) => props.theme.colors.borderColor};
-  color: ${(props) => props.theme.colors.lettersBig};
+  background-color: ${(props) => props.theme.colors.navBackground};
+  border: 1px solid ${(props) => props.theme.colors.navBorder};
+  color: ${(props) => props.theme.colors.navText};
   display: flex;
   justify-content: space-between;
   align-items: center;

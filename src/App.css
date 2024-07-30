@@ -14,7 +14,6 @@
 }
 
 .App-header {
-  /* background-color: #282c34; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,14 +35,12 @@
     transform: rotate(360deg);
   }
 }
-
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: #2E3A46;
+  color: #778899;
 }
 
-button {
-  /* border-radius: 10px; */
-}
 .slick-dots {
   display: none; 
 }
@@ -54,23 +51,16 @@ button {
      left:50%;
     transform: translate(-50%, -50%) ;
     margin-top: 5%;
-  
-    
   }
-
 }
 
 @media (orientation: portrait) {
   .slider-container {
     width: 100%;
-  
-    
   }
-
 }
 
 .slick-slide {
-  /* margin: 0 10px; */
   z-index: 998;
   text-align: center;
 }
@@ -81,7 +71,6 @@ button {
 
 .slick-list {
   margin: 0 -10px;
-
 }
 
 .slick-track {
@@ -89,41 +78,31 @@ button {
 }
 
 .hasLesson {
-  background-color: red;
+  background-color: #D7263D;
 }
 
 .slider-item {
   border: 1px solid black;
   margin-right:1rem;
-  /* width: 16.6666666667vw; */
 }
 
 @media (orientation: portrait) {
-
-  
   .slider-item {
     height: 7rem;
-  
   }
 }
 
 @media (orientation: landscape) {
-
-  
 .slider-item {
   height:7rem;
-
 }
-
 }
 
 .item-h {
   width:100%;
   z-index: 1000;
-
 }
 
 h3 { 
   width:100px
-
 }

@@ -9,6 +9,7 @@ import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThree
 import "../css-components/Day.css";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { isSameDate } from "../functions/compareDatesFormats.js";
 
 const DayHeader = styled.h1`
     @media (orientation: portrait) {
@@ -37,20 +38,27 @@ const Day = ({ date, lessons }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("boxing") || "{}");
 
-  const formatDateInHebrew = (dateString) => {
-    const parsedDate = new Date(dateString);
-    if (isNaN(parsedDate)) {
-      throw new Error("Invalid date format");
-    }
-    const options = {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    const hebrewDate = parsedDate.toLocaleDateString("he-IL", options);
-    return hebrewDate;
-  };
+  console.log(lessons)
+
+  const today = new Date()
+
+  console.log(isSameDate(lessons[0]?.lesson.day), today)
+
+
+  // const formatDateInHebrew = (dateString) => {
+  //   const parsedDate = new Date(dateString);
+  //   if (isNaN(parsedDate)) {
+  //     throw new Error("Invalid date format");
+  //   }
+  //   const options = {
+  //     weekday: "short",
+  //     year: "numeric",
+  //     month: "short",
+  //     day: "numeric",
+  //   };
+  //   const hebrewDate = parsedDate.toLocaleDateString("he-IL", options);
+  //   return hebrewDate;
+  // };
 
 
   useEffect(() => {

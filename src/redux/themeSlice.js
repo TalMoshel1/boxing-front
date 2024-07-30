@@ -3,7 +3,24 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   colors: {
     background: "transparent",
-    headerBackground: "#4285F4",
+    navBackground: "#0B0C10",
+    navBorder: '#2E3A46',
+    navText: '#66FCF1',
+
+    eventBackgroundColor: '#38B2AC',
+    dropDownBackground: '#1F2833',
+    dropDownText: '#C5C6C7',
+    dropDownTextActiveHover: '#2E3A46',
+    dropDownBackgroundActiveHover: '#38B2AC',
+
+    calendarHeaderBackgroundColor: '#1F2833',
+    calendarHeaderColor: '#C5C6C7', /* or #66FCF1 */
+    calendarHeaderBorder: '#38B2AC',
+
+    calendarButtonBackgroundColor: '#66FCF1',
+    calendarButtonBackgroundColorHover: '#38B2AC',
+    calendarButtonColor: '#0B0C10',
+
     borderColor: "#262628",
     itemBackground: "#F5F5F5",
     lettersSmall: "#787878",

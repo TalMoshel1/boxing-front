@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { Navbar } from "./components/Navbar.jsx";
 import Calendar from "./pages/Calendar";
 import DeleteLesson from "./components/deleteLesson.jsx";
+import DetailsLesson from './components/detailsLesson.jsx'
 import SignIn from "./pages/SignIn.jsx";
 import ApproveLink from "./pages/ApprovalLink.jsx";
 import Modal from "./components/Modal.jsx";
@@ -20,11 +21,10 @@ import styled from "styled-components";
 import DateSliderDays from "./components/DateSliderDays.jsx";
 import DateSliderWeeks from "./components/DateSliderWeeks.jsx";
 
+
 function App() {
   const theme = useSelector((state) => state.theme);
-
   
-
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -37,7 +37,7 @@ function App() {
 }
 
 function AppContent() {
-  const [isMenuOpen, toggleMenu] = useState(false);
+  const [isMenuOpen, toggleMenu] = useState(true);
 
   const handleToggleMenu = () => {
     toggleMenu(!isMenuOpen);
@@ -45,6 +45,10 @@ function AppContent() {
 
   const isDeleteLessonModalOpen = useSelector(
     (state) => state.calendar.isDeleteLessonModalOpen
+  );
+
+  const isDetailsLessonModalOpen = useSelector(
+    (state) => state.calendar.isDetailsLessonModalOpen
   );
 
   return (
@@ -57,13 +61,25 @@ function AppContent() {
             <DeleteLesson />
           </Modal>
         )}
+                {isDeleteLessonModalOpen && (
+          <Modal type="delete">
+            <DeleteLesson />
+          </Modal>
+        )}
+
+        {isDetailsLessonModalOpen && (
+          <Modal type="details">
+          <DetailsLesson />
+        </Modal>
+
+        )}
         <Routes>
           <Route path="/" element={<Navigate to="/signin" />} />
           <Route path="/signin" element={<SignIn />} />
           <Route
             path="/calendar"
             element={
-              <StyledDisabledWrapper isDisabled={isDeleteLessonModalOpen}>
+              <StyledDisabledWrapper isDisabled={isDeleteLessonModalOpen || isDetailsLessonModalOpen}>
                 <Calendar />
               </StyledDisabledWrapper>
             }

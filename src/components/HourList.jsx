@@ -1,48 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSetDeleteLessonModal } from "../redux/calendarSlice";
+import { toggleSetDeleteLessonModal, toggleSetDetailsLessonModal } from "../redux/calendarSlice";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   background: none;
   border: none;
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
   right: 0;
-  top: 0;
+top: 0.5rem;
 `;
 export const HourContainer = styled.div`
   display: flex;
   direction: rtl;
   align-items: center;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  border-radius: 8px;
   gap: 1rem;
   color: black;
-  padding-top: 1rem;
+  padding-top: 2rem;
   padding-bottom: 1em;
   width: 100%;
   position: relative;
-  height:30vh;
   flex-direction: column;
+  background-color: ${(props) => props.theme.colors.eventBackgroundColor};
 
-
-
-  @media (orientation: portrait) { 
+  @media (orientation: portrait) {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
   }
 
   @media (orientation: landscape) {
+    border-radius: 8px;
     border: 1px solid #ccc;
   }
-
-
-
-
 `;
 
 const Hour = styled.div`
@@ -54,10 +47,23 @@ const Hour = styled.div`
 const HourEventContainer = styled.div``;
 
 const HourEvent = styled.div`
+  h2,
+  h3 {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+  }
   font-size: 0.8rem;
 `;
 
-const DeleteButton = styled.button``;
+export const InfoButton = styled.button `
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+top: 0.5rem;
+`
 
 const Lesson = ({ lesson }) => {
   const [user, setUser] = useState(null);
@@ -74,6 +80,10 @@ const Lesson = ({ lesson }) => {
     return dispatch(toggleSetDeleteLessonModal(lessonId));
   };
 
+  const handleOpenDetailsModal = (details) => {
+    return dispatch(toggleSetDetailsLessonModal(details))
+  }
+
   if (lesson.lesson.type === "private" && lesson.lesson.isApproved === true) {
     console.log(lesson.lesson);
     return (
@@ -83,6 +93,9 @@ const Lesson = ({ lesson }) => {
             <CloseIcon style={{ fontSize: "1rem" }} />
           </CloseButton>
         )}
+        <InfoButton>
+          <InfoIcon style={{ fontSize: "1rem", color: "black" }} />
+        </InfoButton>
         <Hour>
           {lesson.lesson.startTime} - {lesson.lesson.endTime}
         </Hour>
@@ -94,7 +107,6 @@ const Lesson = ({ lesson }) => {
               {" "}
               {lesson.lesson.studentName}
               <br />
-              {/* {lesson.lesson.studentMail} <br /> */}
               {lesson.lesson.studentPhone}
             </strong>
           </HourEvent>
@@ -110,6 +122,9 @@ const Lesson = ({ lesson }) => {
             <CloseIcon style={{ fontSize: "1rem" }} />
           </CloseButton>
         )}
+        <InfoButton onClick={()=>handleOpenDetailsModal(lesson)}>
+          <InfoIcon style={{ fontSize: "1rem", color: "black" }} />
+        </InfoButton>
         <Hour>
           {lesson.lesson.startTime} - {lesson.lesson.endTime}
         </Hour>

@@ -6,6 +6,8 @@ import { renderDays } from '../functions/renderDays';
 import { formatThreeLettersMonthAndDaysToHebrew } from '../functions/formatThreeLettersMonthAndDaysToHebrew';
 
 const Header = styled.header`
+    background-color: ${(props) => props.theme.colors.calendarHeaderBackgroundColor};
+    color: ${(props) => props.theme.colors.calendarHeaderColor};
     direction: rtl;
     display: flex;
     align-items: center;
@@ -13,30 +15,84 @@ const Header = styled.header`
   @media (orientation: portrait) {
     gap: 0.75rem;
     direction: rtl;
-    // position: sticky;
-    // top: 0;
     justify-content: center;
     padding: 0.5rem;
-    background-color: white; 
     z-index: 2; 
-    margin-top: 0.4rem;
 
+  }
+
+  button { 
+   background-color: #66FCF1;
+  color: #0B0C10;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.calendarButtonBackgroundColorHover};
+
+  }
+    &: {
+      background-color: #45A29E; 
+      }
   }
 
       @media (orientation: landscape) {
     justify-content: space-evenly;
     height: 5rem;
-        margin-top: 1rem;
-
     }
 
     @media (orientation: portrait) { 
     height: 3rem;
     }
-  .viewController {
-    background-color: white;
-    z-index: 2; /* Ensure the select control is also above other content */
+  // .viewController {
+  //   background-color: white;
+  //   z-index: 2; 
+  // }
+
+  select {
+  background-color: #2C3E50;
+    color: #EDEDED;
+    border: 2px solid #66FCF1;
+    border-radius: 5px;
+    padding: 0.5rem;
+    appearance: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    font-size: 1rem;
+    outline: none;
+    position: relative;
+    text-align:center;
+    }
+
+    select:hover,select:focus{
+      background-color: #34495E;
+  border-color: #38B2AC;
+}
+
+select::after{
+  content: '▼';
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: #EDEDED;
+}
+
+
+  option {
+  text-align:center;
+    background-color: #2C3E50;
+  color: #EDEDED;
   }
+
+  option:hover{
+    background-color: #2E4053;
+
+  }
+  
+
 `;
 
 const CalendarHeader = () => {
@@ -75,11 +131,13 @@ const CalendarHeader = () => {
   const today = new Date(currentDate).toDateString();
 
   let firstDate = daysweek[0].displayedDate.split(' ');
+  console.log(firstDate)
   let endDate = daysweek[daysweek.length - 2].displayedDate.split(' ');
 
   const monthInHebrew = formatThreeLettersMonthAndDaysToHebrew('month', endDate[1]);
+  const startMonthInHebrew = formatThreeLettersMonthAndDaysToHebrew('month', firstDate[1]);
 
-  const DateString = `${firstDate[2].split(',')[0]} - ${endDate[2].split(',')[0]} ל${monthInHebrew} ${endDate[3]}`;
+  const DateString = `${firstDate[2].split(',')[0]} ל${startMonthInHebrew} - ${endDate[2].split(',')[0]} ל${monthInHebrew} ${endDate[3]}`;
 
   return (
     <Header>

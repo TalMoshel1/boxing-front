@@ -15,6 +15,9 @@ const initialState = {
   groupModalData: null,
   isDeleteLessonModalOpen: false,
   deleteLessonModalData: null,
+  isDetailsLessonModalOpen: false,
+  detailsLessonModalData: null,
+
   lessonsToDisplay: null
 };
 
@@ -33,8 +36,13 @@ const calendarSlice = createSlice({
       state.currentDate = `${newDate2}`
     },
     setLessonsToDisplay: (state, action) => {
-      const lessons = action.payload;
-      state.lessonsToDisplay = lessons
+      if (action.payload.type === 'deleteDisplayedLesson') {
+        state.lessonsToDisplay = state.lessonsToDisplay.filter(
+          (lesson) => lesson._id !== action.payload.id
+        );
+      } else {
+        state.lessonsToDisplay = action.payload;
+      }
     },
     toggleSetPrivateModal(state, action) {
       state.isPrivateModalOpen = !state.isPrivateModalOpen;
@@ -47,9 +55,13 @@ const calendarSlice = createSlice({
     toggleSetDeleteLessonModal(state, action) {
       state.isDeleteLessonModalOpen = !state.isDeleteLessonModalOpen;
       state.deleteLessonModalData = action.payload ? action.payload : '';
+    },
+    toggleSetDetailsLessonModal(state, action) {
+      state.isDetailsLessonModalOpen = !state.isDetailsLessonModalOpen;
+      state.detailsLessonModalData = action.payload ? action.payload : '';
     }
   },
 });
 
-export const { setView, incrementDate, setMonth, toggleSetPrivateModal, toggleSetGroupModal, toggleSetDeleteLessonModal, setLessonsToDisplay} = calendarSlice.actions;
+export const { setView, incrementDate, setMonth, toggleSetPrivateModal, toggleSetGroupModal, toggleSetDeleteLessonModal, setLessonsToDisplay, toggleSetDetailsLessonModal} = calendarSlice.actions;
 export default calendarSlice.reducer;

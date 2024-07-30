@@ -63,8 +63,8 @@ const Calendar = () => {
             style={{ position: "relative", marginTop: '10rem', paddingInlinestart: '0'}}
             >
               <IndividualDay className="individualDay" style={{position:'absolute'}} />
-            </ul> : <></>
-            // <h1 style={{position: 'absolute', left:'50%', top:'60%', transform: 'translate(-50%, -50%)', direction: 'rtl'}}>גרור את התאריכים ובחר תאריך צבוע</h1>
+            </ul> : 
+            <h1 style={{position: 'absolute', left:'50%', top:'60%', transform: 'translate(-50%, -50%)', direction: 'rtl'}}>גרור את התאריכים ובחר תאריך צבוע</h1>
           } 
 
 

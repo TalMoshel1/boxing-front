@@ -11,7 +11,7 @@ export const CloseButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
-  right: 0.5rem;
+  right: 0;
   top: 0.5rem;
 `;
 
@@ -63,7 +63,6 @@ const HourEvent = styled.div`
   font-size: 0.7rem;
   }
   }
-  // font-size: 0.8rem;
 `;
 
 export const InfoButton = styled.button`
@@ -72,7 +71,7 @@ export const InfoButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
-  left: 0.5rem;
+  left: 0;
   top: 0.5rem;
 `;
 

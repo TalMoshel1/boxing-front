@@ -7,11 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { CloseButton, InfoButton } from "./HourList";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
+import { setView } from "../redux/calendarSlice";
 
 export const IndividualDay = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
+  
 
   console.log(displayedData)
 
@@ -29,6 +31,10 @@ export const IndividualDay = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    // return () => {
+      
+    // }
   }, []);
 
   if (displayedData.length > 0) {

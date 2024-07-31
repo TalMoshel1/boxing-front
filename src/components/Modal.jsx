@@ -44,7 +44,7 @@ export const CloseButton = styled.button`
   position: absolute;
   right: 0;
   top: 0;
-  padding:1rem;
+  padding:0.5rem;
 `;
 
 const Modal = ({ children, type }) => {

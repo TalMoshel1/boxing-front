@@ -63,7 +63,7 @@ const DeleteLesson = () => {
   return (
     <DeleteContainer>
       {lesson.lesson.repeatsWeekly && (
-        <label>
+        <label style={{color: 'black', direction: 'rtl'}}>
           מחק את כל השיעורים
           <input
             type="checkbox"

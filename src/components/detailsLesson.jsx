@@ -10,7 +10,7 @@ const DetailsLesson  = (props) => {
       console.log(details.lesson.description)
   return (
     <section>
-        <p>{details.lesson.description}</p>
+        <p style={{direction:'rtl', color: 'black'}}>{details.lesson.description}</p>
       
     </section>
   )

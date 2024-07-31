@@ -34,9 +34,9 @@ const Header = styled.header`
     background-color: ${(props) => props.theme.colors.calendarButtonBackgroundColorHover};
 
   }
-    &: {
-      background-color: #45A29E; 
-      }
+    // &: {
+    //   background-color: #45A29E; 
+    //   }
   }
 
       @media (orientation: landscape) {

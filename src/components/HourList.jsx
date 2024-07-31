@@ -12,8 +12,9 @@ export const CloseButton = styled.button`
   cursor: pointer;
   position: absolute;
   right: 0.5rem;
-top: 0.5rem;
+  top: 0.5rem;
 `;
+
 export const HourContainer = styled.div`
   display: flex;
   direction: rtl;
@@ -51,23 +52,23 @@ const HourEvent = styled.div`
   h3 {
     margin-block-start: 0em;
     margin-block-end: 0em;
-    width:100%;
-    word-wrap: break-word;  
+    width: 100%;
+    word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: normal; 
+    white-space: normal;
   }
   font-size: 0.8rem;
 `;
 
-export const InfoButton = styled.button `
+export const InfoButton = styled.button`
   background: none;
   border: none;
   font-size: 1rem;
   cursor: pointer;
   position: absolute;
   left: 0.5rem;
-top: 0.5rem;
-`
+  top: 0.5rem;
+`;
 
 const Lesson = ({ lesson }) => {
   const [user, setUser] = useState(null);
@@ -85,10 +86,8 @@ const Lesson = ({ lesson }) => {
   };
 
   const handleOpenDetailsModal = (details) => {
-    return dispatch(toggleSetDetailsLessonModal(details))
-  }
-
-
+    return dispatch(toggleSetDetailsLessonModal(details));
+  };
 
   if (lesson.lesson.type === "private" && lesson.lesson.isApproved === true) {
     console.log(lesson.lesson);
@@ -121,8 +120,7 @@ const Lesson = ({ lesson }) => {
     );
   }
   if (lesson.lesson.type === "group") {
-    lesson.lesson.name.match(/[a-zA-Z-]+/g)
-    const wordsArray = lesson.lesson.name.match(/[a-zA-Z0-9-]+/g)
+    const wordsArray = lesson.lesson.name.match(/[\u0590-\u05FFa-zA-Z0-9-]+/g);
     return (
       <HourContainer>
         {user?.user?.role === "admin" && (
@@ -130,7 +128,7 @@ const Lesson = ({ lesson }) => {
             <CloseIcon style={{ fontSize: "1rem" }} />
           </CloseButton>
         )}
-        <InfoButton onClick={()=>handleOpenDetailsModal(lesson)}>
+        <InfoButton onClick={() => handleOpenDetailsModal(lesson)}>
           <InfoIcon style={{ fontSize: "1rem", color: "black" }} />
         </InfoButton>
         <Hour>
@@ -140,17 +138,13 @@ const Lesson = ({ lesson }) => {
           <HourEvent>
             <h2>{lesson.lesson.trainer}</h2>
             <br />
-            <h3>{wordsArray.map((w,i)=>{
-              if (i !== wordsArray.length -1) {
-                console.log('w: ', w)
-                return <>{w}<br/></>
-              } else {
-                console.log('w: ', w)
-
-                return <>{w}</>
-              }
-            })}
-
+            <h3>
+              {wordsArray.map((w, i) => (
+                <React.Fragment key={i}>
+                  {w}
+                  {i !== wordsArray.length - 1 && <br />}
+                </React.Fragment>
+              ))}
             </h3>
           </HourEvent>
         </HourEventContainer>

@@ -45,20 +45,7 @@ const Day = ({ date, lessons }) => {
   console.log(isSameDate(lessons[0]?.lesson.day), today)
 
 
-  // const formatDateInHebrew = (dateString) => {
-  //   const parsedDate = new Date(dateString);
-  //   if (isNaN(parsedDate)) {
-  //     throw new Error("Invalid date format");
-  //   }
-  //   const options = {
-  //     weekday: "short",
-  //     year: "numeric",
-  //     month: "short",
-  //     day: "numeric",
-  //   };
-  //   const hebrewDate = parsedDate.toLocaleDateString("he-IL", options);
-  //   return hebrewDate;
-  // };
+
 
 
   useEffect(() => {
@@ -69,6 +56,8 @@ const Day = ({ date, lessons }) => {
     const mappedLessons = filteredLessons.map((l) => {
       return l;
     });
+
+    console.log('mappedLessons: ', mappedLessons)
 
 
     setThisDayLessons(mappedLessons);

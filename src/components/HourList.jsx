@@ -57,7 +57,13 @@ const HourEvent = styled.div`
     overflow-wrap: break-word;
     white-space: normal;
   }
-  font-size: 0.8rem;
+
+  @media (orientation: portrait) { 
+  h3 { 
+  font-size: 0.7rem;
+  }
+  }
+  // font-size: 0.8rem;
 `;
 
 export const InfoButton = styled.button`

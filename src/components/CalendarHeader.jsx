@@ -88,7 +88,8 @@ select::after{
   }
 
   option:hover{
-    background-color: #2E4053;
+    // background-color: #2E4053;
+    background-color: red;
 
   }
   
@@ -142,8 +143,8 @@ const CalendarHeader = () => {
   return (
     <Header>
       <select className='viewController' onChange={(e) => dispatch(setView(e.target.value))} value={view}>
-        <option value="week">תצוגה שבועית</option>
-        <option value="day">תצוגה יומית</option>
+        <option value="week" style={{textAlign: 'start'}}>תצוגה שבועית</option>
+        <option value="day" style={{textAlign: 'start'}}>תצוגה יומית</option>
       </select>
 
       {view === 'week' && (

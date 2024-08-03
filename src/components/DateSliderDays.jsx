@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,6 +16,8 @@ const DateSlider = () => {
   const [clickDisabled, setClickDisabled] = useState(false);
   const dispatch = useDispatch();
   const [lessonsMap, setLessonsMap] = useState([]);
+  const sliderRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleDisplayData = (data) => {
     if (clickDisabled) return;
@@ -39,11 +41,11 @@ const DateSlider = () => {
   const settings = {
     arrows: false,
     dots: false,
-    infinite: false, 
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    initialSlide: 0, 
+    initialSlide: currentSlide,
     swipe: true,
     touchMove: true,
     swipeToSlide: true,
@@ -138,8 +140,6 @@ const DateSlider = () => {
 
     const newDates = generateDatesFrom(lastDate, 30);
 
-    setDates((prevDates) => [...prevDates, ...newDates]);
-
     const newLessons = await sendLessonsRequest(
       Object.keys(newDates[0])[0],
       Object.keys(newDates[newDates.length - 1])[0]
@@ -148,6 +148,11 @@ const DateSlider = () => {
     if (newLessons && newLessons.length > 0) {
       setLessonsMap((prevLessons) => [...prevLessons, ...newLessons]);
     }
+
+    setDates((prevDates) => [...prevDates, ...newDates]);
+
+    // Move the slider to the date 30 days before the end
+    setCurrentSlide(dates.length);
 
     setLoading(false);
   }, [dates, loading]);
@@ -166,10 +171,9 @@ const DateSlider = () => {
     setClickDisabled(true);
     setTimeout(() => {
       setClickDisabled(false);
-    }, 200); 
+    }, 200);
   };
 
-  // Fetch initial lessons data
   useEffect(() => {
     setLoading(true);
     const fetchInitialData = async () => {
@@ -179,8 +183,7 @@ const DateSlider = () => {
       );
 
       if (lessons && lessons.length > 0) {
-        setLoading(true);
-        return setLessonsMap(lessons);
+        setLessonsMap(lessons);
       }
       setLoading(false);
     };
@@ -188,10 +191,16 @@ const DateSlider = () => {
     fetchInitialData();
   }, []);
 
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.slickGoTo(currentSlide);
+    }
+  }, [dates, currentSlide]);
+
   return (
     <>
       <div className="slider-container" style={{ position: "absolute" }}>
-        <Slider {...settings}>
+        <Slider ref={sliderRef} {...settings}>
           {dates.map((dateObj, index) => {
             const dateKey = Object.keys(dateObj)[0];
             const hasLesson = (lessonsMap || []).some((lesson) =>
@@ -201,15 +210,28 @@ const DateSlider = () => {
             const day = dateKey.split(",")[0].split(" ")[0];
             if (loading) {
               return (
-                <div className="slider-item">
-                  <ClipLoader />
+                <div className="slider-item" style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  >
+                    <ClipLoader />
+                  </div>
                 </div>
               );
             }
             return (
               <div
                 key={index}
-                onClick={() => handleDisplayData(dateObj)}
+                onClick={() => {
+                  if (hasLesson) {
+                    handleDisplayData(dateObj);
+                  }
+                }}
                 className={hasLesson ? "hasLesson slider-item" : "slider-item"}
               >
                 <h3 className="item-h">
@@ -229,3 +251,4 @@ const DateSlider = () => {
 };
 
 export default DateSlider;
+

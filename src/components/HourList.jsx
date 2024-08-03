@@ -19,7 +19,6 @@ export const HourContainer = styled.div`
   display: flex;
   direction: rtl;
   align-items: center;
-  gap: 1rem;
   color: black;
   padding-top: 2rem;
   padding-bottom: 1em;
@@ -27,6 +26,7 @@ export const HourContainer = styled.div`
   position: relative;
   flex-direction: column;
   background-color: ${(props) => props.theme.colors.eventBackgroundColor};
+  margin-bottom:1rem;
 
   @media (orientation: portrait) {
     border-top: 1px solid #ccc;
@@ -40,7 +40,7 @@ export const HourContainer = styled.div`
 `;
 
 const Hour = styled.div`
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   width: min-content;
   direction: ltr;
 `;
@@ -137,12 +137,11 @@ const Lesson = ({ lesson }) => {
           <InfoIcon style={{ fontSize: "1rem", color: "black" }} />
         </InfoButton>
         <Hour>
-          {lesson.lesson.startTime} - {lesson.lesson.endTime}
+          <strong>{lesson.lesson.startTime} - {lesson.lesson.endTime}</strong>
         </Hour>
         <HourEventContainer>
           <HourEvent>
-            <h2>{lesson.lesson.trainer}</h2>
-            <br />
+            <h2 style={{fontWeight: 'normal'}}>{lesson.lesson.trainer}</h2>
             <h3>
               {wordsArray.map((w, i) => (
                 <React.Fragment key={i}>

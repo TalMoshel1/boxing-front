@@ -26,7 +26,7 @@ const ModalContainer = styled.div`
   transition: transform 0.3s ease-in-out;
   overflow-y: auto;
   padding: 20px;
-  width: 80%;
+  width: max-content;
   max-height: 80%;
   background-color: white;
 `;

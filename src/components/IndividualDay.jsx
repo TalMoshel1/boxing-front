@@ -9,13 +9,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import { setView } from "../redux/calendarSlice";
 
-export const IndividualDay = () => {
+export const IndividualDay = ({displayedData}) => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
+  // const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
   
 
-  console.log(displayedData)
+  // console.log(displayedData)
 
   const handleOpenDeleteModal = (lesson) => {
     const editedLesson = { lesson: lesson };
@@ -127,6 +127,11 @@ const styles = {
     border: "none",
     margin: 0,
     direction: "rtl",
+    position:'relative',
+    top: '10rem',
+    marginBlockStart: '0em',
+    marginBlockEnd: '0em',
+    paddingInlineStart: '0px'
   },
   listItem: {
     backgroundColor: "#38B2AC",

@@ -6,7 +6,7 @@ import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { isSameDate } from "../functions/compareDatesFormats";
 import { IndividualDay } from "./IndividualDay.jsx";
-import { setLessonsToDisplay } from "../redux/calendarSlice.js";
+// import { setLessonsToDisplay } from "../redux/calendarSlice.js";
 import { formatThreeLettersMonthAndDaysToHebrew } from "../functions/formatThreeLettersMonthAndDaysToHebrew";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -18,15 +18,27 @@ const DateSlider = () => {
   const [lessonsMap, setLessonsMap] = useState([]);
   const sliderRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [individualDay, setIndividualDay] = useState([])
+
+  // const handleDisplayData = (data) => {                                using redux
+  //   if (clickDisabled) return;
+
+  //   const lessons = Object.values(data)[0];
+  //   if (lessons && lessons.length > 0) {
+  //     dispatch(setLessonsToDisplay(lessons));
+  //   } else {
+  //     dispatch(setLessonsToDisplay([]));
+  //   }
+  // };
 
   const handleDisplayData = (data) => {
     if (clickDisabled) return;
 
     const lessons = Object.values(data)[0];
     if (lessons && lessons.length > 0) {
-      dispatch(setLessonsToDisplay(lessons));
+      setIndividualDay(lessons);
     } else {
-      dispatch(setLessonsToDisplay([]));
+      setIndividualDay([])
     }
   };
 
@@ -246,6 +258,8 @@ const DateSlider = () => {
           })}
         </Slider>
       </div>
+
+      {individualDay.length > 0 && <IndividualDay displayedData={individualDay}/>}
     </>
   );
 };

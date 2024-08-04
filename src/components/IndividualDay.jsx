@@ -35,10 +35,46 @@ export const IndividualDay = ({ displayedData }) => {
   const [currentLesson, setCurrentLesson] = useState(null);
   const [lessonIdToHide, setLessonIdToHide] = useState([])
 
-  useEffect(()=>{
-      console.log('lessons to show: ', displayLessons())
-    
-  },[lessonIdToHide])
+
+  // const displayLessons = () => {
+  //   console.log('displayed data: ',displayedData)
+  //   const parseTime = (timeStr) => {
+  //     const [hours, minutes] = timeStr.split(':').map(Number);
+  //     return hours * 60 + minutes;
+  //   };
+  
+  //   const sortByEndTime = (arr) => {
+  //     return arr.sort((a, b) => parseTime(a.endTime) - parseTime(b.endTime));
+  //   };
+  
+  //   if (lessonIdToHide.length > 0) {
+  //     const lessons = displayedData.map((l) => {
+  //       let instance = 0;
+  //       for (let i = 0; i < lessonIdToHide.length; i++) {
+  //         if (lessonIdToHide[i] === l._id) {
+  //           instance++;
+  //         }
+  //       }
+      
+  //       if (instance === 0) {
+  //           return l;
+  //       }
+  //     }).filter(l => l !== undefined); 
+
+  //     if (lessons.length === 0) {
+
+  //     }
+  
+  //     return sortByEndTime(lessons);
+  //   }
+
+  
+  //   return sortByEndTime(displayedData).map((l)=>{
+  //     if (l.isApproved) {
+  //       return l
+  //     }
+  //   })
+  // };
 
   const displayLessons = () => {
     const parseTime = (timeStr) => {
@@ -50,29 +86,26 @@ export const IndividualDay = ({ displayedData }) => {
       return arr.sort((a, b) => parseTime(a.endTime) - parseTime(b.endTime));
     };
   
-    if (lessonIdToHide.length > 0) {
-      const lessons = displayedData.map((l) => {
-        let instance = 0;
-        for (let i = 0; i < lessonIdToHide.length; i++) {
-          if (lessonIdToHide[i] === l._id) {
-            instance++;
-          }
-        }
-      
-        if (instance === 0) {
-          return l;
-        }
-      }).filter(l => l !== undefined); 
-
-      if (lessons.length === 0) {
-        
-      }
+    // Filter out lessons that are in the lessonIdToHide array
+    const filteredLessons = displayedData.filter((lesson) => {
+      return !lessonIdToHide.includes(lesson._id);
+    });
   
-      return sortByEndTime(lessons);
+    // If lessonIdToHide is not empty and no lessons left after filtering
+    if (lessonIdToHide.length > 0 && filteredLessons.length === 0) {
+      return [];
     }
   
-    return sortByEndTime(displayedData);
+    // Filter lessons that are approved
+    const approvedLessons = filteredLessons.filter((lesson) => lesson.isApproved);
+  
+    // Return sorted approved lessons
+    return sortByEndTime(approvedLessons);
   };
+  
+
+  console.log('displayed lessons: ', displayLessons())
+
 
   const hideLesson = (lessonId) => {
     setLessonIdToHide((prev)=>([...prev, lessonId]))
@@ -104,6 +137,7 @@ export const IndividualDay = ({ displayedData }) => {
 
   const renderModalContent = () => {
     if (modalType === "details") {
+      console.log('currentLesson: ', currentLesson)
       return <DetailsLesson lesson={currentLesson} closeModal={handleCloseModal} />;
     } else if (modalType === "delete") {
       return <DeleteLesson lesson={currentLesson} closeModal={handleCloseModal} hideLesson={hideLesson} />;
@@ -115,6 +149,8 @@ export const IndividualDay = ({ displayedData }) => {
     const time = displayedData[0].day;
     const date = new Date(time);
 
+    console.log(displayLessons())
+
     return (
       <>
         <ul style={styles.listContainer}>
@@ -124,8 +160,11 @@ export const IndividualDay = ({ displayedData }) => {
 
           {
 
-displayLessons().map((l, index) => (
-  <li key={index} style={styles.listItem}>
+displayLessons().map((l, index) => {
+
+
+  if (user?.user?.role === 'admin' && l.isApproved) {
+   return <li key={index} style={styles.listItem}>
     {user?.user?.role === "admin" && (
       <CloseButton onClick={() => handleOpenDeleteModal(l)}>
         <CloseIcon />
@@ -149,7 +188,34 @@ displayLessons().map((l, index) => (
       </div>
     </div>
   </li>
-))
+} else if (l.type==='group'){
+
+  <li key={index} style={styles.listItem}>
+  {user?.user?.role === "admin" && (
+    <CloseButton onClick={() => handleOpenDeleteModal(l)}>
+      <CloseIcon />
+    </CloseButton>
+  )}
+  <InfoButton onClick={() => handleOpenDetailsModal(l)}>
+    <InfoIcon />
+  </InfoButton>
+  <div style={{ width: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <span style={{ direction: "ltr" }}>
+        {l.startTime} - {l.endTime}
+      </span>
+      <strong>
+        <span>
+          {l.type === "private" ? "אימון אישי" : "אימון: " + l.name}
+        </span>
+        <br />
+        <span>מאמן: {l.trainer}</span>
+      </strong>
+    </div>
+  </div>
+</li>
+}
+  })
           
           // displayedData.map((l, index) => (
           //   <li key={index} style={styles.listItem}>

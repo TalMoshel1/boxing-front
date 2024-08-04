@@ -44,7 +44,9 @@ const DeleteLesson = ({ lesson: propLesson, closeModal, hideLesson}) => {
       }
 
       const data = await response.json();
-      hideLesson(lessonId)
+      if (hideLesson) {
+        hideLesson(lessonId)
+      }
       handleToggleModal({ type: 'deleteDisplayedLesson', id: lessonId });
     } catch (error) {
       console.error("Error deleting lesson:", error);

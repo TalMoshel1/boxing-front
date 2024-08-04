@@ -6,6 +6,9 @@ import "../css-components/Days.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import styled from "styled-components";
 import { renderDays } from "../functions/renderDays.js";
+import Modal from "./Modal.jsx";
+import DeleteLesson from "./deleteLesson.jsx";
+import DetailsLesson from "./detailsLesson.jsx";
 
 const Days = () => {
   const [fetchedLessons, setFetchedLessons] = useState([]);
@@ -14,6 +17,14 @@ const Days = () => {
   const view = useSelector((state) => state.calendar.view);
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
+
+    const isDeleteLessonModalOpen = useSelector(
+    (state) => state.calendar.isDeleteLessonModalOpen
+  );
+
+  const isDetailsLessonModalOpen = useSelector(
+    (state) => state.calendar.isDetailsLessonModalOpen
+  );
 
   const startOfWeek = (date) => {
     const day = date.getDay();
@@ -87,13 +98,28 @@ const Days = () => {
 
   if (isDisplay) {
     return (
-      <div className="days">
+      <>
+            <div className="days">
         {renderDays(currentDate, "week").map((day, index) => {
           if (!day.displayedDate.includes("Sat")) {
             return <Day key={index} date={day} lessons={displayedLessons} />;
           }
         })}
       </div>
+
+             {isDeleteLessonModalOpen && (
+        <Modal type="delete">
+          <DeleteLesson />
+        </Modal>
+      )} 
+
+       {isDetailsLessonModalOpen && (
+        <Modal type="details">
+          <DetailsLesson />
+        </Modal>
+      )} 
+      </>
+
     );
   } else {
     return (

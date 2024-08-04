@@ -216,7 +216,7 @@ const DateSlider = () => {
           {dates.map((dateObj, index) => {
             const dateKey = Object.keys(dateObj)[0];
             const hasLesson = (lessonsMap || []).some((lesson) =>
-              isSameDate(dateKey, new Date(lesson.day).toDateString())
+              isSameDate(dateKey, new Date(lesson.day).toDateString()) && lesson.isApproved
             );
 
             const day = dateKey.split(",")[0].split(" ")[0];

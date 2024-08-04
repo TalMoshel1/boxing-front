@@ -1,4 +1,6 @@
 export function openWhatsApp(lesson, phone) {
+    console.log(lesson)
+    console.log(phone)
     const trainersPhone = ['0544541145', '0502323574']
     let encodedMessage
     let message
@@ -26,5 +28,6 @@ export function openWhatsApp(lesson, phone) {
     encodedMessage = encodeURIComponent(message);
     
     const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+    console.log(whatsappUrl)
     window.open(whatsappUrl, '_blank');
   }

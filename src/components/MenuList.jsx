@@ -63,7 +63,7 @@ const MenuList = ({ isMenuOpen, handleToggleMenu }) => {
           </h2>
         </Item>
         <Item>
-          <h2 style={{ fontSize: "1rem", padding: "1rem" }}>על הצוות</h2>
+          <h2 style={{ fontSize: "1rem", padding: "1rem" }} onClick={()=> handleClick('')}>דף הבית</h2>
         </Item>
         <Item onClick={() => handleClick("signin")}>
           <h2 style={{ fontSize: "1rem", padding: "1rem" }}>ניהול</h2>

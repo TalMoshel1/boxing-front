@@ -44,11 +44,13 @@ const RequestForm = styled.section`
     text-align: center;
     border: 1px solid grey;
     color: black;
+    cursor:pointer;
   }
 
   button {
     padding: 0.5rem 1rem;
     margin-top: 1rem;
+    cursor:pointer;
   }
 `;
 

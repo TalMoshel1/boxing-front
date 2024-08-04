@@ -65,7 +65,7 @@ function AppContent() {
         </Modal>
       )} */}
       <Routes>
-        <Route path="/" element={<Navigate to="/signin" />} />
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/signin" element={<SignIn />} />
         <Route
           path="/calendar"

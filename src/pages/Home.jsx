@@ -7,7 +7,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 
 const MainHome = styled.main`
-  height: 95vh;
+
+  height: calc(100svh - 5rem);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -39,7 +40,6 @@ const MainHome = styled.main`
 
 const Home = () => {
 
-  console.log('rendered')
   const navigate = useNavigate();
 
   return (
@@ -48,11 +48,11 @@ const Home = () => {
         <h2>לוח שעות</h2>
         <CalendarMonthIcon className="icon" />
       </section>
-      <section>
+      {/* <section>
         <h2>מי אנחנו</h2>
         <InfoIcon className="icon" />
-      </section>
-      <section>
+      </section> */}
+      <section onClick={()=>{navigate('/requestPrivte')}} >
         <h2>קבע אימון אישי</h2>
         <ListAltIcon className="icon" />
       </section>

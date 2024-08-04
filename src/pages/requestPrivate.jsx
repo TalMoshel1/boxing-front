@@ -47,6 +47,7 @@ export const RequestForm = styled.form`
 
   p {
     line-height: 1.6;
+    // text-align: start;
   }
 
   label {
@@ -66,6 +67,7 @@ export const RequestForm = styled.form`
     background-color: white;
     color: black;
     font-size: 1rem;
+    cursor: pointer;
   }
 
   button {
@@ -336,6 +338,7 @@ const RequestPrivateLesson = () => {
         onChange={handleInputChange}
         min={formatDateToYYYYMMDD(new Date())}
         required
+        // style={{cursor:'pointer'}}
       />
 
       {loading ? (
@@ -414,7 +417,7 @@ const RequestPrivateLesson = () => {
           }}
         />
         <p style={{ paddingLeft: "1rem", paddingRight: "1rem", lineHeight: "1rem" }}>
-          <br /> לאחר הלחיצה על <button disabled style={{ pointerEvents: "none" }}>שלח</button> אנא אשר שימוש ב <br />WhatsApp ושלח
+          <br /> לאחר הלחיצה על <button disabled style={{ pointerEvents: "none" }}>שלח</button> אנא אשר שימוש ב WhatsApp ושלח
           את ההודעה האוטומטית שתראה למאמן שבחרת.
         </p>
       </section>

@@ -24,6 +24,11 @@ const RequestForm = styled.section`
   text-align: center;
   position: relative;
 
+  .repeatMonth {
+  background-color: white;
+  color: black;
+  }
+
   label {
     width: 100%;
     text-align: center;
@@ -38,6 +43,7 @@ const RequestForm = styled.section`
     box-sizing: border-box;
     text-align: center;
     border: 1px solid grey;
+    color: black;
   }
 
   button {

@@ -1,120 +1,195 @@
 import React, { useEffect, useState } from "react";
-import {
-  toggleSetDeleteLessonModal,
-  toggleSetDetailsLessonModal,
-} from "../redux/calendarSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { CloseButton, InfoButton } from "./HourList";
+import Modal from "./Modal";
+import DetailsLesson from "./detailsLesson";
+import DeleteLesson from "./deleteLesson";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
-import { setView } from "../redux/calendarSlice";
+import styled from "styled-components";
 
-export const IndividualDay = ({displayedData}) => {
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.5rem;
+`;
+
+const InfoButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  right: 3rem;
+  top: 0;
+  padding: 0.5rem;
+`;
+
+export const IndividualDay = ({ displayedData }) => {
   const [user, setUser] = useState(null);
-  const dispatch = useDispatch();
-  // const displayedData = useSelector((state) => state.calendar.lessonsToDisplay);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(""); 
+  const [currentLesson, setCurrentLesson] = useState(null);
+  const [lessonIdToHide, setLessonIdToHide] = useState([])
+
+  useEffect(()=>{
+      console.log('lessons to show: ', displayLessons())
+    
+  },[lessonIdToHide])
+
+  const displayLessons = () => {
+    const parseTime = (timeStr) => {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
   
+    const sortByEndTime = (arr) => {
+      return arr.sort((a, b) => parseTime(a.endTime) - parseTime(b.endTime));
+    };
+  
+    if (lessonIdToHide.length > 0) {
+      const lessons = displayedData.map((l) => {
+        let instance = 0;
+        for (let i = 0; i < lessonIdToHide.length; i++) {
+          if (lessonIdToHide[i] === l._id) {
+            instance++;
+          }
+        }
+      
+        if (instance === 0) {
+          return l;
+        }
+      }).filter(l => l !== undefined); 
 
-  // console.log(displayedData)
-
-  const handleOpenDeleteModal = (lesson) => {
-    const editedLesson = { lesson: lesson };
-    return dispatch(toggleSetDeleteLessonModal(editedLesson));
+      if (lessons.length === 0) {
+        
+      }
+  
+      return sortByEndTime(lessons);
+    }
+  
+    return sortByEndTime(displayedData);
   };
 
-  const handleOpenDetailsModal = (obj) => {
-    return dispatch(toggleSetDetailsLessonModal(obj));
-  };
-
+  const hideLesson = (lessonId) => {
+    setLessonIdToHide((prev)=>([...prev, lessonId]))
+  }
   useEffect(() => {
     const storedUser = localStorage.getItem("boxing");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-
-    // return () => {
-      
-    // }
   }, []);
 
+  const handleOpenDeleteModal = (lesson) => {
+    setCurrentLesson(lesson);
+    setModalType("delete");
+    setIsModalOpen(true);
+  };
+
+  const handleOpenDetailsModal = (lesson) => {
+    setCurrentLesson(lesson);
+    setModalType("details");
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentLesson(null);
+    setModalType("");
+  };
+
+  const renderModalContent = () => {
+    if (modalType === "details") {
+      return <DetailsLesson lesson={currentLesson} closeModal={handleCloseModal} />;
+    } else if (modalType === "delete") {
+      return <DeleteLesson lesson={currentLesson} closeModal={handleCloseModal} hideLesson={hideLesson} />;
+    }
+    return null;
+  };
+
   if (displayedData.length > 0) {
-    console.log(displayedData);
     const time = displayedData[0].day;
     const date = new Date(time);
 
-    if (displayedData.length > 0) {
-      return (
+    return (
+      <>
         <ul style={styles.listContainer}>
           <h1>
             {date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}
           </h1>
 
-          {displayedData.map((l, index) => {
-            if (user?.user?.role === "admin" && l.type === "private") {
-              return (
-                <li key={index} style={styles.listItem}>
-                  {user?.user?.role === "admin" && (
-                    <CloseButton onClick={() => handleOpenDeleteModal(l)}>
-                      <CloseIcon />
-                    </CloseButton>
-                  )}
-                  <InfoButton
-                    onClick={() => handleOpenDetailsModal({ lesson: l })}
-                  >
-                    <InfoIcon />
-                  </InfoButton>
-                  <div style={{ width: "100%" }}>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <span style={{ direction: "ltr" }}>
-                        {l.startTime} - {l.endTime}
-                      </span>{" "}
-                      <span>
-                        <strong>אימון אישי</strong>
-                      </span>{" "}
-                      <span>מתאמן: {l.studentName}</span>{" "}
-                      <span>מאמן: {l.trainer}</span>{" "}
-                      <span>טלפון: {l.studentPhone}</span>
-                    </div>
-                  </div>
-                </li>
-              );
-            }
+          {
 
-            console.log(l);
-
-            return (
-              <li key={index} style={styles.listItem}>
-                {user?.user?.role === "admin" && (
-                  <CloseButton onClick={() => handleOpenDeleteModal(l)}>
-                    <CloseIcon />
-                  </CloseButton>
-                )}
-                <InfoButton
-                  onClick={() => handleOpenDetailsModal({ lesson: l })}
-                >
-                  <InfoIcon />
-                </InfoButton>
-                <div style={{ width: "100%" }}>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <span style={{ direction: "ltr" }}>
-                      {l.startTime} - {l.endTime}
-                    </span>{" "}
-                    <strong>
-                      <span>אימון: {l.name}</span>
-                      <br />
-                      <span>מאמן: {l.trainer}</span>
-                    </strong>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
+displayLessons().map((l, index) => (
+  <li key={index} style={styles.listItem}>
+    {user?.user?.role === "admin" && (
+      <CloseButton onClick={() => handleOpenDeleteModal(l)}>
+        <CloseIcon />
+      </CloseButton>
+    )}
+    <InfoButton onClick={() => handleOpenDetailsModal(l)}>
+      <InfoIcon />
+    </InfoButton>
+    <div style={{ width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span style={{ direction: "ltr" }}>
+          {l.startTime} - {l.endTime}
+        </span>
+        <strong>
+          <span>
+            {l.type === "private" ? "אימון אישי" : "אימון: " + l.name}
+          </span>
+          <br />
+          <span>מאמן: {l.trainer}</span>
+        </strong>
+      </div>
+    </div>
+  </li>
+))
+          
+          // displayedData.map((l, index) => (
+          //   <li key={index} style={styles.listItem}>
+          //     {user?.user?.role === "admin" && (
+          //       <CloseButton onClick={() => handleOpenDeleteModal(l)}>
+          //         <CloseIcon />
+          //       </CloseButton>
+          //     )}
+          //     <InfoButton onClick={() => handleOpenDetailsModal(l)}>
+          //       <InfoIcon />
+          //     </InfoButton>
+          //     <div style={{ width: "100%" }}>
+          //       <div style={{ display: "flex", flexDirection: "column" }}>
+          //         <span style={{ direction: "ltr" }}>
+          //           {l.startTime} - {l.endTime}
+          //         </span>
+          //         <strong>
+          //           <span>
+          //             {l.type === "private" ? "אימון אישי" : "אימון: " + l.name}
+          //           </span>
+          //           <br />
+          //           <span>מאמן: {l.trainer}</span>
+          //         </strong>
+          //       </div>
+          //     </div>
+          //   </li>
+          // ))
+          }
         </ul>
-      );
-    }
 
-    return <h1>לחץ על תאריך צבוע</h1>;
+        {isModalOpen && (
+          <Modal type={modalType} closeModal={handleCloseModal}>
+            {renderModalContent()}
+          </Modal>
+        )}
+      </>
+    );
   }
+
+  return <h1>לחץ על תאריך צבוע</h1>;
 };
 
 const styles = {
@@ -127,7 +202,7 @@ const styles = {
     border: "none",
     margin: 0,
     direction: "rtl",
-    position:'relative',
+    position: 'relative',
     top: '10rem',
     marginBlockStart: '0em',
     marginBlockEnd: '0em',
@@ -146,6 +221,7 @@ const styles = {
     maxWidth: "400px",
     display: "flex",
     justifyContent: "space-evenly",
+
   },
 };
 

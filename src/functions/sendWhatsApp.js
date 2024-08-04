@@ -7,8 +7,8 @@ export function openWhatsApp(lesson, phone) {
     if (trainersPhone.includes(phone)) {
       message = `
       מתאמן: ${lesson.studentName}
-      יום: ${new Date(lesson.day).getDate()}/${new Date(lesson.day).getMonth()}/${new Date(lesson.day).getFullYear()}
-      בשעות:  ${lesson.startTime} - ${lesson.endTime}
+      יום: ${new Date(lesson.day).getDate()}/${new Date(lesson.day).getMonth()+1}/${new Date(lesson.day).getFullYear()}
+      בשעות: ${lesson.endTime} - ${lesson.startTime}
 
       לאישור האימון לחץ:
       https://boxing-front.onrender.com/approveLink/${lesson._id}

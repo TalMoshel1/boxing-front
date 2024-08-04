@@ -26,7 +26,7 @@ const ModalContainer = styled.div`
   transition: transform 0.3s ease-in-out;
   overflow-y: auto;
   padding: 20px;
-  width: max-content;
+  // width: max-content;
   max-height: 80%;
   background-color: white;
 `;
@@ -47,7 +47,7 @@ export const CloseButton = styled.button`
   padding:0.5rem;
 `;
 
-const Modal = ({ children, type }) => {
+const Modal = ({ children, type, closeModal}) => {
   const dispatch = useDispatch();
 
   const handleClose = () => {
@@ -62,10 +62,12 @@ const Modal = ({ children, type }) => {
     }
   };
 
+  console.log('whi it is rendered?!')
+
   return (
     <ModalContainer className="modal">
       <ModalHeader>
-        <CloseButton onClick={handleClose}><CloseIcon/></CloseButton>
+        <CloseButton onClick={closeModal || handleClose}><CloseIcon/></CloseButton>
       </ModalHeader>
       {children}
     </ModalContainer>

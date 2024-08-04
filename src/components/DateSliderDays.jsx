@@ -259,7 +259,7 @@ const DateSlider = () => {
         </Slider>
       </div>
 
-      {individualDay.length > 0 && <IndividualDay displayedData={individualDay}/>}
+      {individualDay.length > 0 && <IndividualDay displayedData={individualDay} />}
     </>
   );
 };

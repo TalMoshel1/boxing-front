@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { toggleSetDeleteLessonModal, setLessonsToDisplay } from "../redux/calendarSlice.js";
 
-const DeleteLesson = () => {
+const DeleteLesson = ({ lesson: propLesson, closeModal, hideLesson}) => {
   const dispatch = useDispatch();
   const lesson = useSelector((state) => state.calendar.deleteLessonModalData);
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
@@ -13,19 +13,16 @@ const DeleteLesson = () => {
   const handleToggleModal = (obj) => {
     dispatch(toggleSetDeleteLessonModal());
     if (obj) {
-      dispatch(setLessonsToDisplay(obj))
-
+      dispatch(setLessonsToDisplay(obj));
     }
   };
-
 
   const handleDeleteAllChange = (event) => {
     setIsDeleteAll(event.target.checked);
   };
 
   const deleteLesson = async (lessonId) => {
-    console.log(lessonId);
-    console.log(token);
+
     try {
       const response = await fetch(
         `https://boxing-back.onrender.com/api/lessons/${lessonId}`,
@@ -47,8 +44,8 @@ const DeleteLesson = () => {
       }
 
       const data = await response.json();
-      console.log('deleted: ',data)
-      handleToggleModal({type: 'deleteDisplayedLesson', id: lessonId});
+      hideLesson(lessonId)
+      handleToggleModal({ type: 'deleteDisplayedLesson', id: lessonId });
     } catch (error) {
       console.error("Error deleting lesson:", error);
     }
@@ -58,13 +55,17 @@ const DeleteLesson = () => {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding:1rem;
+    padding: 1rem;
   `;
+
+  const currentLesson = propLesson || (lesson && lesson.lesson) || {};
+
+  const repeatsWeekly = currentLesson.repeatsWeekly || false;
 
   return (
     <DeleteContainer>
-      {lesson.lesson.repeatsWeekly && (
-        <label style={{color: 'black', direction: 'rtl'}}>
+      {repeatsWeekly && (
+        <label style={{ color: 'black', direction: 'rtl' }}>
           מחק את כל השיעורים
           <input
             type="checkbox"
@@ -77,7 +78,14 @@ const DeleteLesson = () => {
       <button
         type="button"
         onClick={() => {
-          deleteLesson(lesson.lesson._id);
+          if (currentLesson._id) {
+            deleteLesson(currentLesson._id);
+            if (closeModal) {
+              closeModal()
+            }
+          } else {
+            console.error("No lesson ID provided.");
+          }
         }}
       >
         מחק

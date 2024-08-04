@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSetPrivateModal } from "../redux/calendarSlice.js";
 import { incrementHour } from "../functions/incrementHour.js";
 import styled from "styled-components";
 import { openWhatsApp } from "../functions/sendWhatsApp.js";
@@ -19,18 +18,23 @@ export const RequestForm = styled.form`
   text-align: center;
 
   @media (orientation: portrait) {
-  max-width: 40vw;
+    max-width: 40vw;
     .whatsapp {
       width: 90vw;
     }
   }
 
+  @media (orientation: landscape) {
+    .whatsapp {
+      width: 100%;
+    }
+  }
 
   button {
-  all: unset;
-  background-color: white;
-  color: #2E3A46;
-  cursor: pointer;
+    all: unset;
+    background-color: white;
+    color: #2E3A46;
+    cursor: pointer;
   }
 
   .whatsapp {
@@ -40,6 +44,7 @@ export const RequestForm = styled.form`
   .date {
     margin-bottom: 1rem;
   }
+
   p {
     line-height: 1.6;
   }
@@ -50,7 +55,8 @@ export const RequestForm = styled.form`
   }
 
   input,
-  select, custom-select {
+  select,
+  .custom-select {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.5rem;
@@ -59,7 +65,7 @@ export const RequestForm = styled.form`
     border: 1px solid grey;
     background-color: white;
     color: black;
-    font-size:1rem;
+    font-size: 1rem;
   }
 
   button {
@@ -67,16 +73,6 @@ export const RequestForm = styled.form`
     margin-top: 1rem;
   }
 `;
-
-// const CantInContainer = styled.section`
-//   & > div {
-//     margin-bottom: 1.5rem;
-//   }
-
-//   div > :first-child {
-//     margin-top: 1.5rem;
-//   }
-// `;
 
 const StyledSelectContainer = styled.div`
   position: relative;
@@ -133,7 +129,6 @@ const StyledSelectContainer = styled.div`
 `;
 
 const RequestPrivateLesson = () => {
-  console.log("great working, remove others in component folder");
   const data = useSelector((state) => state.calendar.privateModalData);
   const dispatch = useDispatch();
 
@@ -209,7 +204,6 @@ const RequestPrivateLesson = () => {
 
   const handleInputChange = (e) => {
     const date = new Date(e.target.value);
-
     setDay(date);
   };
 
@@ -262,7 +256,7 @@ const RequestPrivateLesson = () => {
       if (trainer === "Eldad") {
         openWhatsApp(data, "0544541145");
       }
-      setMessage("האימון ממתין לאישור. האישור ישלח במייל לכתובת שציינת");
+      setMessage("אימון נשלח לאישור מאמן");
     } catch (error) {
       console.error("Error sending POST request:", error);
     }
@@ -270,6 +264,10 @@ const RequestPrivateLesson = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!startTime) {
+      alert("יש לבחור שעה");
+      return;
+    }
     sendPostPrivateRequest();
   };
 
@@ -283,15 +281,27 @@ const RequestPrivateLesson = () => {
     let hour = 8;
     let minute = 0;
 
+    const parseTime = (timeStr) => {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      return hours * 60 + minutes;
+    };
+
     while (hour < 20 || (hour === 20 && minute === 0)) {
       const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(
         2,
         "0"
       )}`;
+      const timeInMinutes = parseTime(time);
+
       const isDisabled = cantIn.some((l) => {
         const start = l.props.children[0];
         const end = l.props.children[2];
-        return time === start || (time > start && time < end) || time === end;
+        const startInMinutes = parseTime(start);
+        const endInMinutes = parseTime(end);
+
+        return (
+          timeInMinutes >= startInMinutes && timeInMinutes < endInMinutes
+        );
       });
 
       options.push(
@@ -303,7 +313,7 @@ const RequestPrivateLesson = () => {
           {time}
         </div>
       );
-      minute += 30; // Increment by 30 minutes
+      minute += 30;
       if (minute === 60) {
         minute = 0;
         hour += 1;
@@ -317,14 +327,9 @@ const RequestPrivateLesson = () => {
     return <p>{message}</p>;
   }
 
-  const handleFakeSubmit = () => {
-    console.log("fakes work");
-  };
-
   return (
     <RequestForm onSubmit={handleSubmit}>
-      <label htmlFor="trainer">תאריך</label>
-
+      <label htmlFor="date">תאריך</label>
       <input
         className="date"
         type="date"
@@ -341,7 +346,9 @@ const RequestPrivateLesson = () => {
             className="custom-select"
             onClick={() => setShowOptions(!showOptions)}
           >
-            {startTime || "בחר שעה"}
+            <label htmlFor="time" style={{color: 'black'}} className={!startTime ? "select-disabled" : ""}>
+              {startTime || "בחר שעה"}
+            </label>
           </div>
           <div className={`options-container ${showOptions ? "show" : ""}`}>
             {generateTimeOptions()}
@@ -386,6 +393,7 @@ const RequestPrivateLesson = () => {
         onChange={(e) => setStudentMail(e.target.value)}
         required
       />
+
       <section
         className="whatsapp"
         style={{
@@ -405,9 +413,9 @@ const RequestPrivateLesson = () => {
             top: "1.5rem",
           }}
         />
-        <p>
-          <br /> לאחר הלחיצה על <button disabled>שלח</button>, אנא אשר שימוש ב <br/>WhatsApp ושלח
-          את ההודעה המוכנה שתראה למאמן שבחרת
+        <p style={{ paddingLeft: "1rem", paddingRight: "1rem", lineHeight: "1rem" }}>
+          <br /> לאחר הלחיצה על <button disabled style={{ pointerEvents: "none" }}>שלח</button> אנא אשר שימוש ב <br />WhatsApp ושלח
+          את ההודעה האוטומטית שתראה למאמן שבחרת.
         </p>
       </section>
       <button type="submit">שלח</button>

@@ -14,7 +14,6 @@ const Days = () => {
   const [fetchedLessons, setFetchedLessons] = useState([]);
   const currentDateStr = useSelector((state) => state.calendar.currentDate);
   const currentDate = new Date(currentDateStr);
-  const view = useSelector((state) => state.calendar.view);
   const [displayedLessons, setDisplayeLessons] = useState([]);
   const [isDisplay, setIsDisplay] = useState(true);
 
@@ -25,6 +24,9 @@ const Days = () => {
   const isDetailsLessonModalOpen = useSelector(
     (state) => state.calendar.isDetailsLessonModalOpen
   );
+
+  console.log('isDeleteLessonModalOpen: ', isDeleteLessonModalOpen)
+  console.log('isDetailsLessonModalOpen: ',isDetailsLessonModalOpen)
 
   const startOfWeek = (date) => {
     const day = date.getDay();
@@ -57,7 +59,6 @@ const Days = () => {
 
         const data = await response.json();
 
-        console.log("data: ", data);
 
         if (data.length === 0) {
           return setIsDisplay(true);

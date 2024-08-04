@@ -38,7 +38,6 @@ const Day = ({ date, lessons }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("boxing") || "{}");
 
-  console.log(lessons)
 
   const today = new Date()
 

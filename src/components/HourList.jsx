@@ -91,6 +91,7 @@ const Lesson = ({ lesson }) => {
   };
 
   const handleOpenDetailsModal = (details) => {
+    console.log('details: ', details)
     return dispatch(toggleSetDetailsLessonModal(details));
   };
 

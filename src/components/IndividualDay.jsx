@@ -184,6 +184,8 @@ displayLessons().map((l, index) => {
           </span>
           <br />
           <span>מאמן: {l.trainer}</span>
+          <br/>
+          {l.type === 'private' && <span>{l.studentName} {l.studentPhone}</span>}
         </strong>
       </div>
     </div>

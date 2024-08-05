@@ -10,6 +10,7 @@ const FormItemContainer = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
+  width:100%
 `;
 
 const RequestForm = styled.section`

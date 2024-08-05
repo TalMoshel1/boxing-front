@@ -9,6 +9,7 @@ import { renderDays } from "../functions/renderDays.js";
 import Modal from "./Modal.jsx";
 import DeleteLesson from "./deleteLesson.jsx";
 import DetailsLesson from "./detailsLesson.jsx";
+import { StyledDisabledWrapper, DisabledWrapper } from "../App.js";
 
 const Days = () => {
   const [fetchedLessons, setFetchedLessons] = useState([]);
@@ -27,6 +28,13 @@ const Days = () => {
 
   console.log('isDeleteLessonModalOpen: ', isDeleteLessonModalOpen)
   console.log('isDetailsLessonModalOpen: ',isDetailsLessonModalOpen)
+
+  const removeLesson = (lessonId) => {
+    setDisplayeLessons((prev)=>{
+      const result = prev.filter((l)=>{return l.lesson._id !== lessonId})
+     return [...result]
+    })
+  }
 
   const startOfWeek = (date) => {
     const day = date.getDay();
@@ -103,22 +111,22 @@ const Days = () => {
             <div className="days">
         {renderDays(currentDate, "week").map((day, index) => {
           if (!day.displayedDate.includes("Sat")) {
-            return <Day key={index} date={day} lessons={displayedLessons} />;
+            return <Day key={index} date={day} lessons={displayedLessons} removeLesson={removeLesson} />;
           }
         })}
       </div>
 
-             {isDeleteLessonModalOpen && (
+             {/* {isDeleteLessonModalOpen && (
         <Modal type="delete">
-          <DeleteLesson />
+          <DeleteLesson removeLesson={removeLesson} />
         </Modal>
-      )} 
+      )}  */}
 
-       {isDetailsLessonModalOpen && (
+       {/* {isDetailsLessonModalOpen && (
         <Modal type="details">
           <DetailsLesson />
         </Modal>
-      )} 
+      )}  */}
       </>
 
     );

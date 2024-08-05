@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const LoginContainer = styled.main`
   position: absolute;
@@ -18,10 +19,12 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
   const sendPostRequest = async () => {
+    setLoading(!loading)
     try {
       const response = await fetch(
         "https://boxing-back.onrender.com/api/auth/signin",
@@ -59,6 +62,7 @@ const SignIn = () => {
   };
 
   const authenticateRequest = async () => {
+    setLoading(!loading)
     try {
       const token = JSON.parse(boxing)?.token;
       if (!token) throw new Error("No token found");
@@ -79,10 +83,12 @@ const SignIn = () => {
       }
 
       const data = await response.json();
+      setLoading(!loading)
       if (data.message === "Token is valid") {
         navigate("/setgrouplesson");
       }
     } catch (error) {
+      setLoading(!loading)
       console.error("Error verifying token:", error);
     }
   };
@@ -121,6 +127,8 @@ const SignIn = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+
+      {!loading && <ClipLoader/>}
     </LoginContainer>
   );
 };

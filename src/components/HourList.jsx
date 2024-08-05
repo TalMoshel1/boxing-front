@@ -75,7 +75,7 @@ export const InfoButton = styled.button`
   top: 0.5rem;
 `;
 
-const Lesson = ({ lesson }) => {
+const Lesson = ({ lesson, removeLesson }) => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
@@ -84,6 +84,10 @@ const Lesson = ({ lesson }) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    // return () => {
+    //   if (handleOpenDeleteModal)
+    // }
   }, []);
 
   const handleOpenDeleteModal = (lessonId) => {
@@ -96,7 +100,6 @@ const Lesson = ({ lesson }) => {
   };
 
   if (lesson.lesson.type === "private" && lesson.lesson.isApproved === true) {
-    console.log(lesson.lesson);
     return (
       <HourContainer>
         {user?.user?.role === "admin" && (

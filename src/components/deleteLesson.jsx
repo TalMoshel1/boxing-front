@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { toggleSetDeleteLessonModal, setLessonsToDisplay } from "../redux/calendarSlice.js";
 
-const DeleteLesson = ({ lesson: propLesson, closeModal, hideLesson}) => {
+const DeleteLesson = ({ lesson: propLesson, closeModal, hideLesson, removeLesson}) => {
   const dispatch = useDispatch();
   const lesson = useSelector((state) => state.calendar.deleteLessonModalData);
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
@@ -46,6 +46,9 @@ const DeleteLesson = ({ lesson: propLesson, closeModal, hideLesson}) => {
       const data = await response.json();
       if (hideLesson) {
         hideLesson(lessonId)
+      }
+      if (removeLesson) {
+        removeLesson(lessonId)
       }
       handleToggleModal({ type: 'deleteDisplayedLesson', id: lessonId });
     } catch (error) {

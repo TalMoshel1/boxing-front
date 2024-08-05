@@ -33,17 +33,13 @@ const DayStyle = styled.section`
 
 `;
 
-const Day = ({ date, lessons }) => {
+const Day = ({ date, lessons, removeLesson }) => {
   const [thisDayLessons, setThisDayLessons] = useState([]);
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("boxing") || "{}");
 
 
   const today = new Date()
-
-  console.log(isSameDate(lessons[0]?.lesson.day), today)
-
-
 
 
 
@@ -56,7 +52,6 @@ const Day = ({ date, lessons }) => {
       return l;
     });
 
-    console.log('mappedLessons: ', mappedLessons)
 
 
     setThisDayLessons(mappedLessons);
@@ -69,7 +64,7 @@ const Day = ({ date, lessons }) => {
       <DayHeader>{formatThreeLettersMonthAndDaysToHebrew('day',dayOfTheWeek)}</DayHeader>
       <LessonsContainer>
         {thisDayLessons.map((l, index) => (
-          <Lesson key={index} lesson={l} />
+          <Lesson key={index} lesson={l} removeLesson={removeLesson} />
         ))}
       </LessonsContainer>
     </DayStyle>

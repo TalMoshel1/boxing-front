@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Navbar from "./components/Navbar";
 import Calendar from "./pages/Calendar";
-// import DeleteLesson from "./components/deleteLesson";
-// import DetailsLesson from './components/detailsLesson';
+import DeleteLesson from "./components/deleteLesson";
+import DetailsLesson from './components/detailsLesson';
+import Modal from "./components/Modal";
 import SignIn from "./pages/SignIn";
 import ApproveLink from "./pages/ApprovalLink";
 // import Modal from "./components/Modal";
@@ -41,29 +42,29 @@ function AppContent() {
     toggleMenu(!isMenuOpen);
   };
 
-  // const isDeleteLessonModalOpen = useSelector(
-  //   (state) => state.calendar.isDeleteLessonModalOpen
-  // );
+  const isDeleteLessonModalOpen = useSelector(
+    (state) => state.calendar.isDeleteLessonModalOpen
+  );
 
-  // const isDetailsLessonModalOpen = useSelector(
-  //   (state) => state.calendar.isDetailsLessonModalOpen
-  // );
+  const isDetailsLessonModalOpen = useSelector(
+    (state) => state.calendar.isDetailsLessonModalOpen
+  );
 
   return (
     <VerticalContainer>
       <MenuList isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
       <Navbar isMenuOpen={isMenuOpen} handleToggleMenu={handleToggleMenu} />
-      {/* {isDeleteLessonModalOpen && (
+       {isDeleteLessonModalOpen && (
         <Modal type="delete">
           <DeleteLesson />
         </Modal>
-      )} */}
+      )} 
 
-      {/* {isDetailsLessonModalOpen && (
+      {isDetailsLessonModalOpen && (
         <Modal type="details">
           <DetailsLesson />
         </Modal>
-      )} */}
+      )} 
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/signin" element={<SignIn />} />
@@ -71,9 +72,9 @@ function AppContent() {
           path="/calendar"
           element={
             <StyledDisabledWrapper 
-            // isDisabled={
-            //   isDeleteLessonModalOpen || isDetailsLessonModalOpen
-            //   }
+            isDisabled={
+              isDeleteLessonModalOpen || isDetailsLessonModalOpen
+              }
               >
               <Calendar />
             </StyledDisabledWrapper>
@@ -104,11 +105,11 @@ function AppContent() {
   );
 }
 
-const DisabledWrapper = ({ isDisabled, children, ...props }) => (
+export const DisabledWrapper = ({ isDisabled, children, ...props }) => (
   <div {...props}>{children}</div>
 );
 
-const StyledDisabledWrapper = styled(DisabledWrapper)`
+export const StyledDisabledWrapper = styled(DisabledWrapper)`
   ${({ isDisabled }) =>
     isDisabled &&
     `
@@ -127,12 +128,5 @@ const VerticalContainer = styled.div`
   overflow-x: hidden;
 `;
 
-const HorizontalContainer = styled.div`
-  display: flex;
-  direction: rtl;
-  max-width: 100vw;
-  min-height: 100svh; 
-  overflow: hidden;
-`;
 
 export default App;

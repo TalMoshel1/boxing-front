@@ -62,9 +62,9 @@ const Modal = ({ children, type, closeModal}) => {
     }
   };
 
-  console.log('whi it is rendered?!')
 
   return (
+    
     <ModalContainer className="modal">
       <ModalHeader>
         <CloseButton onClick={closeModal || handleClose}><CloseIcon/></CloseButton>

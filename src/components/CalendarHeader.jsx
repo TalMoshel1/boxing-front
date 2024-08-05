@@ -144,7 +144,7 @@ const CalendarHeader = () => {
     <Header>
       <select className='viewController' onChange={(e) => dispatch(setView(e.target.value))} value={view}>
         <option value="week" style={{textAlign: 'start'}}>תצוגה שבועית</option>
-        <option value="day" style={{textAlign: 'start'}}>תצוגה יומית</option>
+        {/* <option value="day" style={{textAlign: 'start'}}>תצוגה יומית</option> */}
       </select>
 
       {view === 'week' && (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { openWhatsApp } from '../functions/sendWhatsApp';
+import { openWhatsApp } from "../functions/sendWhatsApp";
 
 const ApprovalLink = () => {
   const { lessonId } = useParams();
@@ -8,6 +8,7 @@ const ApprovalLink = () => {
   const location = useLocation();
   const [isApproved, setIsApproved] = useState(false);
   const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
+  const [approvedLesson, setApprovedLesson] = useState()
 
   useEffect(() => {
     const authenticateRequest = async () => {
@@ -31,7 +32,6 @@ const ApprovalLink = () => {
 
         const data = await response.json();
         if (data.message !== "Token is valid") {
-          // Navigate to Sign In page
           navigate("/signin", { state: { from: location } });
         }
       } catch (error) {
@@ -66,7 +66,8 @@ const ApprovalLink = () => {
 
         const data = await response.json();
         if (data) {
-          openWhatsApp(data.lesson, '0522233573');
+          setApprovedLesson(data.lesson)
+          // openWhatsApp(data.lesson, "0522233573");
           return setIsApproved(data);
         }
       } catch (error) {
@@ -80,12 +81,15 @@ const ApprovalLink = () => {
   }, [lessonId, boxing]);
 
   if (isApproved) {
-    return <p>{isApproved.message}</p>;
+    return <div style={{display: 'flex', flexDirection: 'column',justifyContent:'center', alignItems:'center'}}>
+    <p>{isApproved.message}</p>
+     {isApproved.message !== 'שיעור כבר קבוע במערכת בזמן זה' && <button style={{width: 'max-content'}} onClick={()=>openWhatsApp(approvedLesson, '0522233573')}>Send approval to requester</button>}
+    </div>
   }
 
   return (
     <div>
-      <p>Approving lesson...</p>
+      <p>...</p>
     </div>
   );
 };

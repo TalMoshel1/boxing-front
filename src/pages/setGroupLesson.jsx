@@ -60,12 +60,17 @@ const Main = styled.main`
 `;
 
 const SetGroupLesson = () => {
+  const [boxing, setBoxing] = useState(localStorage.getItem("boxing"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [day, setDay] = useState("");
+
+  const trainer = JSON.parse(boxing)?.user?.username === 'Eldad'? 'אלדד': 'דוד'
+
+  console.log(trainer)
   const [formData, setFormData] = useState({
-    trainer: "דוד",
+    trainer: trainer,
     name: "",
     description: "",
     day: "",
@@ -129,7 +134,7 @@ const SetGroupLesson = () => {
   const handleSubmit = async (e) => {
     console.log('???')
     e.preventDefault();
-    e.stopPropagation(); // Add this line to stop propagation
+    e.stopPropagation(); 
     const { repeatMonth, ...formDataToSend } = formData;
 
     const repeatEnd = repeatEndDate(formData.day, parseInt(repeatMonth, 10));
